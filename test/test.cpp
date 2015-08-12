@@ -5,10 +5,10 @@
 #include <string>
 #include <queue>
 
-std::string download_url(const std::string& echo)
+std::string download_url()
 {
     std::this_thread::sleep_for(std::chrono::milliseconds( 1000 ));
-    return echo;
+    return "hello world";
 }
 
 class processor
@@ -19,7 +19,7 @@ public:
 	processor(const processor&) = delete;
 	processor& operator=(const processor&) = delete;
 	
-	void enqueue(const std::shared_ptr< std::packaged_task<void()> >& func);
+	void enqueue(std::shared_ptr< std::packaged_task<void()> > func);
 	
 private:
 	// need to keep track of threads so we can join them
@@ -61,7 +61,7 @@ processor::processor(size_t threads) : _stop(false)
 		);
 	}
 }
-void processor::enqueue(const std::shared_ptr< std::packaged_task<void()> >& func)
+void processor::enqueue(std::shared_ptr< std::packaged_task<void()> > func)
 {
 	{
 		std::unique_lock<std::mutex> lock(_queue_mutex);
@@ -91,40 +91,49 @@ processor::~processor()
 
 static processor p(4);
 
-template< typename Function, typename... Args>
-std::future<typename std::result_of<Function(Args&&...)>::type> async_lite(Function&& f, Args&&... args)
+template< typename Function>
+std::future<typename std::result_of<Function()>::type> async_lite(Function&& f)
 {
-	/*
-	auto packaged_pack_internal = std::make_shared< std::packaged_task<void()> >( std::bind(f, args...) );
-	p.enqueue(packaged_pack_internal);
-	return packaged_pack_internal->get_future();
-	*/
-	return std::async(std::launch::async, std::forward<Function>(f), std::forward<Args>(args)...);
+	auto packaged_pack_external = std::make_shared< std::packaged_task<Function()> >( std::bind(std::forward<Function>(f)) );
+	
+	auto task = std::make_shared< std::packaged_task<void()> >(
+		[=]() {
+			(*packaged_pack_external)( );
+		});
+	p.enqueue(task);
+	
+	return packaged_pack_external->get_future();
+	
+	//return std::async(std::launch::async, std::forward<Function>(f), std::forward<Args>(args)...);
 }
 
-template< typename Function, typename Then, typename... Args>
-std::future<typename std::result_of<Function(Args...)>::type> await(Function&& f, Then&& t, Args&&... args)
+template< typename Function, typename Then>
+std::future<typename std::result_of<Function()>::type> await(Function&& f, Then&& t)
 {
     return async_lite(
-        [&](Function&& ff, Then&& tt, Args&& ... argss) -> typename std::result_of<Function(Args...)>::type
+        [&]() -> typename std::result_of<Function()>::type
         {
-            auto result = async_lite(std::forward<Function>(ff), std::forward<Args>(argss)...);
+            auto result = async_lite(std::forward<Function>(f));
             auto result_real = result.get();
-            tt(result_real);
+            t(result_real);
             return result_real;
-        }, std::forward<Function>(f), std::forward<Then>(t), std::forward<Args>(args)...);
+        });
 }
 
 int main()
 {
+	std::vector<std::future<std::string> > _results;
+	
     for(int i=0; i<20; ++i)
     {
-        await(
-                std::bind(download_url, "ecooo66"), [](const std::string& result)
-                {
-                    std::cout << "Result is " << result << std::endl;
-                }
-            );
+		_results.emplace_back(
+			await(
+					download_url, [](const std::string& result)
+					{
+						std::cout << "Result is " << result << std::endl;
+					}
+				)
+		);
     }
     return(0);
 }
