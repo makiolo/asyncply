@@ -3,8 +3,8 @@
 
 #include <functional>
 #include <Poco/Runnable.h>
-#include <asyncply/h/promise.h>
-#include <asyncply/h/run_fwd.h>
+#include "promise.h"
+#include "run_fwd.h"
 
 namespace asyncply {
 

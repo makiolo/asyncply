@@ -4,7 +4,7 @@
 #include <memory>
 #include <exception>
 #include <Poco/Semaphore.h>
-#include <asyncply/h/future.h>
+#include "future.h"
 
 namespace asyncply {
 

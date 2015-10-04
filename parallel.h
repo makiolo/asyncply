@@ -2,8 +2,8 @@
 #define _PARALLEL_H_
 
 #include <vector>
-#include <asyncply/h/common.h>
-#include <asyncply/h/run.h>
+#include "common.h"
+#include "run.h"
 
 namespace asyncply {
 

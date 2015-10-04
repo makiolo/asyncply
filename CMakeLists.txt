@@ -10,7 +10,5 @@ ENDIF()
 
 include(utils)
 ENABLE_MODERN_CPP()
-
-add_subdirectory(asyncply)
 add_subdirectory(tests)
 

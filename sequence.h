@@ -2,7 +2,7 @@
 #define _SEQUENCE_H_
 
 #include <functional>
-#include <asyncply/h/run.h>
+#include "run.h"
 
 namespace asyncply {
 

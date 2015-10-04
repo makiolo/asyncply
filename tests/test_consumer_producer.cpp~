@@ -9,7 +9,7 @@ int main(int, const char**)
 	try
 	{
 		const size_t N = 1e4;
-		std::atomic<long long> f;
+		std::atomic<size_t> f;
 		f = 0;
 		asyncply::parallel(
 			[&]()

@@ -3,14 +3,9 @@
 
 #include <memory>
 #include <Poco/ThreadPool.h>
-#include <asyncply/h/allocator.h>
-#include <asyncply/h/run_fwd.h>
-#include <asyncply/h/task.h>
-
-/*
-	using call_type = boost::coroutines::asymmetric_coroutine<void>::pull_type;
-	using yield_type = boost::coroutines::asymmetric_coroutine<void>::push_type;
-*/
+#include "allocator.h"
+#include "run_fwd.h"
+#include "task.h"
 
 namespace asyncply {
 
