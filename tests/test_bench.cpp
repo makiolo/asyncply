@@ -5,12 +5,13 @@
 #include <sstream>
 #include <fstream>
 #include "../sequence.h"
+#include "../parallel.h"
 
 template <typename T>
 using weakptr = std::weak_ptr<T>;
 
 class Entity final
-	{
+{
 public:
 	Entity() { ; }
 	virtual ~Entity() { ; }
@@ -171,30 +172,29 @@ int main_measured_algorithm_1(int, const char**)
 
 int main_measured_algorithm_2(int, const char**)
 {
-	double total = 0.0;
-	total = asyncply::sequence(1.0,
-		[](double data)
+	double total = asyncply::parallel(
+		[]()
 		{
-			return data + 1.0;
+			return 1.0;
 		},
-		[](double data)
+		[]()
 		{
-			return data + 1.0;
+			return 1.0;
 		},
-		[](double data)
+		[]()
 		{
-			return data + 1.0;
+			return 1.0;
 		},
-		[](double data)
+		[]()
 		{
-			return data + 1.0;
+			return 1.0;
 		},
-		[](double data)
+		[]()
 		{
-			return data + 1.0;
+			return 1.0;
 		}
 	);
-	if(std::abs(total - 6.0) > 1e-3)
+	if(std::abs(total - 5.0) > 1e-3)
 	{
 		std::cout << "invalid result: " << total << std::endl;
 		throw std::exception();
