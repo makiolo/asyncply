@@ -22,7 +22,11 @@
 #endif
 #endif
 
-#include <multithread/h/api.h>
+#include <multithread/api.h>
+
+#ifndef JOINABLE
+#define JOINABLE
+#endif
 
 namespace asyncply
 {
@@ -51,3 +55,4 @@ class scoped_lock;
 #include "JobFunction.h"
 
 #endif  // _MULTITHREADING_H_
+

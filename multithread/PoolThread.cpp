@@ -1,21 +1,17 @@
-#include <multithread/h/api.h>
-#include "multithread/h/MultiThreading.h"
-#include "multithread/h/PoolThread.h"
+#include <multithread/api.h>
+#include <multithread/MultiThreading.h>
+#include <multithread/PoolThread.h>
 
 namespace asyncply
 {
 
 pool_thread::pool_thread(uint32_t numThreads /*= 4*/)
-    : _number_threads( std::min<uint32_t>(numThreads, THREADCOUNT_MAX) )
+    : _number_threads( numThreads )
     , _started( false )
     , _queue(nullptr)
     , _any_job(nullptr)
     , _workers_finished(nullptr)
 {
-
-	assert(_number_threads > 0);
-	assert(_number_threads <= THREADCOUNT_MAX);
-
 	_started = false;
 	for (uint32_t i = 0; i < _number_threads; ++i)
 	{
@@ -29,6 +25,7 @@ pool_thread::pool_thread(uint32_t numThreads /*= 4*/)
 
 pool_thread::~pool_thread(void)
 {
+	stop();
 	delete _workers_finished;
 	delete _any_job;
 	delete _queue;
@@ -38,7 +35,7 @@ pool_thread::~pool_thread(void)
 	}
 }
 
-void pool_thread::Start()
+void pool_thread::start()
 {
 	if (!_started)
 	{
@@ -54,20 +51,17 @@ void pool_thread::Start()
 				0,				   // default creation flags
 				&_threads_id[i]);  // receive thread identifier
 #else
-#ifdef JOINABLE  // Joinable
-			pthread_create(&_threads[i], NULL, HandleGlobalMyPoolThread, _workers[i]);
-#else			 // Detachable
-
+// #ifdef JOINABLE  // Joinable
+// 			pthread_create(&_threads[i], NULL, HandleGlobalMyPoolThread, _workers[i]);
+// #else
 			pthread_attr_t attr;  // thread attribute
-
-			// set thread detachstate attribute to DETACHED
 			pthread_attr_init(&attr);
 			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-
 			pthread_create(&_threads[i], &attr, HandleGlobalMyPoolThread, _workers[i]);
-#endif
+// #endif
 #endif
 		}
+
 
 		// esperar a que los hilos terminen
 		//
@@ -78,10 +72,10 @@ void pool_thread::Start()
 void pool_thread::execute()
 {
 	// Empieza el pool (desde el hilo)
-	Start();
+	start();
 }
 
-void pool_thread::Stop()
+void pool_thread::stop()
 {
 	mutex::scoped_lock_t lock(_queue->get_mutex());
 
@@ -104,7 +98,7 @@ void pool_thread::Stop()
 	_started = false;
 }
 
-void pool_thread::submit(job* j)
+void pool_thread::submit(job& j)
 {
 	_queue->push(j);
 	// avisar de que hay trabajo

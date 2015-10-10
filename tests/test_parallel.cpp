@@ -9,9 +9,6 @@ int main(int, const char **)
 	{
 		for(int i=0; i<100;++i)
 		{
-
-
-
 			std::vector<std::shared_ptr<asyncply::task<double> > > vjobs;
 			asyncply::_parallel(vjobs,
 			   []()
@@ -71,7 +68,6 @@ int main(int, const char **)
 				std::cout << "invalid total " << total << std::endl;
 				return 1;
 			}
-
 		}
 		std::cout << "result ok" << std::endl;
 	}

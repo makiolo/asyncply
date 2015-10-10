@@ -44,7 +44,7 @@ struct Allocator
 		return static_cast<pointer>(malloc(n * sizeof(T)));
     }
 
-    void deallocate(T* ptr, size_type)
+    void deallocate(pointer ptr, size_type)
     {
 		free(ptr);
     }

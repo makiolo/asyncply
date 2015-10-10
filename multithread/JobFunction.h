@@ -9,36 +9,34 @@ namespace asyncply
 class job_function : public job
 {
 public:
-	job_function(const std::function<job::StateJob()>& function)
+	job_function(const std::function<void()>& function)
         : _function( function )
         , _callback( true )
-	{
-
-	}
+	{ ; }
 
 	job_function()
         : _function( nullptr )
         , _callback(false)
     { ; }
 
-	~job_function(void) {}
+	virtual ~job_function() {}
 
-	void set_function(const std::function<job::StateJob()>& function)
+	void set_function(const std::function<void()>& function)
 	{
 		_function = function;
 		_callback = true;
 	}
 
-	virtual void Start() { assert(_callback); }
-
-	virtual job::StateJob Update() { return _function(); }
-
-	virtual void Finish() {}
+	virtual void execute() override
+	{
+		_function();
+	}
 
 protected:
-	std::function<job::StateJob()> _function;
+	std::function<void()> _function;
 	bool _callback;
 };
+
 }
 
 #endif  // _JOB_FUNCTION_H_

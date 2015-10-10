@@ -204,7 +204,7 @@ int main_measured_algorithm_2(int, const char**)
 
 double launch_benchmark(int argc, const char* argv[], int (*algorithm)(int, const char**))
 {
-	long long N = 1e2;
+	long long N = 1e4;
 	double elapsedtime;
 	{
 		measure_scoped timer(elapsedtime);

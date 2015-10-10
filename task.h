@@ -5,11 +5,12 @@
 #include <Poco/Runnable.h>
 #include "promise.h"
 #include "run_fwd.h"
+#include <multithread/MultiThreading.h>
 
 namespace asyncply {
 
 template <typename R>
-class task : public Poco::Runnable
+class task : public asyncply::job
 {
 public:
 	using func = std::function<R()>;
@@ -45,7 +46,7 @@ public:
 			return _result.get_future()->get();
 	}
 
-	void run() override
+	virtual void execute() override
 	{
 		try
 		{
@@ -95,7 +96,7 @@ protected:
 };
 
 template <>
-class task<void> : public Poco::Runnable
+class task<void> : public asyncply::job
 {
 public:
 	using func = std::function<void()>;
@@ -133,7 +134,7 @@ public:
 			_result.get_future()->get();
 	}
 
-	void run() override
+	virtual void execute() override
 	{
 		try
 		{

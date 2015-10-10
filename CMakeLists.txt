@@ -10,6 +10,7 @@ ENDIF()
 
 include(utils)
 ENABLE_MODERN_CPP()
+
 add_subdirectory(multithread)
 add_subdirectory(tests)
 

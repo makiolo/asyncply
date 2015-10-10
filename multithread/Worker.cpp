@@ -1,6 +1,6 @@
-#include <multithread/h/api.h>
-#include "multithread/h/MultiThreading.h"
-#include "multithread/h/Worker.h"
+#include <multithread/api.h>
+#include <multithread/MultiThreading.h>
+#include <multithread/Worker.h>
 
 namespace asyncply
 {
@@ -10,10 +10,10 @@ void worker::execute()
 	circular_queue<job>* queue = _owner->get_queue();
 	while (!_interrupted)
 	{
-		job* pendingJob = queue->pop();
-		if (pendingJob)
+		job* j = queue->pop();
+		if(j)
 		{
-			pendingJob->Execute();
+			j->execute();
 		}
 		else
 		{
@@ -23,4 +23,6 @@ void worker::execute()
 		}
 	}
 }
+
 }
+

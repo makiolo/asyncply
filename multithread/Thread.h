@@ -7,13 +7,12 @@ namespace asyncply
 class multithread_API thread
 {
 public:
-	thread(void)
+	thread()
         : _thread(0)
-    {}
+	{ ; }
+	virtual ~thread() { ; }
 
-	virtual ~thread(void) {}
-
-	void Run()
+	bool run()
 	{
 #ifdef _WIN32
 		_thread = CreateThread(NULL,  // default security attributes
@@ -24,10 +23,11 @@ public:
 			&_thread_id);  // receive thread identifier
 #else
 
-#ifdef JOINABLE  // Joinable
+#ifdef JOINABLE
+		// Joinable
 		pthread_create(&_thread, NULL, HandleGlobalMyThread, this);
-#else			 // Detachable
-
+#else
+		// Detachable
 		pthread_attr_t attr;  // thread attribute
 
 		// set thread detachstate attribute to DETACHED
@@ -37,6 +37,7 @@ public:
 		pthread_create(&_thread, &attr, HandleGlobalMyThread, this);
 #endif
 #endif
+		return true;
 	}
 
 	void join() const
@@ -68,6 +69,7 @@ public:
 	static void* HandleGlobalMyThread(void* parms);
 #endif
 };
+
 }
 
 #endif  // _THREAD_H_

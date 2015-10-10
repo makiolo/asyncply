@@ -11,26 +11,34 @@ namespace asyncply
 class multithread_API pool_thread : public thread
 {
 public:
-	pool_thread(uint32_t numThreads = 4);
+	pool_thread(uint32_t n = 8);
 	virtual ~pool_thread(void);
 
 	pool_thread(const pool_thread& other) = delete;
-    pool_thread& operator=(const pool_thread& other) = delete;
+	pool_thread& operator=(const pool_thread& other) = delete;
 
-	void Stop();
 
-	circular_queue<job>* get_queue() const { return _queue; }
+	circular_queue<job>* get_queue() const
+	{
+		return _queue;
+	}
 
-	void submit(job* j);
+	void submit(job& j);
 
-	synchronizer* get_synchronizer_workers_finished() const { return _workers_finished; }
+	synchronizer* get_synchronizer_workers_finished() const
+	{
+		return _workers_finished;
+	}
 
-	unsigned int get_number_threads() const { return _number_threads; }
+	unsigned int get_number_threads() const
+	{
+		return _number_threads;
+	}
 
 protected:
-	void Start();
-
-	virtual void execute();
+	void start();
+	void stop();
+	virtual void execute() override;
 
 protected:
 	friend class worker;

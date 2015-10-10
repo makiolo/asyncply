@@ -12,7 +12,7 @@ std::function<Data(const Data&)> _sequence(Function&& f)
 	return [&f](const Data& data)
 	{
 		auto job = asyncply::run(
-			[&f, &data]()
+			[&]()
 			{
 				return f(data);
 			});

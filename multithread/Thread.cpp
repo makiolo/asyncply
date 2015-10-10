@@ -1,6 +1,6 @@
-#include <multithread/h/api.h>
-#include "multithread/h/MultiThreading.h"
-#include "multithread/h/Thread.h"
+#include <multithread/api.h>
+#include <multithread/MultiThreading.h>
+#include <multithread/Thread.h>
 
 namespace asyncply
 {
@@ -16,6 +16,7 @@ DWORD thread::HandleGlobalMyThread(LPVOID parms)
 }
 
 #else
+
 void* thread::HandleGlobalMyThread(void* parms)
 {
 	thread* t = static_cast<thread*>(parms);
@@ -24,7 +25,9 @@ void* thread::HandleGlobalMyThread(void* parms)
 #ifdef JOINABLE  // Joinable
 	pthread_exit(0);
 #endif
-	return NULL;
 }
+
 #endif
+
 }
+
