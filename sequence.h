@@ -9,10 +9,10 @@ namespace asyncply {
 template <typename Data, typename Function>
 std::function<Data(const Data&)> _sequence(Function&& f)
 {
-	return [&f](const Data& data)
+	return [&](const Data& data)
 	{
 		auto job = asyncply::run(
-			[&f, &data]()
+			[&]()
 			{
 				return f(data);
 			});
@@ -23,14 +23,14 @@ std::function<Data(const Data&)> _sequence(Function&& f)
 template <typename Data, typename Function, typename... Functions>
 std::function<Data(const Data&)> _sequence(Function&& f, Functions&&... fs)
 {
-	return [&f, &fs...](const Data& data)
+	return [&](const Data& data)
 	{
 		auto job = asyncply::run(
-			[&f, &data]()
+			[&]()
 			{
 				return f(data);
 			},
-			[&fs...](const Data& d)
+			[&](const Data& d)
 			{
 				return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(d);
 			});
@@ -42,7 +42,7 @@ template <typename Data, typename... Functions>
 Data sequence(const Data& data, Functions&&... fs)
 {
 	auto job = asyncply::run(
-			[&data, &fs...]()
+			[&]()
 			{
 				return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(data);
 			});
