@@ -2,6 +2,7 @@
 #define _PARALLEL_H_
 
 #include <vector>
+#include <numeric>
 #include "common.h"
 #include "run.h"
 

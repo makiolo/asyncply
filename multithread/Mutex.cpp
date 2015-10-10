@@ -5,8 +5,10 @@
 namespace asyncply {
 
 mutex::mutex()
+#if defined(LINUX)
 	: _mutex()
 	, _attr()
+#endif
 {
 #if defined(LINUX)
 	if (pthread_mutexattr_init(&_attr) != 0)
