@@ -11,9 +11,11 @@ int semaphore::_count_sem = 0;
 #endif
 
 semaphore::semaphore(uint32_t concurrency, bool isForSync)
-    : _concurrency( concurrency )
 #if defined(LINUX)
-	, _sem()
+	: _sem()
+    , _concurrency( concurrency )
+#else
+    : _concurrency( concurrency )
 #endif
 {
 	assert(_concurrency > 0);  // "La concurrencia es negativa o cero");
