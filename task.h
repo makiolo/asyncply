@@ -67,10 +67,12 @@ public:
 
 		if (_has_post && _post_method)
 		{
-			auto post_task = asyncply::run(std::bind(_post_method, std::cref(_result.get_value())));
+			//auto post_task = asyncply::run(std::bind(_post_method, std::cref(_result.get_value())));
+			auto post_task = std::bind(_post_method, std::cref(_result.get_value()));
 			try
 			{
-				_result_post.set_value(post_task->get());
+				//_result_post.set_value(post_task->get());
+				_result_post.set_value( post_task() );
 			}
 			catch (...)
 			{
@@ -155,10 +157,11 @@ public:
 
 		if (_has_post && _post_method)
 		{
-			auto post_task = asyncply::run(std::bind(_post_method));
+			//auto post_task = asyncply::run(std::bind(_post_method));
+			auto post_task = std::bind(_post_method);
 			try
 			{
-				post_task->get();
+				post_task();
 			}
 			catch (...)
 			{
