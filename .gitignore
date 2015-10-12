@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+.clang_complete
+build/
+debug/
+release/
+*~
