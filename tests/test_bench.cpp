@@ -160,9 +160,8 @@ int main_measured_algorithm_1(int, const char**)
 		[](double data)
 		{
 			return data + 1.0;
-		}
-	);
-	if(std::abs(total - 6.0) > 1e-3)
+		});
+	if (std::abs(total - 6.0) > 1e-3)
 	{
 		std::cout << "invalid result: " << total << std::endl;
 		throw std::exception();
@@ -192,9 +191,8 @@ int main_measured_algorithm_2(int, const char**)
 		[]()
 		{
 			return 1.0;
-		}
-	);
-	if(std::abs(total - 5.0) > 1e-3)
+		});
+	if (std::abs(total - 5.0) > 1e-3)
 	{
 		std::cout << "invalid result: " << total << std::endl;
 		throw std::exception();
@@ -226,4 +224,3 @@ int main(int argc, const char* argv[])
 
 	return 0;
 }
-

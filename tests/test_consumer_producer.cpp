@@ -14,7 +14,7 @@ int main(int, const char**)
 		asyncply::parallel(
 			[&]()
 			{
-				for (size_t i = 0; i < (N+1); ++i)
+				for (size_t i = 0; i < (N + 1); ++i)
 				{
 					f += i;
 				}
@@ -28,7 +28,7 @@ int main(int, const char**)
 			});
 
 		std::cout << "f = " << f << std::endl;
-		if(f != N)
+		if (f != N)
 		{
 			throw std::runtime_error("Invalid value f");
 		}

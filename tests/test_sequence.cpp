@@ -2,11 +2,11 @@
 #include <complex>
 #include "../sequence.h"
 
-int main(int, const char **)
+int main(int, const char**)
 {
 	try
 	{
-		for(int i=0; i<100;++i)
+		for (int i = 0; i < 100; ++i)
 		{
 			double total = 1.0;
 			total = asyncply::sequence(total,
@@ -29,9 +29,8 @@ int main(int, const char **)
 				[](double data)
 				{
 					return data + 6.0;
-				}
-			);
-			if(std::abs(total - 21.0) > 1e-3)
+				});
+			if (std::abs(total - 21.0) > 1e-3)
 			{
 				std::cout << "not expected result" << std::endl;
 				throw std::exception();
@@ -40,11 +39,10 @@ int main(int, const char **)
 		}
 		std::cout << "result ok" << std::endl;
 	}
-	catch(std::exception& e)
+	catch (std::exception& e)
 	{
 		std::cout << "general exception " << e.what() << std::endl;
 		return 1;
 	}
 	return 0;
 }
-
