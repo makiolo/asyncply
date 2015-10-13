@@ -7,7 +7,7 @@ $ git clone --recursive https://github.com/makiolo/asyncply.git asyncply
 $ cd asyncply
 $ mkdir release
 $ cd release
-$ cmake .. -DCMAKE_BUILD_TYPE=release
+$ cmake ..
 $ cmake --build . --config release
 $ ctest . -C release
 ```
