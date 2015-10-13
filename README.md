@@ -5,9 +5,9 @@ Async-Await implementation in C++11/14 for humans
 ```bash
 $ git clone --recursive https://github.com/makiolo/asyncply.git asyncply
 $ cd asyncply
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make -j
-$ make test ARGS=-V
+$ mkdir release
+$ cd release
+$ cmake .. -DCMAKE_BUILD_TYPE=release
+$ cmake --build . --config release
+$ ctest . -C release
 ```
