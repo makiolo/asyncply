@@ -1,7 +1,7 @@
 #ifndef _JOB_FUNCTION_H_
 #define _JOB_FUNCTION_H_
 
-#include "Job.h"
+#include "job.h"
 
 namespace asyncply
 {

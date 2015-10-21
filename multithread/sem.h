@@ -52,7 +52,7 @@ public:
 	///
 	inline void lock() const
 	{
-#if defined(LINUX)
+#if defined(__unix__)
 
 		(void)sem_wait(&_sem);
 
@@ -89,7 +89,7 @@ public:
 	///
 	inline void unlock() const
 	{
-#if defined(LINUX)
+#if defined(__unix__)
 
 		(void)sem_post(&_sem);
 
@@ -112,7 +112,7 @@ public:
 
 	int get_value() const
 	{
-#if defined(LINUX)
+#if defined(__unix__)
 		int value;
 		(void)sem_getvalue(&_sem, &value);
 		return value;
@@ -127,7 +127,7 @@ public:
 	}
 
 protected:
-#if defined(LINUX)
+#if defined(__unix__)
 	mutable sem_t _sem;
 #elif defined(__APPLE__)
 	sem_t* _sem;

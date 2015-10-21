@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <Poco/ThreadPool.h>
-#include <multithread/MultiThreading.h>
+#include <multithread/multithread.h>
 //#include "allocator.h"
 #include "run_fwd.h"
 #include "task.h"

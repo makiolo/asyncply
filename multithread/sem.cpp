@@ -1,6 +1,6 @@
-#include <multithread/api.h>
-#include <multithread/MultiThreading.h>
-#include <multithread/Semaphore.h>
+#include "api.h"
+#include "multithread.h"
+#include "sem.h"
 
 namespace asyncply
 {
@@ -11,7 +11,7 @@ int semaphore::_count_sem = 0;
 #endif
 
 semaphore::semaphore(uint32_t concurrency, bool isForSync)
-#if defined(LINUX)
+#if defined(__unix__)
 	: _sem()
     , _concurrency( concurrency )
 #else
@@ -20,7 +20,7 @@ semaphore::semaphore(uint32_t concurrency, bool isForSync)
 {
 	assert(_concurrency > 0);  // "La concurrencia es negativa o cero");
 
-#if defined(LINUX)
+#if defined(__unix__)
 
 	(void)sem_init(&_sem, 0, _concurrency);
 
@@ -65,7 +65,7 @@ semaphore::semaphore(uint32_t concurrency, bool isForSync)
 
 semaphore::~semaphore()
 {
-#if defined(LINUX)
+#if defined(__unix__)
 	(void)sem_destroy(&_sem);
 #elif defined(__APPLE__)
 	int code1 = sem_close(_sem);

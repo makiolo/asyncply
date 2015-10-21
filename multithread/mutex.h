@@ -1,15 +1,11 @@
 #ifndef _MUTEX_H_
 #define _MUTEX_H_
 
-#include "Semaphore.h"
+#include "sem.h"
 
 namespace asyncply {
 
 class multithread_API mutex
-/*!
- * This class represent a mutex.
- * OS Supported: *Windows*, *Linux*, *Mac*
- */
 {
 public:
 	using scoped_lock_t = scoped_lock<mutex>;
@@ -23,7 +19,7 @@ public:
 	inline void lock()
 	//! lock this mutex
 	{
-#if defined(LINUX)
+#if defined(__unix__)
 		if(pthread_mutex_lock(&_mutex) != 0)
 		{
 			throw std::runtime_error("error in mutex::lock()");
@@ -38,7 +34,7 @@ public:
 	inline void unlock()
 	//! unlock mutex
 	{
-#if defined(LINUX)
+#if defined(__unix__)
 		pthread_mutex_unlock(&_mutex);
 #elif defined(__APPLE__)
 		_sem.unlock();
@@ -50,7 +46,7 @@ public:
 	inline bool trylock()
 	//! lock if is not busy
 	{
-#if defined(LINUX)
+#if defined(__unix__)
 		return pthread_mutex_trylock(&_mutex) == 0;
 #elif defined(__APPLE__)
 		assert(0);
@@ -60,7 +56,7 @@ public:
 	}
 
 protected:
-#if defined(LINUX)
+#if defined(__unix__)
 	pthread_mutex_t _mutex;
 	pthread_mutexattr_t _attr;
 #elif defined(__APPLE__)

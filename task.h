@@ -5,7 +5,7 @@
 #include <Poco/Runnable.h>
 #include "promise.h"
 #include "run_fwd.h"
-#include <multithread/MultiThreading.h>
+#include <multithread/multithread.h>
 
 namespace asyncply {
 

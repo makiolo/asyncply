@@ -1,7 +1,7 @@
 #ifndef _SYNCRONIZER_H_
 #define _SYNCRONIZER_H_
 
-#include "Semaphore.h"
+#include "sem.h"
 
 namespace asyncply
 {

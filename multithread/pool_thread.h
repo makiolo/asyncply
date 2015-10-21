@@ -1,7 +1,7 @@
 #ifndef _POOL_THREAD_
 #define _POOL_THREAD_
 
-#include "Thread.h"
+#include "thread.h"
 
 #define THREADCOUNT_MAX 16
 

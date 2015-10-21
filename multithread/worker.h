@@ -1,7 +1,7 @@
 #ifndef _WORKER_H_
 #define _WORKER_H_
 
-#include "Thread.h"
+#include "thread.h"
 
 namespace asyncply
 {

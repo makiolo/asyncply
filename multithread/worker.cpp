@@ -1,6 +1,6 @@
-#include <multithread/api.h>
-#include <multithread/MultiThreading.h>
-#include <multithread/Worker.h>
+#include "api.h"
+#include "multithread.h"
+#include "worker.h"
 
 namespace asyncply
 {

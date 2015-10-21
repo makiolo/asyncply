@@ -1,8 +1,8 @@
 #ifndef _CIRCULAR_QUEUE_H_
 #define _CIRCULAR_QUEUE_H_
 
-#include "Mutex.h"
-#include "Semaphore.h"
+#include "mutex.h"
+#include "sem.h"
 
 #define MAX_ELEMENTS 512
 

@@ -1,16 +1,16 @@
-#include <multithread/api.h>
-#include <multithread/MultiThreading.h>
-#include <multithread/Mutex.h>
+#include "api.h"
+#include "multithread.h"
+#include "mutex.h"
 
 namespace asyncply {
 
 mutex::mutex()
-#if defined(LINUX)
+#if defined(__unix__)
 	: _mutex()
 	, _attr()
 #endif
 {
-#if defined(LINUX)
+#if defined(__unix__)
 	if (pthread_mutexattr_init(&_attr) != 0)
 	{
 		throw std::runtime_error("error initializing mutex");
@@ -27,7 +27,7 @@ mutex::mutex()
 
 mutex::~mutex()
 {
-#if defined(LINUX)
+#if defined(__unix__)
 	pthread_mutexattr_destroy(&_attr);
 	pthread_mutex_destroy(&_mutex);
 #elif defined(__APPLE__)
