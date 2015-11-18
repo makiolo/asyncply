@@ -1,24 +1,9 @@
-add_subdirectory(verypoco)
-
 PROJECT(ASYNCPLY CXX)
 cmake_minimum_required(VERSION 2.8)
-enable_testing()
+add_subdirectory(verypoco)
 
-IF(NOT DEFINED CMAKE_MODULE_PATH)
-	set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmaki)
-ENDIF()
-
-include(utils)
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmaki/utils.cmake")
 ENABLE_MODERN_CPP()
-SET(CMAKE_BUILD_TYPE_INIT Release)
-IF(WIN32)
-    SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin CACHE PATH "")
-    SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin CACHE PATH "")
-ELSE()
-	SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE} CACHE PATH "")
-	SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE} CACHE PATH "")
-ENDIF()
-
 add_subdirectory(multithread)
 add_subdirectory(tests)
 

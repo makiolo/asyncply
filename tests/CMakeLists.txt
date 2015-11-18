@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-find_package(verypoco REQUIRED)
+enable_testing()
 CREATE_TEST(test_bench "")
 CREATE_TEST(test_sequence "")
 CREATE_TEST(test_parallel "")
