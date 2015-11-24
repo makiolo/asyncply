@@ -6,8 +6,7 @@
 #include <Poco/Mutex.h>
 #include <Poco/Semaphore.h>
 
-namespace asyncply
-{
+namespace asyncply {
 
 template <typename R>
 class future
