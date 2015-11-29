@@ -4,6 +4,7 @@ add_subdirectory(verypoco)
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmaki/utils.cmake")
 ENABLE_MODERN_CPP()
+include_directories(metacommon)
 add_subdirectory(multithread)
 add_subdirectory(tests)
 
