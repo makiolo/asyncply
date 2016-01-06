@@ -2,15 +2,13 @@
 #define _TASK_H_
 
 #include <functional>
-#include <Poco/Runnable.h>
 #include "promise.h"
 #include "run_fwd.h"
-#include <multithread/multithread.h>
 
 namespace asyncply {
 
 template <typename R>
-class task : public asyncply::job
+class task
 {
 public:
 	using func = std::function<R()>;
@@ -33,7 +31,7 @@ public:
 		;
 	}
 
-	virtual ~task() { get(); }
+	~task() { get(); }
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
@@ -46,7 +44,7 @@ public:
 			return _result.get_future()->get();
 	}
 
-	virtual void execute() override
+	void execute()
 	{
 		try
 		{
@@ -98,7 +96,7 @@ protected:
 };
 
 template <>
-class task<void> : public asyncply::job
+class task<void>
 {
 public:
 	using func = std::function<void()>;
@@ -123,7 +121,7 @@ public:
 	{
 	}
 
-	virtual ~task() { get(); }
+	~task() { get(); }
 
 	task(const task& te) = delete;
 	task& operator=(const task& te) = delete;
@@ -136,7 +134,7 @@ public:
 			_result.get_future()->get();
 	}
 
-	virtual void execute() override
+	void execute()
 	{
 		try
 		{
@@ -189,3 +187,4 @@ protected:
 }
 
 #endif
+

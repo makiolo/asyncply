@@ -1,9 +1,9 @@
 [submodule "verypoco"]
 	path = verypoco
 	url = https://github.com/makiolo/verypoco.git
-[submodule "cmaki"]
-	path = cmaki
-	url = https://github.com/makiolo/cmaki.git
 [submodule "metacommon"]
 	path = metacommon
 	url = https://github.com/makiolo/metacommon.git
+[submodule "cmaki"]
+	path = cmaki
+	url = https://github.com/makiolo/cmaki.git

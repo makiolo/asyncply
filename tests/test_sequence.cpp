@@ -1,6 +1,15 @@
 #include <iostream>
 #include <complex>
 #include "../sequence.h"
+#include "../run.h"
+#include <thread>
+#include <uvpp/loop.hpp>
+#include <uvpp/timer.hpp>
+#include <uvpp/async.hpp>
+#include <uvpp/work.hpp>
+#include <uvpp/tcp.hpp>
+#include <uvpp/idle.hpp>
+#include <uvpp/resolver.hpp>
 
 int main(int, const char**)
 {
@@ -46,3 +55,4 @@ int main(int, const char**)
 	}
 	return 0;
 }
+
