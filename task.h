@@ -2,6 +2,7 @@
 #define _TASK_H_
 
 #include <functional>
+#include <uv.h>
 #include "promise.h"
 #include "run_fwd.h"
 
@@ -87,6 +88,8 @@ public:
 		}
 	}
 
+public:
+	uv_work_t req;
 protected:
 	func _method;
 	promise<R> _result;
@@ -176,6 +179,8 @@ public:
 		}
 	}
 
+public:
+	uv_work_t req;
 protected:
 	func _method;
 	promise<void> _result;
