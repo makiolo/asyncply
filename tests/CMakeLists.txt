@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
+include_directories(${CMAKE_SOURCE_DIR}/libuv/include)
+link_directories(${CMAKE_SOURCE_DIR}/libuv/lib)
+
 enable_testing()
 CREATE_TEST(test_bench "")
 CREATE_TEST(test_sequence "")

@@ -18,8 +18,6 @@ ExternalProject_Add (
 	INSTALL_COMMAND sh -c "make -j8 install"
 	BUILD_IN_SOURCE 1
 )
-include_directories(${CMAKE_SOURCE_DIR}/libuv/include)
-link_directories(${CMAKE_SOURCE_DIR}/libuv/lib)
 
 include_directories(metacommon)
 add_subdirectory(multithread)
