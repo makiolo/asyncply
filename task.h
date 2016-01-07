@@ -5,6 +5,7 @@
 #include <uv.h>
 #include "promise.h"
 #include "run_fwd.h"
+#include <thread>
 
 namespace asyncply {
 
@@ -21,7 +22,7 @@ public:
 		, _post_method(nullptr)
 		, _has_post(false)
 	{
-		;
+		_req.data = (void*)this;
 	}
 
 	task(const func& method, const post_type& post_method)
@@ -29,7 +30,7 @@ public:
 		, _post_method(post_method)
 		, _has_post(true)
 	{
-		;
+		_req.data = (void*)this;
 	}
 
 	~task() { get(); }
@@ -39,7 +40,7 @@ public:
 
 	R& get()
 	{
-		if (_post_method)
+		if (_has_post && _post_method)
 			return _result_post.get_future()->get();
 		else
 			return _result.get_future()->get();
@@ -47,6 +48,7 @@ public:
 
 	void execute()
 	{
+		std::cout << "-- execute start -- " << std::this_thread::get_id() << std::endl;
 		try
 		{
 			_result.set_value(_method());
@@ -86,16 +88,18 @@ public:
 			}
 			_result_post.signal();
 		}
+		std::cout << "-- execute end -- " << std::this_thread::get_id() << std::endl;
 	}
 
-public:
-	uv_work_t req;
+	uv_work_t* get_raw_req() { return &_req; }
+
 protected:
 	func _method;
 	promise<R> _result;
 	promise<R> _result_post;
 	post_type _post_method;
 	bool _has_post;
+	uv_work_t _req;
 };
 
 template <>
@@ -113,6 +117,7 @@ public:
         , _post_method()
 		, _has_post(false)
 	{
+		_req.data = (void*)this;
 	}
 
 	task(const func& method, const post_type& post_method)
@@ -122,6 +127,7 @@ public:
 		, _post_method(post_method)
 		, _has_post(true)
 	{
+		_req.data = (void*)this;
 	}
 
 	~task() { get(); }
@@ -131,7 +137,7 @@ public:
 
 	void get()
 	{
-		if (_post_method)
+		if (_has_post && _post_method)
 			_result_post.get_future()->get();
 		else
 			_result.get_future()->get();
@@ -179,14 +185,15 @@ public:
 		}
 	}
 
-public:
-	uv_work_t req;
+	uv_work_t* get_raw_req() { return &_req; }
+
 protected:
 	func _method;
 	promise<void> _result;
 	promise<void> _result_post;
 	post_type _post_method;
 	bool _has_post;
+	uv_work_t _req;
 };
 
 }
