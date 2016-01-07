@@ -22,7 +22,6 @@ include_directories(${CMAKE_SOURCE_DIR}/libuv/include)
 link_directories(${CMAKE_SOURCE_DIR}/libuv/lib)
 
 include_directories(metacommon)
-include_directories(uvpp)
 add_subdirectory(multithread)
 add_subdirectory(tests)
 

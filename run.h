@@ -2,16 +2,9 @@
 #define _RUN_H_
 
 #include <memory>
+#include <uv>
 #include "run_fwd.h"
 #include "task.h"
-
-#include <uvpp/loop.hpp>
-#include <uvpp/timer.hpp>
-#include <uvpp/async.hpp>
-#include <uvpp/work.hpp>
-#include <uvpp/tcp.hpp>
-#include <uvpp/idle.hpp>
-#include <uvpp/resolver.hpp>
 
 namespace asyncply {
 
