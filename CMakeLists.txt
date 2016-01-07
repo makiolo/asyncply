@@ -19,6 +19,7 @@ ExternalProject_Add (
 	BUILD_IN_SOURCE 1
 )
 
+enable_testing()
 include_directories(metacommon)
 add_subdirectory(multithread)
 add_subdirectory(tests)
