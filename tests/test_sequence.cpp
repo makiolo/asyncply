@@ -1,8 +1,8 @@
 #include <iostream>
 #include <complex>
+#include <cmath>
 #include "../sequence.h"
 #include "../run.h"
-#include <thread>
 
 int main(int, const char**)
 {

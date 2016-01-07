@@ -4,6 +4,7 @@
 #include <chrono>
 #include <sstream>
 #include <fstream>
+#include <cmath>
 #include "../sequence.h"
 #include "../parallel.h"
 
