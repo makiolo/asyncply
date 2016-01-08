@@ -15,21 +15,15 @@ public:
 	promise()
 		: _future(std::make_shared<asyncply::future<R>>(_semaphore))
 		, _semaphore(0, 1)
-	{
-	}
-
+	{ ; }
 	~promise() {}
 
-	std::shared_ptr<asyncply::future<R>> get_future() const { return _future; }
-
-	void set_value(const R& value) { _future->set_value(value); }
-	R& get_value() { return _future->get(); }
-
-	void set_value(R&& value) { _future->set_value(std::forward<R>(value)); }
-
-	void set_exception(std::exception_ptr p) { _future->set_exception(p); }
-
 	void signal() { _semaphore.set(); }
+
+	std::shared_ptr<asyncply::future<R>> get_future() const { return _future; }
+	void set_value(const R& value) { _future->set_value(value); }
+	void set_value(R&& value) { _future->set_value(std::forward<R>(value)); }
+	void set_exception(std::exception_ptr p) { _future->set_exception(p); }
 
 protected:
 	std::shared_ptr<asyncply::future<R>> _future;
@@ -43,16 +37,13 @@ public:
 	promise()
 		: _future(std::make_shared<asyncply::future<void>>(_semaphore))
 		, _semaphore(0, 1)
-	{
-	}
-
+	{ ; }
 	~promise() {}
 
-	std::shared_ptr<asyncply::future<void>> get_future() const { return _future; }
-
-	void set_exception(std::exception_ptr p) { _future->set_exception(p); }
-
 	void signal() { _semaphore.set(); }
+
+	std::shared_ptr<asyncply::future<void>> get_future() const { return _future; }
+	void set_exception(std::exception_ptr p) { _future->set_exception(p); }
 
 protected:
 	std::shared_ptr<asyncply::future<void>> _future;

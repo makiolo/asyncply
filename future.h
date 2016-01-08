@@ -38,9 +38,7 @@ public:
 	}
 
 	void set_value(const R& value) { _value = value; }
-
 	void set_value(R&& value) { _value = std::forward<R>(value); }
-
 	void set_exception(std::exception_ptr p)
 	{
 		_exception = p;

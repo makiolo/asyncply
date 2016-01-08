@@ -42,7 +42,6 @@ public:
 	{
 		if (_has_post && _post_method)
 		{
-			_result.get_future()->get();
 			return _result_post.get_future()->get();
 		}
 		else
@@ -73,7 +72,7 @@ public:
 
 		if (_has_post && _post_method)
 		{
-			auto post_task = std::bind(_post_method, std::cref(_result.get_value()));
+			auto post_task = std::bind(_post_method, std::cref(_result.get_future()->get()));
 			try
 			{
 				_result_post.set_value( post_task() );
@@ -142,7 +141,6 @@ public:
 	{
 		if (_has_post && _post_method)
 		{
-			_result.get_future()->get();
 			_result_post.get_future()->get();
 		}
 		else
@@ -172,6 +170,7 @@ public:
 
 		if (_has_post && _post_method)
 		{
+			_result.get_future()->get();
 			auto post_task = std::bind(_post_method);
 			try
 			{
