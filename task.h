@@ -3,9 +3,10 @@
 
 #include <functional>
 #include <uv.h>
-#include "promise.h"
 #include "run_fwd.h"
+#include "future.h"
 #include <thread>
+#include <uv.h>
 
 namespace asyncply {
 
@@ -22,7 +23,16 @@ public:
 		, _post_method(nullptr)
 		, _has_post(false)
 	{
+		uv_loop_t* loop = get_loop();
 		_req.data = (void*)this;
+		uv_queue_work(loop, get_raw_req(),
+				[](uv_work_t *req)
+				{
+					auto crossjob = (task<R>*)req->data;
+					crossjob->execute();
+				},
+				NULL
+			);
 	}
 
 	task(const func& method, const post_type& post_method)
@@ -30,29 +40,41 @@ public:
 		, _post_method(post_method)
 		, _has_post(true)
 	{
+		uv_loop_t* loop = get_loop();
 		_req.data = (void*)this;
+		uv_queue_work(loop, get_raw_req(),
+				[](uv_work_t *req)
+				{
+					auto crossjob = (task<R>*)req->data;
+					crossjob->execute();
+				},
+				[](uv_work_t *req, int status)
+				{
+					auto crossjob = (task<R>*)req->data;
+					crossjob->execute_post(status);
+				}
+			);
 	}
 
-	~task() { get(); }
+	~task() { ; }
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
 
-	R& get()
+	R& await()
 	{
-		if (_has_post && _post_method)
+		if(has_post())
 		{
-			return _result_post.get_future()->get();
+			return _result_post.await();
 		}
 		else
 		{
-			return _result.get_future()->get();
+			return _result.await();
 		}
 	}
 
 	void execute()
 	{
-		std::cout << "-- execute start -- " << std::this_thread::get_id() << std::endl;
 		try
 		{
 			_result.set_value(_method());
@@ -69,36 +91,51 @@ public:
 			}
 		}
 		_result.signal();
+	}
 
-		if (_has_post && _post_method)
+	void execute_post(int status)
+	{
+		try
 		{
-			auto post_task = std::bind(_post_method, std::cref(_result.get_future()->get()));
+			if (status == UV_ECANCELED)
+			{
+				std::cout << "task cancel exception" << std::endl;
+				throw std::exception();
+			}
+			else
+			{
+				_result_post.set_value( _post_method( _result.await() ) );
+			}
+		}
+		catch(...)
+		{
 			try
 			{
-				_result_post.set_value( post_task() );
+				_result_post.set_exception( std::current_exception() );
 			}
 			catch (...)
 			{
-				try
-				{
-					_result_post.set_exception(std::current_exception());
-				}
-				catch (...)
-				{
-					;
-				}
+				;
 			}
-			_result_post.signal();
 		}
-		std::cout << "-- execute end -- " << std::this_thread::get_id() << std::endl;
+		_result_post.signal();
 	}
 
-	uv_work_t* get_raw_req() { return &_req; }
+	inline bool has_post() const { return (_has_post && _post_method); }
+	inline uv_work_t* get_raw_req() { return &_req; }
+
+	/*
+	 * only can be canceled, if its still in the queue
+	 */
+	inline void cancel()
+	{
+		uv_cancel( (uv_req_t*)get_raw_req() );
+	}
 
 protected:
 	func _method;
-	promise<R> _result;
-	promise<R> _result_post;
+	future<R> _result;
+	future<R> _result_post;
 	post_type _post_method;
 	bool _has_post;
 	uv_work_t _req;
@@ -119,7 +156,16 @@ public:
         , _post_method()
 		, _has_post(false)
 	{
+		uv_loop_t* loop = get_loop();
 		_req.data = (void*)this;
+		uv_queue_work(loop, get_raw_req(),
+				[](uv_work_t *req)
+				{
+					auto crossjob = (task<void>*)req->data;
+					crossjob->execute();
+				},
+				NULL
+			);
 	}
 
 	task(const func& method, const post_type& post_method)
@@ -129,23 +175,36 @@ public:
 		, _post_method(post_method)
 		, _has_post(true)
 	{
+		uv_loop_t* loop = get_loop();
 		_req.data = (void*)this;
+		uv_queue_work(loop, get_raw_req(),
+				[](uv_work_t *req)
+				{
+					auto crossjob = (task<void>*)req->data;
+					crossjob->execute();
+				},
+				[](uv_work_t *req, int status)
+				{
+					auto crossjob = (task<void>*)req->data;
+					crossjob->execute_post(status);
+				}
+			);
 	}
 
-	~task() { get(); }
+	~task() { ; }
 
 	task(const task& te) = delete;
 	task& operator=(const task& te) = delete;
 
-	void get()
+	void await()
 	{
-		if (_has_post && _post_method)
+		if(has_post())
 		{
-			_result_post.get_future()->get();
+			_result_post.await();
 		}
 		else
 		{
-			_result.get_future()->get();
+			_result.await();
 		}
 	}
 
@@ -167,36 +226,53 @@ public:
 			}
 		}
 		_result.signal();
+	}
 
-		if (_has_post && _post_method)
+	void execute_post(int status)
+	{
+		try
 		{
-			_result.get_future()->get();
-			auto post_task = std::bind(_post_method);
+			_result.await();
+			if (status == UV_ECANCELED)
+			{
+				std::cout << "task cancel exception" << std::endl;
+				throw std::exception();
+			}
+			else
+			{
+				auto post_task = std::bind(_post_method);
+				post_task();
+			}
+		}
+		catch(...)
+		{
 			try
 			{
-				post_task();
+				_result_post.set_exception( std::current_exception() );
 			}
 			catch (...)
 			{
-				try
-				{
-					_result_post.set_exception(std::current_exception());
-				}
-				catch (...)
-				{
-					;
-				}
+				;
 			}
-			_result_post.signal();
 		}
+		_result_post.signal();
 	}
 
-	uv_work_t* get_raw_req() { return &_req; }
+	inline bool has_post() const { return (_has_post && _post_method); }
+	inline uv_work_t* get_raw_req() { return &_req; }
+
+	/*
+	 * only can be canceled, if its still in the queue
+	 */
+	inline void cancel()
+	{
+		uv_cancel( (uv_req_t*)get_raw_req() );
+	}
 
 protected:
 	func _method;
-	promise<void> _result;
-	promise<void> _result_post;
+	future<void> _result;
+	future<void> _result_post;
 	post_type _post_method;
 	bool _has_post;
 	uv_work_t _req;

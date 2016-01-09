@@ -12,31 +12,37 @@ template <typename R>
 class future
 {
 public:
-	future(Poco::Semaphore& sem)
-		: _semaphore(sem)
-		, _ready(false)
+	future()
+		: _ready(false)
 		, _has_exception(false)
+		, _semaphore(0, 1)
 		, _value()
 	{
 	}
 
-	~future() {}
-
-	R& get()
+	~future()
 	{
-		Poco::Mutex::ScopedLock lock(_lock);
-		while (!_ready)
+		;
+	}
+
+	future(const future&) = delete;
+	future& operator=(const future&) = delete;
+
+	R& await()
+	{
+		if(!_ready)
 		{
 			_semaphore.wait();
+			_ready = true;
 			if (_has_exception && _exception)
 			{
 				std::rethrow_exception(_exception);
 			}
-			_ready = true;
 		}
 		return _value;
 	}
 
+	void signal() { _semaphore.set(); }
 	void set_value(const R& value) { _value = value; }
 	void set_value(R&& value) { _value = std::forward<R>(value); }
 	void set_exception(std::exception_ptr p)
@@ -46,11 +52,10 @@ public:
 	}
 
 protected:
-	Poco::Mutex _lock;
-	Poco::Semaphore& _semaphore;
 	std::atomic<bool> _ready;
 	std::atomic<bool> _has_exception;
 	std::exception_ptr _exception;
+	Poco::Semaphore _semaphore;
 	// atomic ?
 	R _value;
 };
@@ -59,37 +64,41 @@ template <>
 class future<void>
 {
 public:
-	future(Poco::Semaphore& sem)
-		: _lock()
-		, _semaphore(sem)
-		, _exception()
+	future()
+		: _exception()
 		, _ready(false)
+		, _semaphore(0, 1)
 	{
 	}
 
-	~future() {}
-
-	void get()
+	~future()
 	{
-		Poco::Mutex::ScopedLock lock(_lock);
-		while (!_ready)
+		;
+	}
+
+	future(const future&) = delete;
+	future& operator=(const future&) = delete;
+
+	void await()
+	{
+		if(!_ready)
 		{
 			_semaphore.wait();
+			_ready = true;
 			if (_exception)
 			{
 				std::rethrow_exception(_exception);
 			}
-			_ready = true;
 		}
 	}
 
+	void signal() { _semaphore.set(); }
 	void set_exception(std::exception_ptr p) { _exception = p; }
 
 protected:
-	Poco::Mutex _lock;
-	Poco::Semaphore& _semaphore;
 	std::exception_ptr _exception;
 	std::atomic<bool> _ready;
+	Poco::Semaphore _semaphore;
 };
 
 }

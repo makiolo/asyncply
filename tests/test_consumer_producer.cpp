@@ -4,6 +4,8 @@
 #include "../parallel.h"
 #include "../task.h"
 
+asyncply::pool p;
+
 int main(int, const char**)
 {
 	try

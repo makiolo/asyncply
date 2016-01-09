@@ -5,13 +5,15 @@
 #include "../sequence.h"
 #include "../task.h"
 
+asyncply::pool p;
+
 int main(int, const char**)
 {
 	try
 	{
 		for (int i = 0; i < 100; ++i)
 		{
-			std::vector<std::shared_ptr<asyncply::task<double>>> vjobs;
+			std::vector<asyncply::task_t< asyncply::task_t<double> > > vjobs;
 			asyncply::_parallel(vjobs,
 				[&]()
 				{
@@ -42,7 +44,8 @@ int main(int, const char**)
 			{
 				try
 				{
-					double partial = job->get();
+					// double await await
+					double partial = job->await()->await();
 					aggregation += partial;
 				}
 				catch (std::exception& e)

@@ -7,23 +7,23 @@
 namespace asyncply {
 
 template <typename Data, typename Function>
-std::function<Data(const Data&)> _sequence(Function&& f)
+std::function<Data(Data)> _sequence(Function&& f)
 {
-	return [&](const Data& data)
+	return [&](Data data)
 	{
 		auto job = asyncply::run(
 			[&]()
 			{
 				return f(data);
 			});
-		return job->get();
+		return Data(job->await());
 	};
 }
 
 template <typename Data, typename Function, typename... Functions>
-std::function<Data(const Data&)> _sequence(Function&& f, Functions&&... fs)
+std::function<Data(Data)> _sequence(Function&& f, Functions&&... fs)
 {
-	return [&](const Data& data)
+	return [&](Data data)
 	{
 		auto job = asyncply::run(
 			[&]()
@@ -31,27 +31,27 @@ std::function<Data(const Data&)> _sequence(Function&& f, Functions&&... fs)
 				return f(data);
 			},
 #ifdef _WIN32
-			[&](const Data& d)
+			[&](Data d)
 #else
 			// solution for bug in gcc 4.9.3
-			[&fs...](const Data& d)
+			[&fs...](Data d)
 #endif
 			{
 				return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(d);
 			});
-		return job->get();
+		return Data(job->await());
 	};
 }
 
 template <typename Data, typename... Functions>
-Data sequence(const Data& data, Functions&&... fs)
+task_t<Data> sequence(Data data, Functions&&... fs)
 {
-	auto job = asyncply::run(
-			[&]()
+	auto task = asyncply::run(
+			[data, &fs...]()
 			{
 				return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(data);
 			});
-	return job->get();
+	return task;
 }
 
 }

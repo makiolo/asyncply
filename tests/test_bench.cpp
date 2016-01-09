@@ -8,6 +8,8 @@
 #include "../sequence.h"
 #include "../parallel.h"
 
+asyncply::pool p;
+
 template <typename T>
 using weakptr = std::weak_ptr<T>;
 
@@ -140,8 +142,7 @@ public:
 
 int main_measured_algorithm_1(int, const char**)
 {
-	double total = 0.0;
-	total = asyncply::sequence(1.0,
+	auto task = asyncply::sequence(1.0,
 		[](double data)
 		{
 			return data + 1.0;
@@ -162,6 +163,7 @@ int main_measured_algorithm_1(int, const char**)
 		{
 			return data + 1.0;
 		});
+	double total = task->await();
 	if (std::abs(total - 6.0) > 1e-3)
 	{
 		std::cout << "invalid result: " << total << std::endl;

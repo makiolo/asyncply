@@ -4,13 +4,17 @@
 #include "../parallel.h"
 #include "../task.h"
 
+asyncply::pool p;
+
 int main(int, const char**)
 {
+	asyncply::pool p;
+
 	try
 	{
 		for (int i = 0; i < 100; ++i)
 		{
-			std::vector<std::shared_ptr<asyncply::task<double>>> vjobs;
+			std::vector< asyncply::task_t<double> > vjobs;
 			asyncply::_parallel(vjobs,
 				[]()
 				{
@@ -33,7 +37,7 @@ int main(int, const char**)
 			{
 				try
 				{
-					aggregation += job->get();
+					aggregation += job->await();
 				}
 				catch (std::exception& e)
 				{
