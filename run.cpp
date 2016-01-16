@@ -36,10 +36,10 @@ asyncply_API void __stop()
 asyncply_API void start()
 {
 	j = std::move(std::thread([]() {
-				// while(!interrupted)
-				// {
+				while(!interrupted)
+				{
 					asyncply::__run();
-				// }
+				}
 			}));
 }
 

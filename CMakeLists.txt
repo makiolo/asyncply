@@ -2,9 +2,10 @@ PROJECT(ASYNCPLY CXX)
 cmake_minimum_required(VERSION 2.8)
 add_subdirectory(verypoco)
 
-include("${CMAKE_CURRENT_SOURCE_DIR}/cmaki/utils.cmake")
-ENABLE_MODERN_CPP()
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmaki/cmaki.cmake")
+cmaki_setup()
 
+# ===============================================================
 include(ExternalProject)
 set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 ExternalProject_Add (
@@ -20,17 +21,11 @@ ExternalProject_Add (
 )
 include_directories(${CMAKE_SOURCE_DIR}/libuv/include)
 link_directories(${CMAKE_SOURCE_DIR}/libuv/lib)
-include_directories(metacommon)
+# ===============================================================
+
 add_subdirectory(multithread)
-
-add_compile_options(-pthread)
-add_library(asyncply SHARED run.cpp)
-target_link_libraries(asyncply uv)
-target_link_libraries(asyncply multithread)
-target_link_libraries(asyncply verypoco)
-target_link_libraries(asyncply pthread)
+include_directories(metacommon)
+cmaki_library(asyncply run.cpp DEPENDS uv multithread verypoco PTHREADS)
 add_dependencies(asyncply project_libuv)
-
-enable_testing()
 add_subdirectory(tests)
 
