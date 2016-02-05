@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-# include_directories(${CMAKE_SOURCE_DIR}/libuv/include)
-# link_directories(${CMAKE_SOURCE_DIR}/libuv/lib)
-
 cmaki_test(bench test_bench.cpp DEPENDS asyncply)
 cmaki_test(sequence test_bench.cpp DEPENDS asyncply)
 cmaki_test(parallel test_bench.cpp DEPENDS asyncply)
