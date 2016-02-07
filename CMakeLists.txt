@@ -27,5 +27,6 @@ add_subdirectory(multithread)
 include_directories(metacommon)
 cmaki_library(asyncply run.cpp DEPENDS uv multithread verypoco PTHREADS)
 add_dependencies(asyncply project_libuv)
+add_dependencies(multithread project_libuv)
 add_subdirectory(tests)
 
