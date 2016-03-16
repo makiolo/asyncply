@@ -28,6 +28,8 @@ int main(int, const char**)
 					f -= i;
 				}
 			});
+		asyncply::__run();
+
 
 		std::cout << "f = " << f << std::endl;
 		if (f != N)

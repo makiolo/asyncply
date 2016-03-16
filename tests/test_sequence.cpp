@@ -7,10 +7,10 @@
 #include <thread>
 #include <vector>
 
+#define PARALLEL 0
 #define SEQUENCE 1
-#define PARALLEL 1
 
-// asyncply::pool p;
+asyncply::pool p;
 
 int main(int, const char**)
 {
@@ -19,40 +19,49 @@ int main(int, const char**)
 	asyncply::_parallel(vjobs,
 			[]()
 			{
-				// std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
+				std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
 				return 9.0;
 			},
 			[]()
 			{
-				// std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
+				std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
 				return 7.0;
 			},
 			[]()
 			{
-				// std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
+				std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
 				return 10.0;
 			},
 			[]()
 			{
-				// std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
+				std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
 				return 6.0;
 			});
+
+	asyncply::__run();
 #endif
 
 #if SEQUENCE
 	int input_data = 10;
 	auto task = asyncply::sequence(input_data,
-			[](int data) {
-				// std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
-				std::cout << "hello ... ---" << data << "---" << std::endl;
-				return data + 59;
-			},
-			[](int data) {
-				// std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
-				std::cout << "world ... ---" << data << "---" << std::endl;
-				return data + 59;
-			}
-		);
+		[](int data) {
+			std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
+			std::cout << "hello ... ---" << data << "---" << std::endl;
+			return data + 59;
+		},
+		[](int data) {
+			std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
+			std::cout << "world ... ---" << data << "---" << std::endl;
+			return data + 59;
+		},
+		[](int data) {
+			std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
+			std::cout << "world ... ---" << data << "---" << std::endl;
+			return data + 59;
+		}
+	);
+
+	asyncply::__run();
 #endif
 
 #if PARALLEL
@@ -66,6 +75,7 @@ int main(int, const char**)
 	std::cout << "result = " << task->await() << std::endl;
 #endif
 
+#if 0
 	std::cout << "start old test" << std::endl;
 	try
 	{
@@ -108,6 +118,7 @@ int main(int, const char**)
 		std::cout << "general exception " << e.what() << std::endl;
 		return 1;
 	}
+#endif
 	return 0;
 }
 
