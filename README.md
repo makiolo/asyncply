@@ -10,7 +10,8 @@ $ git clone --recursive https://github.com/makiolo/asyncply.git asyncply
 $ cd asyncply
 $ mkdir release
 $ cd release
-$ cmake ..
+$ cmake .. (default compiler)
+$ cmake .. -G"MinGW Makefiles" -DCMAKE_C_COMPILER="mingw32-gcc" -DCMAKE_CXX_COMPILER="mingw32-g++" (I use with Mingw)
 $ cmake --build . --config release
 $ ctest . -C release
 ```
