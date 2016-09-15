@@ -11,7 +11,11 @@ $ cd asyncply
 $ mkdir release
 $ cd release
 $ cmake .. (default compiler)
-$ cmake .. -G"MinGW Makefiles" -DCMAKE_C_COMPILER="mingw32-gcc" -DCMAKE_CXX_COMPILER="mingw32-g++" (I use with Mingw)
 $ cmake --build . --config release
 $ ctest . -C release
+```
+# cygwin / mingw
+```bash
+$ git config --global core.autocrlf false
+$ cmake .. -G"MinGW Makefiles" -DCMAKE_C_COMPILER="mingw32-gcc" -DCMAKE_CXX_COMPILER="mingw32-g++" (I use with Mingw)
 ```
