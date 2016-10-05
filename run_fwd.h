@@ -3,13 +3,17 @@
 
 #include <memory>
 #include <type_traits>
+#include <future>
 #include "api.h"
 #include "task_fwd.h"
 
 namespace asyncply {
 
 template <typename Function>
-using task_of_functor = asyncply::task<typename std::result_of<Function()>::type>;
+using return_of_functor = typename std::result_of<Function()>::type;
+
+template <typename Function>
+using task_of_functor = asyncply::task< return_of_functor<Function> >;
 
 template <typename Type>
 using task_t = std::shared_ptr< asyncply::task<Type> >;
@@ -22,6 +26,9 @@ shared_task<Function> run(Function&& f);
 
 template <typename Function, typename FunctionPost>
 shared_task<Function> run(Function&& f, FunctionPost&& fp);
+
+template <typename Function>
+using future_of_functor = std::future< return_of_functor<Function> >;
 
 }
 

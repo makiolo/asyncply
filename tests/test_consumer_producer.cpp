@@ -11,7 +11,7 @@ int main(int, const char**)
 		const size_t N = 1e4;
 		std::atomic<size_t> f;
 		f = 0;
-		asyncply::parallel(
+		asyncply::parallel_sync(
 			[&]()
 			{
 				for (size_t i = 0; i < (N + 1); ++i)

@@ -2,13 +2,9 @@
 #define _TASK_H_
 
 #include <functional>
-#include "run_fwd.h"
-#include "future.h"
 #include <thread>
-//
-#include <thread_pool.hpp>
-
-static ThreadPool pool;
+#include "run_fwd.h"
+#include "async.h"
 
 namespace asyncply {
 
@@ -25,31 +21,23 @@ public:
 		, _post_method(nullptr)
 		, _has_post(false)
 	{
-        std::packaged_task<return_type()> t([&](){
+		asyncply::async(_result, [&](){
 			return _method();
-        });
-        _result = t.get_future();
-
-		// add in pool
-        pool.post(t);
+		});
 	}
 
 	task(const func& method, const post_type& post_method)
-		: task(method)
-		// , _method(method)
-		// , _post_method(post_method)
-		// , _has_post(true)
+		: _method(method)
+		, _post_method(_post_method)
+		, _has_post(true)
 	{
-		_post_method = post_method;
-		_has_post = true;
+		asyncply::async(_result, [&](){
+			return _method();
+		});
 
-        std::packaged_task<return_type()> t([&](){
+		asyncply::async(_result_post, [&](){
 			return _post_method(_result.get());
-        });
-        _result_post = t.get_future();
-
-		// add in pool
-        pool.post(t);
+		});
 	}
 
 	~task() { ; }
@@ -92,32 +80,24 @@ public:
         , _post_method()
 		, _has_post(false)
 	{
-        std::packaged_task<return_type()> t([&](){
+		asyncply::async(_result, [&](){
 			_method();
-        });
-        _result = t.get_future();
-
-		// add in pool
-        pool.post(t);
+		});
 	}
 
 	task(const func& method, const post_type& post_method)
-		: task(method)
-		// , _method(method)
-		// , _post_method(post_method)
-		// , _has_post(true)
+		: _method(method)
+		, _post_method(post_method)
+		, _has_post(true)
 	{
-		_post_method = post_method;
-		_has_post = true;
+		asyncply::async(_result, [&](){
+			_method();
+		});
 
-        std::packaged_task<return_type()> t([&](){
+		asyncply::async(_result_post, [&](){
 			_result.get();
 			_post_method();
-        });
-        _result_post = t.get_future();
-
-		// add in pool
-        pool.post(t);
+		});
 	}
 
 	~task() { ; }
@@ -145,7 +125,6 @@ protected:
 	std::future<void> _result;
 	std::future<void> _result_post;
 	bool _has_post;
-	// uv_work_t _req;
 };
 
 }

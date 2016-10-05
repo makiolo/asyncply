@@ -44,14 +44,19 @@ std::function<Data(Data)> _sequence(Function&& f, Functions&&... fs)
 }
 
 template <typename Data, typename... Functions>
-task_t<Data> sequence(Data data, Functions&&... fs)
+Data sequence_sync(Data data, Functions&&... fs)
 {
-	auto task = asyncply::run(
+	return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(data);
+}
+
+template <typename Data, typename... Functions>
+auto sequence(Data data, Functions&&... fs)
+{
+	return asyncply::run(
 			[data, &fs...]()
 			{
-				return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(data);
+				return sequence_sync<Data>(data, std::forward<Functions>(fs)...);
 			});
-	return task;
 }
 
 }

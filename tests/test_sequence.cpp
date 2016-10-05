@@ -14,7 +14,7 @@ int main(int, const char**)
 {
 #if PARALLEL
 	// std::vector< asyncply::task_t<double> > vjobs;
-	double total = asyncply::parallel(
+	auto task_parallel = asyncply::parallel(
 			[]()
 			{
 				// std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
@@ -35,6 +35,7 @@ int main(int, const char**)
 				// std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
 				return 6.0;
 			});
+	double total = task_parallel->get();
 
 	std::cout << "result parallel = " << total << std::endl;
 #endif
@@ -59,10 +60,8 @@ int main(int, const char**)
 		}
 	);
 
-#endif
-
-#if SEQUENCE
 	std::cout << "result = " << task->get() << std::endl;
+
 #endif
 
 #if 0

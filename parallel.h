@@ -29,7 +29,7 @@ template <  typename Function,
 				(!std::is_void<typename std::result_of<Function()>::type>::value)
 			>::type
 	>
-std::vector<typename std::result_of<Function()>::type> parallel(Function&& f, Functions&&... fs)
+std::vector<typename std::result_of<Function()>::type> parallel_sync(Function&& f, Functions&&... fs)
 {
 	using ret_t = typename std::result_of<Function()>::type;
 	std::vector<shared_task<Function>> vf;
@@ -48,7 +48,7 @@ template <  typename Function,
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value)
 			>::type
 	>
-typename std::result_of<Function()>::type parallel(Function&& f, Functions&&... fs)
+typename std::result_of<Function()>::type parallel_sync(Function&& f, Functions&&... fs)
 {
 	using ret_t = typename std::result_of<Function()>::type;
 	std::vector<shared_task<Function>> vf;
@@ -66,7 +66,7 @@ template <  typename Function,
 				(std::is_same<typename std::result_of<Function()>::type, bool>::value)
 			>::type
 	>
-bool parallel(Function&& f, Functions&&... fs)
+bool parallel_sync(Function&& f, Functions&&... fs)
 {
 	std::vector<shared_task<Function>> vf;
 	vf.emplace_back(asyncply::run(std::forward<Function>(f)));
@@ -83,13 +83,23 @@ template <  typename Function,
 				(std::is_void<typename std::result_of<Function()>::type>::value)
 			>::type
 	>
-void parallel(Function&& f, Functions&&... fs)
+void parallel_sync(Function&& f, Functions&&... fs)
 {
 	std::vector<shared_task<Function> > vf;
 	vf.emplace_back(asyncply::run(std::forward<Function>(f)));
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 	for(auto& v : vf)
 		v->get();
+}
+
+template <typename... Functions>
+auto parallel(Functions&&... fs)
+{
+	return asyncply::run(
+			[&fs...]()
+			{
+				return asyncply::parallel_sync<Functions...>(std::forward<Functions>(fs)...);
+			});
 }
 
 }

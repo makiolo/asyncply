@@ -172,7 +172,7 @@ int main_measured_algorithm_1(int, const char**)
 
 int main_measured_algorithm_2(int, const char**)
 {
-	double total = asyncply::parallel(
+	auto task_parallel = asyncply::parallel(
 		[]()
 		{
 			return 1.0;
@@ -193,6 +193,7 @@ int main_measured_algorithm_2(int, const char**)
 		{
 			return 1.0;
 		});
+	double total = task_parallel->get();
 	if (std::abs(total - 5.0) > 1e-3)
 	{
 		std::cout << "invalid result: " << total << std::endl;

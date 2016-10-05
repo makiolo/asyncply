@@ -47,7 +47,7 @@ int main(int, const char**)
 				return 1;
 			}
 
-			auto total = asyncply::parallel(
+			auto task_parallel = asyncply::parallel(
 				[]()
 				{
 					return 9.0;
@@ -64,6 +64,7 @@ int main(int, const char**)
 				{
 					return 6.0;
 				});
+			double total = task_parallel->get();
 			if (std::abs(aggregation - total) > 1e-3)
 			{
 				std::cout << "invalid total " << total << std::endl;
