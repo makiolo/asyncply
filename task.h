@@ -27,23 +27,31 @@ public:
 	}
 
 	task(const func& method, const post_type& post_method)
-		: _method(method)
-		, _post_method(_post_method)
-		, _has_post(true)
+		: task(method)
 	{
-		asyncply::async(_result, [&](){
-			return _method();
-		});
-
-		asyncply::async(_result_post, [&](){
-			return _post_method(_result.get());
-		});
+		then(post_method);
 	}
 
 	~task() { ; }
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
+
+	void then(const post_type& post_method)
+	{
+		if(has_post())
+		{
+			throw std::exception();
+		}
+		else
+		{
+			_has_post = true;
+			_post_method = post_method;
+			asyncply::async(_result_post, [&](){
+				return _post_method(_result.get());
+			});
+		}
+	}
 
 	return_type get()
 	{
@@ -86,24 +94,32 @@ public:
 	}
 
 	task(const func& method, const post_type& post_method)
-		: _method(method)
-		, _post_method(post_method)
-		, _has_post(true)
+		: task(method)
 	{
-		asyncply::async(_result, [&](){
-			_method();
-		});
-
-		asyncply::async(_result_post, [&](){
-			_result.get();
-			_post_method();
-		});
+		then(post_method);
 	}
 
 	~task() { ; }
 
 	task(const task& te) = delete;
 	task& operator=(const task& te) = delete;
+
+	void then(const post_type& post_method)
+	{
+		if(has_post())
+		{
+			throw std::exception();
+		}
+		else
+		{
+			_has_post = true;
+			_post_method = post_method;
+			asyncply::async(_result_post, [&](){
+				_result.get();
+				_post_method();
+			});
+		}
+	}
 
 	void get()
 	{
