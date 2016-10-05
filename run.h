@@ -6,12 +6,8 @@
 #include <memory>
 #include "run_fwd.h"
 #include "task.h"
-//
-#include <thread_pool.hpp>
 
 namespace asyncply {
-
-static ThreadPool pool;
 
 struct asyncply_API register_asyncply
 {

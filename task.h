@@ -99,7 +99,7 @@ public:
 		then(post_method);
 	}
 
-	~task() { ; }
+	~task() { get(); }
 
 	task(const task& te) = delete;
 	task& operator=(const task& te) = delete;
@@ -125,11 +125,13 @@ public:
 	{
 		if(has_post())
 		{
-			_result_post.get();
+			if (_result_post.valid())
+				_result_post.get();
 		}
 		else
 		{
-			_result.get();
+			if(_result.valid())
+				_result.get();
 		}
 	}
 
