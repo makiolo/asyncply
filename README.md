@@ -17,7 +17,7 @@ $ cmake ..
 ```
 # Option 2: use specific compiler
 ```bash
-$ cmake .. -G"MinGW Makefiles" -DCMAKE_C_COMPILER="mingw32-gcc" -DCMAKE_CXX_COMPILER="mingw32-g++" (I use with Mingw)
+$ cmake .. -G"MinGW Makefiles" -DCMAKE_C_COMPILER="mingw32-gcc" -DCMAKE_CXX_COMPILER="mingw32-g++"
 ```
 # compilation and execute unittests
 ```bash
