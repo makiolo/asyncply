@@ -4,18 +4,23 @@ Async-Await implementation in C++11/14 for humans
 # :construction: I am under construction
 Don't use it
 
-# quick-start
+# checkout and prepare
 ```bash
 $ git clone --recursive https://github.com/makiolo/asyncply.git asyncply
 $ cd asyncply
 $ mkdir release
 $ cd release
-$ cmake .. (default compiler)
+```
+# Option 1: use default compiler
+```bash
+$ cmake ..
+```
+# Option 2: use specific compiler
+```bash
+$ cmake .. -G"MinGW Makefiles" -DCMAKE_C_COMPILER="mingw32-gcc" -DCMAKE_CXX_COMPILER="mingw32-g++" (I use with Mingw)
+```
+# compilation and execute unittests
+```bash
 $ cmake --build . --config release
 $ ctest . -C release
-```
-# cygwin / mingw
-```bash
-$ git config --global core.autocrlf false
-$ cmake .. -G"MinGW Makefiles" -DCMAKE_C_COMPILER="mingw32-gcc" -DCMAKE_CXX_COMPILER="mingw32-g++" (I use with Mingw)
 ```
