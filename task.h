@@ -120,6 +120,19 @@ public:
 			});
 		}
 	}
+    
+	// void invalid_post()
+	// {
+	// 	if(!has_post())
+	// 	{
+	// 		throw std::exception();
+	// 	}
+	// 	else
+	// 	{
+	// 		_has_post = false;
+	// 		_post_method = nullptr;
+	// 	}
+	// }
 
 	void get()
 	{
