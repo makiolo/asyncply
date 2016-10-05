@@ -16,7 +16,7 @@ std::function<Data(Data)> _sequence(Function&& f)
 			{
 				return f(data);
 			});
-		return Data(job->await());
+		return Data(job->get());
 	};
 }
 
@@ -30,7 +30,7 @@ std::function<Data(Data)> _sequence(Function&& f, Functions&&... fs)
 			{
 				return f(data);
 			},
-#ifdef _WIN32
+#ifdef _MSC_VER
 			[&](Data d)
 #else
 			// solution for bug in gcc 4.9.3
@@ -39,7 +39,7 @@ std::function<Data(Data)> _sequence(Function&& f, Functions&&... fs)
 			{
 				return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(d);
 			});
-		return Data(job->await());
+		return Data(job->get());
 	};
 }
 

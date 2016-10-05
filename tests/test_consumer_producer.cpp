@@ -4,8 +4,6 @@
 #include "../parallel.h"
 #include "../task.h"
 
-asyncply::pool p;
-
 int main(int, const char**)
 {
 	try
@@ -28,21 +26,12 @@ int main(int, const char**)
 					f -= i;
 				}
 			});
-		asyncply::__run();
-
 
 		std::cout << "f = " << f << std::endl;
 		if (f != N)
 		{
 			throw std::runtime_error("Invalid value f");
 		}
-
-		// if(total)
-		// 	std::cout << "yes" << std::endl;
-		// else
-		// 	std::cout << "no" << std::endl;
-
-		// std::cout << "total = " << total << std::endl;
 	}
 	catch (std::exception& e)
 	{
@@ -51,3 +40,4 @@ int main(int, const char**)
 	}
 	return 0;
 }
+

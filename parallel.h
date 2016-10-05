@@ -37,7 +37,7 @@ std::vector<typename std::result_of<Function()>::type> parallel(Function&& f, Fu
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 	std::vector<ret_t> results;
 	for(auto& v : vf)
-		results.emplace_back(v->await());
+		results.emplace_back(v->get());
 	return std::move(results);
 }
 
@@ -56,7 +56,7 @@ typename std::result_of<Function()>::type parallel(Function&& f, Functions&&... 
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 	std::vector<ret_t> results;
 	for(auto& v : vf)
-		results.emplace_back(v->await());
+		results.emplace_back(v->get());
 	return std::accumulate(results.begin(), results.end(), ret_t(0), std::plus<ret_t>());
 }
 
@@ -73,7 +73,7 @@ bool parallel(Function&& f, Functions&&... fs)
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 	std::vector<bool> results;
 	for(auto& v : vf)
-		results.emplace_back(v->await());
+		results.emplace_back(v->get());
 	return std::accumulate(results.begin(), results.end(), true, std::logical_and<bool>());
 }
 
@@ -89,7 +89,7 @@ void parallel(Function&& f, Functions&&... fs)
 	vf.emplace_back(asyncply::run(std::forward<Function>(f)));
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 	for(auto& v : vf)
-		v->await();
+		v->get();
 }
 
 }

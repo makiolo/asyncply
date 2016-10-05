@@ -4,12 +4,8 @@
 #include "../parallel.h"
 #include "../task.h"
 
-asyncply::pool p;
-
 int main(int, const char**)
 {
-	asyncply::pool p;
-
 	try
 	{
 		for (int i = 0; i < 100; ++i)
@@ -37,7 +33,7 @@ int main(int, const char**)
 			{
 				try
 				{
-					aggregation += job->await();
+					aggregation += job->get();
 				}
 				catch (std::exception& e)
 				{

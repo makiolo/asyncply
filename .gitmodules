@@ -7,3 +7,6 @@
 [submodule "verypoco"]
 	path = verypoco
 	url = https://github.com/makiolo/verypoco.git
+[submodule "thread-pool-cpp"]
+	path = thread-pool-cpp
+	url = https://github.com/inkooboo/thread-pool-cpp.git

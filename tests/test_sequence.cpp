@@ -7,72 +7,62 @@
 #include <thread>
 #include <vector>
 
-#define PARALLEL 0
+#define PARALLEL 1
 #define SEQUENCE 1
-
-asyncply::pool p;
 
 int main(int, const char**)
 {
 #if PARALLEL
-	std::vector< asyncply::task_t<double> > vjobs;
-	asyncply::_parallel(vjobs,
+	// std::vector< asyncply::task_t<double> > vjobs;
+	double total = asyncply::parallel(
 			[]()
 			{
-				std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
+				// std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
 				return 9.0;
 			},
 			[]()
 			{
-				std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
+				// std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
 				return 7.0;
 			},
 			[]()
 			{
-				std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
+				// std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
 				return 10.0;
 			},
 			[]()
 			{
-				std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
+				// std::cout << "-- thread parallel " << std::this_thread::get_id() << std::endl;
 				return 6.0;
 			});
 
-	asyncply::__run();
+	std::cout << "result parallel = " << total << std::endl;
 #endif
 
 #if SEQUENCE
 	int input_data = 10;
 	auto task = asyncply::sequence(input_data,
 		[](int data) {
-			std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
-			std::cout << "hello ... ---" << data << "---" << std::endl;
+			// std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
+			// std::cout << "hello ... ---" << data << "---" << std::endl;
 			return data + 59;
 		},
 		[](int data) {
-			std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
-			std::cout << "world ... ---" << data << "---" << std::endl;
+			// std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
+			// std::cout << "world ... ---" << data << "---" << std::endl;
 			return data + 59;
 		},
 		[](int data) {
-			std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
-			std::cout << "world ... ---" << data << "---" << std::endl;
+			// std::cout << "-- thread sequence " << std::this_thread::get_id() << std::endl;
+			// std::cout << "world ... ---" << data << "---" << std::endl;
 			return data + 59;
 		}
 	);
 
-	asyncply::__run();
-#endif
-
-#if PARALLEL
-	for(auto& job : vjobs)
-	{
-		std::cout << "result parallel = " << job->await() << std::endl;
-	}
 #endif
 
 #if SEQUENCE
-	std::cout << "result = " << task->await() << std::endl;
+	std::cout << "result = " << task->get() << std::endl;
 #endif
 
 #if 0
@@ -103,7 +93,7 @@ int main(int, const char**)
 				{
 					return data + 6.0;
 				});
-			double total = task_seq->await();
+			double total = task_seq->get();
 			if (std::abs(total - 21.0) > 1e-3)
 			{
 				std::cout << "not expected result" << std::endl;

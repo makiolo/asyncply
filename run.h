@@ -4,32 +4,17 @@
 #include <thread>
 #include <iostream>
 #include <memory>
-#include <uv.h>
-#include <uv-threadpool.h>
 #include "run_fwd.h"
 #include "task.h"
 
 namespace asyncply {
 
-struct asyncply_API init_asyncply
+struct asyncply_API register_asyncply
 {
-	init_asyncply();
-	~init_asyncply();
+	register_asyncply();
+	~register_asyncply();
 };
-asyncply_API init_asyncply _init_asyncply;
-
-struct pool
-{
-	pool()
-	{
-		asyncply::start();
-	}
-	~pool()
-	{
-		asyncply::stop();
-	}
-};
-static pool _p;
+asyncply_API register_asyncply _reg;
 
 template <typename Function>
 shared_task<Function> run(Function&& f)

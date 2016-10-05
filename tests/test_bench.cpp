@@ -8,8 +8,6 @@
 #include "../sequence.h"
 #include "../parallel.h"
 
-asyncply::pool p;
-
 template <typename T>
 using weakptr = std::weak_ptr<T>;
 
@@ -74,9 +72,9 @@ struct measure_scoped
 {
 	// TODO: decision by compiler
 	// use best clock for you
-	// using clock = std::chrono::high_resolution_clock;
+	using clock = std::chrono::high_resolution_clock;
 	// using clock = std::chrono::steady_clock;
-	using clock = std::chrono::system_clock;
+	// using clock = std::chrono::system_clock;
 
 	using result_t = double;
 	using time_point_t = std::chrono::time_point<clock>;
@@ -163,7 +161,7 @@ int main_measured_algorithm_1(int, const char**)
 		{
 			return data + 1.0;
 		});
-	double total = task->await();
+	double total = task->get();
 	if (std::abs(total - 6.0) > 1e-3)
 	{
 		std::cout << "invalid result: " << total << std::endl;
@@ -205,7 +203,7 @@ int main_measured_algorithm_2(int, const char**)
 
 double launch_benchmark(int argc, const char* argv[], int (*algorithm)(int, const char**))
 {
-	long long N = 1e4;
+	long long N = 1e2;
 	double elapsedtime;
 	{
 		measure_scoped timer(elapsedtime);

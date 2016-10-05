@@ -5,8 +5,6 @@
 #include "../sequence.h"
 #include "../task.h"
 
-asyncply::pool p;
-
 int main(int, const char**)
 {
 	try
@@ -44,8 +42,8 @@ int main(int, const char**)
 			{
 				try
 				{
-					// double await await
-					double partial = job->await()->await();
+					// double get get
+					double partial = job->get()->get();
 					aggregation += partial;
 				}
 				catch (std::exception& e)
@@ -58,7 +56,7 @@ int main(int, const char**)
 				std::cout << "invalid total " << aggregation << std::endl;
 				throw std::exception();
 			}
-			std::cout << "aggregation = " << aggregation << std::endl;
+			// std::cout << "aggregation = " << aggregation << std::endl;
 		}
 		std::cout << "result ok" << std::endl;
 	}
