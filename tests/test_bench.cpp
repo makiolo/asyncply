@@ -5,6 +5,9 @@
 #include <sstream>
 #include <fstream>
 #include <cmath>
+#include <atomic>
+#include <algorithm>
+#include "../algorithm.h"
 #include "../sequence.h"
 #include "../parallel.h"
 
@@ -140,65 +143,39 @@ public:
 
 int main_measured_algorithm_1(int, const char**)
 {
-	auto task = asyncply::sequence(1.0,
-		[](double data)
-		{
-			return data + 1.0;
-		},
-		[](double data)
-		{
-			return data + 1.0;
-		},
-		[](double data)
-		{
-			return data + 1.0;
-		},
-		[](double data)
-		{
-			return data + 1.0;
-		},
-		[](double data)
-		{
-			return data + 1.0;
-		});
-	double total = task->get();
-	if (std::abs(total - 6.0) > 1e-3)
+	std::vector<int> a;
+	for(int i=0; i<200; ++i)
 	{
-		std::cout << "invalid result: " << total << std::endl;
-		throw std::exception();
+		a.push_back(1);
+		a.push_back(4);
+		a.push_back(12);
+		a.push_back(-3);
+		a.push_back(22);
 	}
+	std::atomic<int> total;
+	total = 0;
+	asyncply::for_each(a.begin(), a.end(), [&total](int i) {
+		total += i;
+	});
 	return 0;
 }
 
 int main_measured_algorithm_2(int, const char**)
 {
-	auto task_parallel = asyncply::parallel(
-		[]()
-		{
-			return 1.0;
-		},
-		[]()
-		{
-			return 1.0;
-		},
-		[]()
-		{
-			return 1.0;
-		},
-		[]()
-		{
-			return 1.0;
-		},
-		[]()
-		{
-			return 1.0;
-		});
-	double total = task_parallel->get();
-	if (std::abs(total - 5.0) > 1e-3)
+	std::vector<int> a;
+	for(int i=0; i<200; ++i)
 	{
-		std::cout << "invalid result: " << total << std::endl;
-		throw std::exception();
+		a.push_back(1);
+		a.push_back(4);
+		a.push_back(12);
+		a.push_back(-3);
+		a.push_back(22);
 	}
+	std::atomic<int> total;
+	total = 0;
+	std::for_each(a.begin(), a.end(), [&total](int i) {
+		total += i;
+	});
 	return 0;
 }
 

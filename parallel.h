@@ -89,7 +89,9 @@ void parallel_sync(Function&& f, Functions&&... fs)
 	vf.emplace_back(asyncply::run(std::forward<Function>(f)));
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 	for(auto& v : vf)
+	{
 		v->get();
+	}
 }
 
 template <typename... Functions>
@@ -98,7 +100,7 @@ auto parallel(Functions&&... fs)
 	return asyncply::run(
 			[&fs...]()
 			{
-				return asyncply::parallel_sync<Functions...>(std::forward<Functions>(fs)...);
+				return asyncply::parallel_sync(std::forward<Functions>(fs)...);
 			});
 }
 

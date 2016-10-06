@@ -37,14 +37,15 @@ std::function<Data(Data)> _sequence(Function&& f, Functions&&... fs)
 			[&fs...](Data d)
 #endif
 			{
-				if(bool(d))
-				{
+				// if(bool(d))
+				// {
 					return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(d);
-				}
-				else
-				{
-					std::cout << "stoping flow!" << std::endl;
-				}
+				// }
+				// else
+				// {
+				// 	std::cout << "stoping flow!" << std::endl;
+				// 	return Data();
+				// }
 			});
 		return Data(job->get());
 	};
