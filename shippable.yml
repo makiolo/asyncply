@@ -1,6 +1,26 @@
-language: python # lie, is cpp
+language: c
 os:
     - linux
+
+build:
+    ci:
+        - apt-get update -qq
+        - apt-get install -qq software-properties-common
+        - add-apt-repository --yes "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main"
+        - add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+        - add-apt-repository --yes ppa:h-rayflood/llvm
+        - add-apt-repository --yes ppa:andykimpe/cmake
+        - apt-get install -qq wget
+        - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | apt-key add -
+        - apt-get install -qq cmake
+        - apt-get install -qq clang-3.6
+        - apt-get install -qq g++-4.9
+        - apt-get install -qq xsltproc
+        - apt-get install -qq llvm-3.6-tools
+        - apt-get install -qq git
+        - apt-get install -qq kbtin
+        - apt-get install -qq libtool
+        - apt-get install -qq autoconf
 
 before_install:
     - export LANG=en_US.UTF-8
