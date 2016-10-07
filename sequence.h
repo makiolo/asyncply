@@ -11,7 +11,7 @@ std::function<Data(Data)> _sequence(Function&& f)
 {
 	return [&](Data data)
 	{
-		auto job = asyncply::run(
+		auto job = asyncply::async(
 			[&]()
 			{
 				return f(data);
@@ -25,7 +25,7 @@ std::function<Data(Data)> _sequence(Function&& f, Functions&&... fs)
 {
 	return [&](Data data)
 	{
-		auto job = asyncply::run(
+		auto job = asyncply::async(
 			[&]()
 			{
 				return f(data);
@@ -60,7 +60,7 @@ Data sequence_sync(Data data, Functions&&... fs)
 template <typename Data, typename... Functions>
 auto sequence(Data data, Functions&&... fs)
 {
-	return asyncply::run(
+	return asyncply::async(
 			[data, &fs...]()
 			{
 				return sequence_sync<Data>(data, std::forward<Functions>(fs)...);

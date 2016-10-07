@@ -11,13 +11,13 @@ namespace asyncply {
 template <typename Function>
 void _parallel(std::vector<shared_task<Function>>& vf, Function&& f)
 {
-	vf.emplace_back(asyncply::run(std::forward<Function>(f)));
+	vf.emplace_back(asyncply::async(std::forward<Function>(f)));
 }
 
 template <typename Function, typename... Functions>
 void _parallel(std::vector<shared_task<Function>>& vf, Function&& f, Functions&&... fs)
 {
-	vf.emplace_back(asyncply::run(std::forward<Function>(f)));
+	vf.emplace_back(asyncply::async(std::forward<Function>(f)));
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 }
 
@@ -33,7 +33,7 @@ std::vector<typename std::result_of<Function()>::type> parallel_sync(Function&& 
 {
 	using ret_t = typename std::result_of<Function()>::type;
 	std::vector<shared_task<Function>> vf;
-	vf.emplace_back(asyncply::run(std::forward<Function>(f)));
+	vf.emplace_back(asyncply::async(std::forward<Function>(f)));
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 	std::vector<ret_t> results;
 	for(auto& v : vf)
@@ -52,7 +52,7 @@ typename std::result_of<Function()>::type parallel_sync(Function&& f, Functions&
 {
 	using ret_t = typename std::result_of<Function()>::type;
 	std::vector<shared_task<Function>> vf;
-	vf.emplace_back(asyncply::run(std::forward<Function>(f)));
+	vf.emplace_back(asyncply::async(std::forward<Function>(f)));
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 	std::vector<ret_t> results;
 	for(auto& v : vf)
@@ -69,7 +69,7 @@ template <  typename Function,
 bool parallel_sync(Function&& f, Functions&&... fs)
 {
 	std::vector<shared_task<Function>> vf;
-	vf.emplace_back(asyncply::run(std::forward<Function>(f)));
+	vf.emplace_back(asyncply::async(std::forward<Function>(f)));
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 	std::vector<bool> results;
 	for(auto& v : vf)
@@ -86,7 +86,7 @@ template <  typename Function,
 void parallel_sync(Function&& f, Functions&&... fs)
 {
 	std::vector<shared_task<Function> > vf;
-	vf.emplace_back(asyncply::run(std::forward<Function>(f)));
+	vf.emplace_back(asyncply::async(std::forward<Function>(f)));
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 	for(auto& v : vf)
 	{
@@ -97,7 +97,7 @@ void parallel_sync(Function&& f, Functions&&... fs)
 template <typename... Functions>
 auto parallel(Functions&&... fs)
 {
-	return asyncply::run(
+	return asyncply::async(
 			[&fs...]()
 			{
 				return asyncply::parallel_sync(std::forward<Functions>(fs)...);

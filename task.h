@@ -21,7 +21,7 @@ public:
 		, _post_method(nullptr)
 		, _has_post(false)
 	{
-		asyncply::async(_result, [&](){
+		_result = asyncply::_async([&](){
 			return _method();
 		});
 	}
@@ -47,7 +47,7 @@ public:
 		{
 			_has_post = true;
 			_post_method = post_method;
-			asyncply::async(_result_post, [&](){
+			_result_post = asyncply::_async([&](){
 				return _post_method(_result.get());
 			});
 		}
@@ -88,7 +88,7 @@ public:
         , _post_method()
 		, _has_post(false)
 	{
-		asyncply::async(_result, [&](){
+		_result = asyncply::_async([&](){
 			_method();
 		});
 	}
@@ -114,7 +114,7 @@ public:
 		{
 			_has_post = true;
 			_post_method = post_method;
-			asyncply::async(_result_post, [&](){
+			_result_post = asyncply::_async([&](){
 				_result.get();
 				_post_method();
 			});

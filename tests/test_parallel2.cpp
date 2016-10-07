@@ -7,10 +7,18 @@
 #include "../algorithm.h"
 #include "../parallel.h"
 #include "../sequence.h"
+#include "../async.h"
 #include "../task.h"
 
 int main(int, const char**)
 {
+	std::future<int> f = asyncply::_async([](){return 10;});
+	std::cout << "f = " << f.get() << std::endl;
+
+	auto f2 = asyncply::async([](){return 15;});
+	f2->then([](int data){ std::cout << "post, received: " << data << std::endl; return 0; });
+	std::cout << "f2 = " << f2->get() << std::endl;
+
 	std::vector<int> a;
 	for(int i=0; i<100; ++i)
 	{
@@ -22,8 +30,9 @@ int main(int, const char**)
 	}
 	std::atomic<int> total;
 	total = 0;
-	asyncply::for_each(a.begin(), a.end(), [&total](int i) {
+	asyncply::for_each_sync(a.begin(), a.end(), [&total](int i) {
 		total += i;
+		// std::cout << "thread " << std::this_thread::get_id() << std::endl;
 	});
 	std::cout << "total = " << total << std::endl;
 

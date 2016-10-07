@@ -9,11 +9,9 @@ namespace asyncply {
 static ThreadPool __pool;
 
 template <typename Function>
-void async(future_of_functor<Function>& result, Function&& f)
+future_of_functor<Function> _async(Function&& f)
 {
-	std::packaged_task<return_of_functor<Function>()> t(f);
-	result = t.get_future();
-	__pool.post(t);
+	return __pool.process(std::forward<Function>(f));
 }
 
 }
