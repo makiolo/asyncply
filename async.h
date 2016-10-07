@@ -6,7 +6,7 @@
 
 namespace asyncply {
 
-static ThreadPool __pool({1000});
+static ThreadPool __pool;
 
 template <typename Function>
 void async(future_of_functor<Function>& result, Function&& f)
