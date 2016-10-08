@@ -24,6 +24,10 @@ public:
 		_result = asyncply::_async([&](){
 			return _method();
 		});
+		// _result_waiting = asyncply::_async([&](){
+		// 	_result.wait();
+		// 	_post_method(_result);
+		// });
 	}
 
 	task(const func& method, const post_type& post_method)
@@ -120,7 +124,7 @@ public:
 			});
 		}
 	}
-    
+
 	// void invalid_post()
 	// {
 	// 	if(!has_post())
