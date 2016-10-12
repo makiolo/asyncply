@@ -37,7 +37,7 @@ int main(int, const char**)
 	std::cout << "total = " << total << std::endl;
 
 	{
-		auto process1 = asyncply::parallel(
+		auto total_ps = asyncply::parallel_sync(
 					[]()
 					{
 						return asyncply::sequence_sync(1.0,
@@ -63,13 +63,7 @@ int main(int, const char**)
 							});
 					}
 				);
-		process1->then([](int accum)
-				{
-					assert(accum == 6);
-					std::cout << "accum is " << accum << std::endl;
-					return 0;
-				});
-		assert(process1->get() == 0);
+		std::cout << "process1 = " << total_ps << std::endl;
 	}
 
 	{
