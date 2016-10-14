@@ -40,7 +40,7 @@ int main(int, const char**)
 		auto total_ps = asyncply::parallel_sync(
 					[]()
 					{
-						return asyncply::sequence_sync(1.0,
+						return asyncply::sequence(1.0,
 							[](double data)
 							{
 								return data + 1.0;
@@ -52,7 +52,7 @@ int main(int, const char**)
 					},
 					[]()
 					{
-						return asyncply::sequence_sync(1.0,
+						return asyncply::sequence(1.0,
 							[](double data)
 							{
 								return data + 1.0;
@@ -64,6 +64,11 @@ int main(int, const char**)
 					}
 				);
 		std::cout << "process1 = " << total_ps << std::endl;
+		if (std::abs(6.0 - total_ps) > 1e-3)
+		{
+			std::cout << "invalid total " << total_ps << std::endl;
+			return 1;
+		}
 	}
 
 	{
