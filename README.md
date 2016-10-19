@@ -19,7 +19,6 @@ $ cmake ..
 ```bash
 $ cmake .. -G"MinGW Makefiles" -DCMAKE_C_COMPILER="mingw32-gcc" -DCMAKE_CXX_COMPILER="mingw32-g++"
 $ cmake .. -G"MinGW Makefiles" -DCMAKE_C_COMPILER="x86_64-w64-mingw32-gcc" -DCMAKE_CXX_COMPILER="x86_64-w64-mingw32-g++"
-$ 
 ```
 # compilation and execute unittests
 ```bash
