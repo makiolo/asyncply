@@ -10,3 +10,6 @@
 [submodule "stackless_coroutine"]
 	path = stackless_coroutine
 	url = https://github.com/jbandela/stackless_coroutine.git
+[submodule "fast-event-system"]
+	path = fast-event-system
+	url = https://github.com/makiolo/fast-event-system.git
