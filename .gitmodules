@@ -13,3 +13,4 @@
 [submodule "fast-event-system"]
 	path = fast-event-system
 	url = https://github.com/makiolo/fast-event-system.git
+

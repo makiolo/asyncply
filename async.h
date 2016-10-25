@@ -6,11 +6,10 @@
 
 namespace asyncply {
 
-
 template <typename Function, typename ... Args>
 future_of_functor<Function> _async(Function&& f, Args&& ... data)
 {
-#if 1
+#if 0
 	static ThreadPool __pool;
 	return __pool.process(std::forward<Function>(f), std::forward<Args>(data)...);
 #else
