@@ -9,7 +9,7 @@ include_directories(metacommon)
 include_directories(thread-pool-cpp/thread_pool)
 include_directories(stackless_coroutine)
 include_directories(fast-event-system)
-cmaki_library(asyncply run.cpp PTHREADS)
+cmaki2_library(asyncply run.cpp PTHREADS)
 add_subdirectory(tests)
 
 

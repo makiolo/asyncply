@@ -1,0 +1,4 @@
+{boost-atomic: 1.58.0.0, boost-chrono: 1.58.0.0, boost-context: 1.58.0.0, boost-coroutines: 1.58.0.0,
+  boost-filesystem: 1.58.0.0, boost-headers: 1.58.0.0, boost-program-options: 1.58.0.0,
+  boost-regex: 1.58.0.0, boost-system: 1.58.0.0, boost-thread: 1.58.0.0, fast-event-system: 0.0.329.513,
+  google-gmock: 0.0.955.555, google-gtest: 0.0.955.555, ois: 1.3.0.0}

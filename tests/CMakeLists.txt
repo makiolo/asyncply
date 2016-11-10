@@ -18,3 +18,4 @@ cmaki2_gtest(consumer_producer test_consumer_producer.cpp DEPENDS asyncply)
 # cmaki2_gtest(coroutine test_coroutine.cpp DEPENDS asyncply)
 # disabling because have problems with gtest
 # cmaki2_gtest(parallel_fes test_parallel_fes.cpp DEPENDS asyncply)
+
