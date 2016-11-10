@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
 cmaki_find_package(fast-event-system)
+cmaki_find_package(boost-headers)
+cmaki_find_package(boost-coroutines)
 
 cmaki2_gtest(bench test_bench.cpp DEPENDS asyncply)
 cmaki2_gtest(sequence test_sequence.cpp DEPENDS asyncply)
