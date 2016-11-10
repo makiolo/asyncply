@@ -81,6 +81,5 @@ TEST(ParallelFesTest, Test1)
 			});
 	}
 	ASSERT_EQ(total, 405);
-	return 0;
 }
 
