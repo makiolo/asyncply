@@ -40,9 +40,9 @@ cmd::link cat()
 	return [](cmd::in& source, cmd::out& yield)
 	{
 		std::string line;
-		for (; source; source())
+		for (auto s : source)
 		{
-			std::ifstream input(source.get());
+			std::ifstream input(s);
 			while (std::getline(input, line))
 			{
 				yield(line);
@@ -76,7 +76,7 @@ void find_tree(const boost::filesystem::path& p, std::vector<std::string>& files
 
 cmd::link find(const std::string& dir)
 {
-	return [dir](cmd::in& source, cmd::out& yield)
+	return [dir](cmd::in&, cmd::out& yield)
 	{
 		boost::filesystem::path p(dir);
 		if (boost::filesystem::exists(p))
@@ -94,7 +94,7 @@ cmd::link find(const std::string& dir)
 cmd::link ls(const std::string& dir)
 {
 	namespace fs = boost::filesystem;
-	return [dir](cmd::in& source, cmd::out& yield)
+	return [dir](cmd::in&, cmd::out& yield)
 	{
 		fs::path p(dir);
 		if (fs::exists(p) && fs::is_directory(p))
@@ -115,9 +115,9 @@ cmd::link grep(const std::string& pattern, bool exclusion = false)
 	return [pattern, exclusion](cmd::in& source, cmd::out& yield)
 	{
 		const boost::regex re(pattern);
-		for (; source; source())
+		for (auto s : source)
 		{
-			const std::string& line(source.get());
+			const std::string& line(s);
 			boost::match_results<std::string::const_iterator> groups;
 			if ((boost::regex_search(line, groups, re) && (groups.size() > 0)) == !exclusion)
 			{
@@ -139,9 +139,9 @@ cmd::link contain(const std::string& in)
 {
 	return [in](cmd::in& source, cmd::out& yield)
 	{
-		for (; source; source())
+		for (auto s : source)
 		{
-			const std::string& line(source.get());
+			const std::string& line(s);
 			if (line.find(in) != std::string::npos)
 			{
 				yield(line);
@@ -155,9 +155,9 @@ cmd::link uniq()
 	return [](cmd::in& source, cmd::out& yield)
 	{
 		std::set<std::string> unique;
-		for (; source; source())
+		for (auto s : source)
 		{
-			unique.insert(source.get());
+			unique.insert(s);
 		}
 		for (const auto& s : unique)
 		{
@@ -170,9 +170,9 @@ cmd::link ltrim()
 {
 	return [](cmd::in& source, cmd::out& yield)
 	{
-		for (; source; source())
+		for (auto s : source)
 		{
-			std::string buf = source.get();
+			std::string buf(s);
 			buf.erase(buf.begin(), std::find_if(buf.begin(), buf.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
 			yield(buf);
 		}
@@ -183,9 +183,9 @@ cmd::link rtrim()
 {
 	return [](cmd::in& source, cmd::out& yield)
 	{
-		for (; source; source())
+		for (auto s : source)
 		{
-			std::string buf = source.get();
+			std::string buf(s);
 			buf.erase(std::find_if(buf.rbegin(), buf.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), buf.end());
 			yield(buf);
 		}
@@ -206,10 +206,10 @@ cmd::link cut(const char* delim, int field)
 	return [delim, field](cmd::in& source, cmd::out& yield)
 	{
 		typedef boost::tokenizer<boost::char_separator<char>> tokenizer;
-		for (; source; source())
+		for (auto s : source)
 		{
 			int i = 0;
-			for (auto& t : tokenizer(source.get(), boost::char_separator<char>(delim)))
+			for (auto& t : tokenizer(s, boost::char_separator<char>(delim)))
 			{
 				if (i++ == field)
 				{
@@ -223,7 +223,7 @@ cmd::link cut(const char* delim, int field)
 
 cmd::link in(const std::vector<std::string>& strs)
 {
-	return [&strs](cmd::in& source, cmd::out& yield)
+	return [&strs](cmd::in&, cmd::out& yield)
 	{
 		for(auto& str : strs)
 		{
@@ -234,7 +234,7 @@ cmd::link in(const std::vector<std::string>& strs)
 
 cmd::link in(const std::string& str)
 {
-	return [&str](cmd::in& source, cmd::out& yield)
+	return [&str](cmd::in&, cmd::out& yield)
 	{
 		yield(str);
 	};
@@ -244,9 +244,9 @@ cmd::link out(std::vector<std::string>& strs)
 {
 	return [&strs](cmd::in& source, cmd::out&)
 	{
-		for (; source; source())
+		for (auto s : source)
 		{
-			strs.emplace_back(source.get());
+			strs.emplace_back(s);
 		}
 	};
 }
@@ -255,10 +255,7 @@ cmd::link out(std::string& str)
 {
 	return [&str](cmd::in& source, cmd::out&)
 	{
-		if(source)
-		{
-			str = source.get();
-		}
+		str = source();
 	};
 }
 
@@ -266,9 +263,9 @@ cmd::link out()
 {
 	return [](cmd::in& source, cmd::out&)
 	{
-		for (; source; source())
+		for (auto s : source)
 		{
-			std::cout << source.get() << std::endl;
+			std::cout << s << std::endl;
 		}
 	};
 }
@@ -277,10 +274,10 @@ cmd::link quote(const char* delim = "\"")
 {
 	return [delim](cmd::in& source, cmd::out& yield)
 	{
-		for (; source; source())
+		for (auto s : source)
 		{
 			std::stringstream ss;
-			ss << delim << source.get() << delim;
+			ss << delim << s << delim;
 			yield(ss.str());
 		}
 	};
@@ -291,12 +288,14 @@ cmd::link join(const char* delim = " ")
 	return [delim](cmd::in& source, cmd::out& yield)
 	{
 		std::stringstream ss;
-		for (int i=0; source; source(), ++i)
+		int i = 0;
+		for (auto s : source)
 		{
 			if(i != 0)
-				ss << delim << source.get();
+				ss << delim << s;
 			else
-				ss << source.get();
+				ss << s;
+			++i;
 		}
 		yield(ss.str());
 	};
@@ -306,9 +305,9 @@ cmd::link split(const char* delim = " ", bool keep_empty=true)
 {
 	return [delim, keep_empty](cmd::in& source, cmd::out& yield)
 	{
-		for (int i=0; source; source(), ++i)
+		for (auto s : source)
 		{
-			std::string line = source.get();
+			std::string line = s;
 			std::vector<std::string> chunks;
 			boost::split(chunks, line, boost::is_any_of(delim));
 			for(auto& chunk : chunks)
@@ -324,7 +323,7 @@ cmd::link split(const char* delim = " ", bool keep_empty=true)
 cmd::link run(const std::string& cmd)
 {
 	char buff[BUFSIZ];
-	return [cmd, &buff](cmd::in& source, cmd::out& yield)
+	return [cmd, &buff](cmd::in&, cmd::out& yield)
 	{
 		FILE *in;
 		if(!(in = popen(cmd.c_str(), "r")))
