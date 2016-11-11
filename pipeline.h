@@ -14,8 +14,8 @@
 namespace asyncply {
 
 template <typename T>
-// using coro = boost::coroutines::asymmetric_coroutine<T()>;
-using coro = boost::coroutines::symmetric_coroutine<T()>;
+// using coro = boost::coroutines::asymmetric_coroutine<T>;
+using coro = boost::coroutines::symmetric_coroutine<T>;
 
 template <typename T>
 using yield_type = typename coro<T>::yield_type;
