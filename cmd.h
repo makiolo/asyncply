@@ -30,7 +30,7 @@ cmd::link cat(const std::string& filename)
 		std::ifstream input(filename);
 		while (std::getline(input, line))
 		{
-			yield(source, line);
+			yield(line);
 		}
 	};
 }
@@ -45,7 +45,7 @@ cmd::link cat()
 			std::ifstream input(source.get());
 			while (std::getline(input, line))
 			{
-				yield(source, line);
+				yield(line);
 			}
 		}
 	};
@@ -85,7 +85,7 @@ cmd::link find(const std::string& dir)
 			find_tree(p, files);
 			for(auto& f : files)
 			{
-				yield(source, f);
+				yield(f);
 			}
 		}
 	};
@@ -103,7 +103,7 @@ cmd::link ls(const std::string& dir)
 			{
 				if (fs::is_regular_file(f->path()))
 				{
-					yield(source, f->path().string());
+					yield(f->path().string());
 				}
 			}
 		}
@@ -121,7 +121,7 @@ cmd::link grep(const std::string& pattern, bool exclusion = false)
 			boost::match_results<std::string::const_iterator> groups;
 			if ((boost::regex_search(line, groups, re) && (groups.size() > 0)) == !exclusion)
 			{
-				yield(source, line);
+				yield(line);
 			}
 		}
 	};
@@ -144,7 +144,7 @@ cmd::link contain(const std::string& in)
 			const std::string& line(source.get());
 			if (line.find(in) != std::string::npos)
 			{
-				yield(source, line);
+				yield(line);
 			}
 		}
 	};
@@ -161,7 +161,7 @@ cmd::link uniq()
 		}
 		for (const auto& s : unique)
 		{
-			yield(source, s);
+			yield(s);
 		}
 	};
 }
@@ -174,7 +174,7 @@ cmd::link ltrim()
 		{
 			std::string buf = source.get();
 			buf.erase(buf.begin(), std::find_if(buf.begin(), buf.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
-			yield(source, buf);
+			yield(buf);
 		}
 	};
 }
@@ -187,7 +187,7 @@ cmd::link rtrim()
 		{
 			std::string buf = source.get();
 			buf.erase(std::find_if(buf.rbegin(), buf.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), buf.end());
-			yield(source, buf);
+			yield(buf);
 		}
 	};
 }
@@ -213,7 +213,7 @@ cmd::link cut(const char* delim, int field)
 			{
 				if (i++ == field)
 				{
-					yield(source, t);
+					yield(t);
 					break;
 				}
 			}
@@ -227,7 +227,7 @@ cmd::link in(const std::vector<std::string>& strs)
 	{
 		for(auto& str : strs)
 		{
-			yield(source, str);
+			yield(str);
 		}
 	};
 }
@@ -236,7 +236,7 @@ cmd::link in(const std::string& str)
 {
 	return [&str](cmd::in& source, cmd::out& yield)
 	{
-		yield(source, str);
+		yield(str);
 	};
 }
 
@@ -281,7 +281,7 @@ cmd::link quote(const char* delim = "\"")
 		{
 			std::stringstream ss;
 			ss << delim << source.get() << delim;
-			yield(source, ss.str());
+			yield(ss.str());
 		}
 	};
 }
@@ -298,7 +298,7 @@ cmd::link join(const char* delim = " ")
 			else
 				ss << source.get();
 		}
-		yield(source, ss.str());
+		yield(ss.str());
 	};
 }
 
@@ -315,7 +315,7 @@ cmd::link split(const char* delim = " ", bool keep_empty=true)
 			{
 				if(!keep_empty && chunk.empty())
 					continue;
-				yield(source, chunk);
+				yield(chunk);
 			}
 		}
 	};
@@ -333,11 +333,11 @@ cmd::link run(const std::string& cmd)
 			ss << "Error executing command: " << cmd;
 			throw std::runtime_error(ss.str());
 		}
-		while(fgets(buff, sizeof(buff), in) != 0)
+		while(fgets(buff, BUFSIZ, in) != 0)
 		{
 			std::string newline(buff);
 			newline.erase(std::remove(newline.begin(), newline.end(), '\n'), newline.end());
-			yield(source, newline);
+			yield(newline);
 		}
 		pclose(in);
 	};
