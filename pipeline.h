@@ -19,7 +19,7 @@ using coro = boost::coroutines::symmetric_coroutine<T()>; // sync
 
 template <typename T>
 // using yield_type = typename coro<T>::pull_type; // async
-using yield_type = typename coro<T>::yield_type; // sync
+using yield_type = typename coro<T>::call_type; // sync
 
 template <typename T>
 using link = boost::function<void(asyncply::coro<T>&, asyncply::yield_type<T>&)>;
