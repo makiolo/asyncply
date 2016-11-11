@@ -14,10 +14,12 @@
 namespace asyncply {
 
 template <typename T>
-using coro = boost::coroutines::asymmetric_coroutine<T()>;
+// using coro = boost::coroutines::asymmetric_coroutine<T()>; // async
+using coro = boost::coroutines::symmetric_coroutine<T()>; // sync
 
 template <typename T>
-using yield_type = typename coro<T>::push_type;
+// using yield_type = typename coro<T>::pull_type; // async
+using yield_type = typename coro<T>::call_type; // sync
 
 template <typename T>
 using link = boost::function<void(asyncply::coro<T>&, asyncply::yield_type<T>&)>;
