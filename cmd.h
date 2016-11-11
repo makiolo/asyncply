@@ -24,13 +24,13 @@ using cmd = asyncply::pipeline<std::string>;
 
 cmd::link cat(const std::string& filename)
 {
-	return [filename](cmd::in&, cmd::out& yield)
+	return [filename](cmd::in& source, cmd::out& yield)
 	{
 		std::string line;
 		std::ifstream input(filename);
 		while (std::getline(input, line))
 		{
-			yield(line);
+			yield(source, line);
 		}
 	};
 }
@@ -45,7 +45,7 @@ cmd::link cat()
 			std::ifstream input(source.get());
 			while (std::getline(input, line))
 			{
-				yield(line);
+				yield(source, line);
 			}
 		}
 	};
@@ -76,7 +76,7 @@ void find_tree(const boost::filesystem::path& p, std::vector<std::string>& files
 
 cmd::link find(const std::string& dir)
 {
-	return [dir](cmd::in&, cmd::out& yield)
+	return [dir](cmd::in& source, cmd::out& yield)
 	{
 		boost::filesystem::path p(dir);
 		if (boost::filesystem::exists(p))
@@ -85,7 +85,7 @@ cmd::link find(const std::string& dir)
 			find_tree(p, files);
 			for(auto& f : files)
 			{
-				yield(f);
+				yield(source, f);
 			}
 		}
 	};
@@ -94,7 +94,7 @@ cmd::link find(const std::string& dir)
 cmd::link ls(const std::string& dir)
 {
 	namespace fs = boost::filesystem;
-	return [dir](cmd::in&, cmd::out& yield)
+	return [dir](cmd::in& source, cmd::out& yield)
 	{
 		fs::path p(dir);
 		if (fs::exists(p) && fs::is_directory(p))
@@ -103,7 +103,7 @@ cmd::link ls(const std::string& dir)
 			{
 				if (fs::is_regular_file(f->path()))
 				{
-					yield(f->path().string());
+					yield(source, f->path().string());
 				}
 			}
 		}
@@ -121,7 +121,7 @@ cmd::link grep(const std::string& pattern, bool exclusion = false)
 			boost::match_results<std::string::const_iterator> groups;
 			if ((boost::regex_search(line, groups, re) && (groups.size() > 0)) == !exclusion)
 			{
-				yield(line);
+				yield(source, line);
 			}
 		}
 	};
@@ -144,7 +144,7 @@ cmd::link contain(const std::string& in)
 			const std::string& line(source.get());
 			if (line.find(in) != std::string::npos)
 			{
-				yield(line);
+				yield(source, line);
 			}
 		}
 	};
@@ -161,7 +161,7 @@ cmd::link uniq()
 		}
 		for (const auto& s : unique)
 		{
-			yield(s);
+			yield(source, s);
 		}
 	};
 }
@@ -174,7 +174,7 @@ cmd::link ltrim()
 		{
 			std::string buf = source.get();
 			buf.erase(buf.begin(), std::find_if(buf.begin(), buf.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
-			yield(buf);
+			yield(source, buf);
 		}
 	};
 }
@@ -187,7 +187,7 @@ cmd::link rtrim()
 		{
 			std::string buf = source.get();
 			buf.erase(std::find_if(buf.rbegin(), buf.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), buf.end());
-			yield(buf);
+			yield(source, buf);
 		}
 	};
 }
@@ -213,7 +213,7 @@ cmd::link cut(const char* delim, int field)
 			{
 				if (i++ == field)
 				{
-					yield(t);
+					yield(source, t);
 					break;
 				}
 			}
@@ -223,20 +223,20 @@ cmd::link cut(const char* delim, int field)
 
 cmd::link in(const std::vector<std::string>& strs)
 {
-	return [&strs](cmd::in&, cmd::out& yield)
+	return [&strs](cmd::in& source, cmd::out& yield)
 	{
 		for(auto& str : strs)
 		{
-			yield(str);
+			yield(source, str);
 		}
 	};
 }
 
 cmd::link in(const std::string& str)
 {
-	return [&str](cmd::in&, cmd::out& yield)
+	return [&str](cmd::in& source, cmd::out& yield)
 	{
-		yield(str);
+		yield(source, str);
 	};
 }
 
@@ -281,7 +281,7 @@ cmd::link quote(const char* delim = "\"")
 		{
 			std::stringstream ss;
 			ss << delim << source.get() << delim;
-			yield(ss.str());
+			yield(source, ss.str());
 		}
 	};
 }
@@ -298,7 +298,7 @@ cmd::link join(const char* delim = " ")
 			else
 				ss << source.get();
 		}
-		yield(ss.str());
+		yield(source, ss.str());
 	};
 }
 
@@ -315,7 +315,7 @@ cmd::link split(const char* delim = " ", bool keep_empty=true)
 			{
 				if(!keep_empty && chunk.empty())
 					continue;
-				yield(chunk);
+				yield(source, chunk);
 			}
 		}
 	};
@@ -324,7 +324,7 @@ cmd::link split(const char* delim = " ", bool keep_empty=true)
 cmd::link run(const std::string& cmd)
 {
 	char buff[BUFSIZ];
-	return [cmd, &buff](cmd::in&, cmd::out& yield)
+	return [cmd, &buff](cmd::in& source, cmd::out& yield)
 	{
 		FILE *in;
 		if(!(in = popen(cmd.c_str(), "r")))
@@ -337,7 +337,7 @@ cmd::link run(const std::string& cmd)
 		{
 			std::string newline(buff);
 			newline.erase(std::remove(newline.begin(), newline.end(), '\n'), newline.end());
-			yield(newline);
+			yield(source, newline);
 		}
 		pclose(in);
 	};
