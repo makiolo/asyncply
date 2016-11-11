@@ -59,10 +59,3 @@ script:
   - cmake --build . --config $MODE --target install -- -j8 -k || cmake --build . --config $MODE --target install -- -j1
   - ctest . --no-compress-output --output-on-failure -T Test -C $MODE -V
 
-notifications:
-pushover:
-  api_key: ub9q9jkeuyd8kgvyka7d2cv5e2429s
-  users:
-    - makiolo
-  template: "%{repository} (%{commit}) : %{message} %{foo} - Build details: %{build_url}"
-  
