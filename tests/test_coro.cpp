@@ -2,8 +2,8 @@
 #include <boost/coroutine/coroutine.hpp>
 #include <boost/filesystem.hpp>
 #include <asyncply/parallel.h>
-#include "../pipeline.h"
-#include "../cmd.h"
+#include <asyncply/pipeline.h>
+#include <asyncply/cmd.h>
 
 int main()
 {
