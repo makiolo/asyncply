@@ -10,11 +10,11 @@ int main()
 	using namespace asyncply;
 	std::cout.sync_with_stdio(false);
 
-	// std::vector<std::string> lines;
-	// cmd(find("../tests"), grep("test_"), out(lines));
-	// for (auto& line : lines)
-	// 	std::cout << line << std::endl;
-
+	std::vector<std::string> lines;
+	cmd(find("../tests"), grep("test_"), out(lines));
+	for (auto& line : lines)
+		std::cout << line << std::endl;
+	/*
 	cmd({
 		find(".."),
 		grep(".*\\.cpp$|.*\\.h$"),
@@ -27,6 +27,7 @@ int main()
 		join(" "),
 		out()
 	});
+	*/
 
 	// ssh_session my_ssh_session;
 	// int rc;
