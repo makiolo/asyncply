@@ -1,5 +1,4 @@
 #include <boost/bind.hpp>
-#include <boost/coroutine/coroutine.hpp>
 #include <boost/filesystem.hpp>
 #include <asyncply/parallel.h>
 #include <asyncply/pipeline.h>

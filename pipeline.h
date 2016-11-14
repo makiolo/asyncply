@@ -9,35 +9,37 @@
 
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
-#include <boost/coroutine/coroutine.hpp>
+#include <boost/coroutine2/coroutine.hpp>
 
 namespace asyncply {
 
 template <typename T>
-using coro = boost::coroutines::asymmetric_coroutine<T>;
-// using coro = boost::coroutines::symmetric_coroutine<T>;
+using coro = boost::coroutines2::asymmetric_coroutine<T>;
+
+template <typename T>
+using pull_type = typename coro<T>::pull_type;
 
 template <typename T>
 using yield_type = typename coro<T>::push_type;
 
 template <typename T>
-using link = boost::function<void(asyncply::coro<T>&, asyncply::yield_type<T>&)>;
+using link = boost::function<void(asyncply::pull_type<T>&, asyncply::yield_type<T>&)>;
 
 template <typename T, typename Function>
-std::shared_ptr< coro<T> > corun(Function&& f)
+std::shared_ptr< asyncply::pull_type<T> > corun(Function&& f)
 {
-	return std::make_shared<coro<T> >(std::forward<Function>(f));
+	return std::make_shared< asyncply::pull_type<T> >(std::forward<Function>(f));
 }
 
 template <typename T>
 class pipeline
 {
 private:
-	using coro = asyncply::coro<T>;
+	using coro = asyncply::pull_type<T>;
 	using coroptr = std::shared_ptr<coro>;
 
 public:
-	using in = asyncply::coro<T>;
+	using in = asyncply::pull_type<T>;
 	using out = asyncply::yield_type<T>;
 	using link = asyncply::link<T>;
 

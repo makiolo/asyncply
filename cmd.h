@@ -251,13 +251,13 @@ cmd::link out(std::vector<std::string>& strs)
 	};
 }
 
-cmd::link out(std::string& str)
-{
-	return [&str](cmd::in& source, cmd::out&)
-	{
-		str = source();
-	};
-}
+// cmd::link out(std::string& str)
+// {
+// 	return [&str](cmd::in& source, cmd::out&)
+// 	{
+// 		str = source();
+// 	};
+// }
 
 cmd::link out()
 {
