@@ -5,10 +5,10 @@
 #include <atomic>
 #include <assert.h>
 #include <fes/async_fast.h>
-#include <gtest/gtest.h>
 #include "../parallel.h"
 #include "../task.h"
 #include "../algorithm.h"
+#include <gtest/gtest.h>
 
 class ParallelFesTest : testing::Test
 {
@@ -82,12 +82,3 @@ TEST(ParallelFesTest, Test1)
 	}
 	ASSERT_EQ(total, 405);
 }
-
-/*
-int main(int argc, char **argv)
-{
-	::testing::InitGoogleTest(&argc, argv);
-	return RUN_ALL_TESTS();
-}
-*/
-
