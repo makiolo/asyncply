@@ -11,7 +11,6 @@
 #include "../task.h"
 #include "../algorithm.h"
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
 class foo
 {
