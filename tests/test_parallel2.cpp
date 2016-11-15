@@ -99,5 +99,33 @@ TEST(Parallel2Test, Test5)
 				std::cout << "no accum" << std::endl;
 				total += 1;
 			});
+	process2->get();
 	ASSERT_EQ(total, 3);
 }
+
+TEST(Parallel2Test, Test6)
+{
+	std::atomic<int> total;
+	total = 0;
+	{
+		auto process2 = asyncply::parallel(
+					[&total]()
+					{
+						std::cout << "hi" << std::endl;
+						total += 1;
+					},
+					[&total]()
+					{
+						std::cout << "bye" << std::endl;
+						total += 1;
+					}
+				);
+		process2->then([&total]()
+				{
+					std::cout << "no accum" << std::endl;
+					total += 1;
+				});
+	}
+	ASSERT_EQ(total, 3);
+}
+
