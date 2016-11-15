@@ -3,41 +3,29 @@
 #include <atomic>
 #include "../parallel.h"
 #include "../task.h"
+#include <gtest/gtest.h>
 
-int main(int, const char**)
+class ConsumerProducerTest : testing::Test { };
+
+TEST(ConsumerProducerTest, Test1)
 {
-	try
-	{
-		const size_t N = 1e4;
-		std::atomic<size_t> f;
-		f = 0;
-		asyncply::parallel_sync(
-			[&]()
-			{
-				for (size_t i = 0; i < (N + 1); ++i)
-				{
-					f += i;
-				}
-			},
-			[&]()
-			{
-				for (size_t i = 0; i < N; ++i)
-				{
-					f -= i;
-				}
-			});
-
-		std::cout << "f = " << f << std::endl;
-		if (f != N)
+	const size_t N = 1e4;
+	std::atomic<size_t> f;
+	f = 0;
+	asyncply::parallel_sync(
+		[&]()
 		{
-			throw std::runtime_error("Invalid value f");
-		}
-	}
-	catch (std::exception& e)
-	{
-		std::cout << "general exception " << e.what() << std::endl;
-		return 1;
-	}
-	return 0;
+			for (size_t i = 0; i < (N + 1); ++i)
+			{
+				f += i;
+			}
+		},
+		[&]()
+		{
+			for (size_t i = 0; i < N; ++i)
+			{
+				f -= i;
+			}
+		});
+	ASSERT_EQ(f, N);
 }
-
