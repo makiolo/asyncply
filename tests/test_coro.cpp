@@ -1,18 +1,14 @@
-#include <boost/bind.hpp>
-#include <boost/filesystem.hpp>
-#include <asyncply/parallel.h>
-#include <asyncply/pipeline.h>
 #include <asyncply/cmd.h>
+
+using namespace asyncply;
 
 int main()
 {
-	using namespace asyncply;
-	std::cout.sync_with_stdio(false);
-
 	std::vector<std::string> lines;
 	cmd(find("../tests"), grep("test_"), out(lines));
 	for (auto& line : lines)
 		std::cout << line << std::endl;
+
 	/*
 	cmd({
 		find(".."),
