@@ -6,8 +6,11 @@
 #include "../run.h"
 #include <thread>
 #include <vector>
+#include <gtest/gtest.h>
 
-int main(int, const char**)
+class SequenceTest : testing::Test { };
+
+TEST(SequenceTest, Test1)
 {
 	struct control_flow
 	{
@@ -38,15 +41,6 @@ int main(int, const char**)
 			return flow;
 		}
 	);
-	task->get();
-
-	std::cout << bool(23) << std::endl;
-	std::cout << bool(0) << std::endl;
-	std::cout << bool("hola") << std::endl;
-	std::cout << bool("") << std::endl;
-	std::cout << flow << std::endl;
-	control_flow flow2 = {false};
-	std::cout << flow2 << std::endl;
-	return 0;
+	flow = task->get();
+	ASSERT_FALSE(flow.code);
 }
-
