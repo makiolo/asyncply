@@ -83,18 +83,18 @@ TEST(Parallel2Test, Test5)
 	std::atomic<int> total;
 	total = 0;
 	auto process2 = asyncply::parallel(
-				[]()
+				[&total]()
 				{
 					std::cout << "hi" << std::endl;
 					total += 1;
 				},
-				[]()
+				[&total]()
 				{
 					std::cout << "bye" << std::endl;
 					total += 1;
 				}
 			);
-	process2->then([]()
+	process2->then([&total]()
 			{
 				std::cout << "no accum" << std::endl;
 				total += 1;
