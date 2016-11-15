@@ -4,7 +4,9 @@
 #include <cstring>
 #include <atomic>
 #include <assert.h>
+#include <fes/sync.h>
 #include <fes/async_fast.h>
+#include <fes/async_delay.h>
 #include "../parallel.h"
 #include "../task.h"
 #include "../algorithm.h"
@@ -119,11 +121,33 @@ TEST(ParallelFesTest, Test1)
 	ASSERT_EQ(total, 405);
 }
 
-TEST(ParallelFesTest, Test2)
+TEST(ParallelFesTest, TestSync)
+{
+	fes::sync<foo> channel;
+	channel.connect([](const foo& f) {
+		std::cout << "<sync> received foo" << std::endl;
+	});
+	// send foo
+	channel(foo("bar"));
+}
+
+TEST(ParallelFesTest, TestAsyncFast)
 {
 	fes::async_fast<foo> channel;
 	channel.connect([](const foo& f) {
-		std::cout << "received foo" << std::endl;
+		std::cout << "<async_fast> received foo" << std::endl;
+	});
+	// send foo
+	channel(foo("bar"));
+	// recv foo
+	channel.get();
+}
+
+TEST(ParallelFesTest, TestAsyncDelay)
+{
+	fes::async_delay<foo> channel;
+	channel.connect([](const foo& f) {
+		std::cout << "<async_delay> received foo" << std::endl;
 	});
 	// send foo
 	channel(foo("bar"));
