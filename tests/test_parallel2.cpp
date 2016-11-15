@@ -9,16 +9,26 @@
 #include "../sequence.h"
 #include "../async.h"
 #include "../task.h"
+#include <gtest/gtest.h>
 
-int main(int, const char**)
+class Parallel2Test : testing::Test { };
+
+TEST(Parallel2Test, Test1)
 {
 	std::future<int> f = asyncply::_async([](){return 10;});
-	std::cout << "f = " << f.get() << std::endl;
+	ASSERT_EQ(f.get(), 10);
+}
 
+TEST(Parallel2Test, Test2)
+{
 	auto f2 = asyncply::async([](){return 15;});
-	f2->then([](int data){ std::cout << "post, received: " << data << std::endl; return 0; });
-	std::cout << "f2 = " << f2->get() << std::endl;
+	f2->then([](int data){ std::cout << "post, received: " << data << std::endl; return 6; });
+	// 6 or 15 ?
+	ASSERT_EQ(f2->get(), 6);
+}
 
+TEST(Parallel2Test, Test3)
+{
 	std::vector<int> a;
 	for(int i=0; i<100; ++i)
 	{
@@ -34,60 +44,60 @@ int main(int, const char**)
 		total += i;
 		// std::cout << "thread " << std::this_thread::get_id() << std::endl;
 	});
-	std::cout << "total = " << total << std::endl;
-
-	{
-		auto total_ps = asyncply::parallel_sync(
-					[]()
-					{
-						return asyncply::sequence(1.0,
-							[](double data)
-							{
-								return data + 1.0;
-							},
-							[](double data)
-							{
-								return data + 1.0;
-							});
-					},
-					[]()
-					{
-						return asyncply::sequence(1.0,
-							[](double data)
-							{
-								return data + 1.0;
-							},
-							[](double data)
-							{
-								return data + 1.0;
-							});
-					}
-				);
-		std::cout << "process1 = " << total_ps << std::endl;
-		if (std::abs(6.0 - total_ps) > 1e-3)
-		{
-			std::cout << "invalid total " << total_ps << std::endl;
-			return 1;
-		}
-	}
-
-	{
-		auto process2 = asyncply::parallel(
-					[]()
-					{
-						std::cout << "hi" << std::endl;
-					},
-					[]()
-					{
-						std::cout << "bye" << std::endl;
-					}
-				);
-		process2->then([]()
-				{
-					std::cout << "no accum" << std::endl;
-				});
-	}
-
-	return 0;
+	ASSERT_EQ(total, 3600);
 }
 
+TEST(Parallel2Test, Test4)
+{
+	auto total_ps = asyncply::parallel_sync(
+				[]()
+				{
+					return asyncply::sequence(1.0,
+						[](double data)
+						{
+							return data + 1.0;
+						},
+						[](double data)
+						{
+							return data + 1.0;
+						});
+				},
+				[]()
+				{
+					return asyncply::sequence(1.0,
+						[](double data)
+						{
+							return data + 1.0;
+						},
+						[](double data)
+						{
+							return data + 1.0;
+						});
+				}
+			);
+	ASSERT_EQ(total_ps, 6);
+}
+
+TEST(Parallel2Test, Test5)
+{
+	std::atomic<int> total;
+	total = 0;
+	auto process2 = asyncply::parallel(
+				[]()
+				{
+					std::cout << "hi" << std::endl;
+					total += 1;
+				},
+				[]()
+				{
+					std::cout << "bye" << std::endl;
+					total += 1;
+				}
+			);
+	process2->then([]()
+			{
+				std::cout << "no accum" << std::endl;
+				total += 1;
+			});
+	ASSERT_EQ(total, 3);
+}
