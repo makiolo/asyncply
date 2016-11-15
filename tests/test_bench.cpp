@@ -10,66 +10,9 @@
 #include "../algorithm.h"
 #include "../sequence.h"
 #include "../parallel.h"
+#include <gtest/gtest.h>
 
-template <typename T>
-using weakptr = std::weak_ptr<T>;
-
-class Entity final
-{
-public:
-	Entity() { ; }
-	virtual ~Entity() { ; }
-};
-
-class Component
-{
-public:
-	Component(weakptr<Entity>&& entity)
-		: _entity(std::forward<weakptr<Entity>>(entity))
-	{
-		;
-	}
-	virtual ~Component() { ; }
-
-protected:
-	weakptr<Entity> _entity;
-};
-
-class Render final : public Component
-{
-public:
-	Render(weakptr<Entity>&& entity)
-		: Component(std::forward<weakptr<Entity>>(entity))
-	{
-		;
-	}
-	virtual ~Render() { ; }
-};
-
-class ComponentOLD
-{
-public:
-	ComponentOLD(const weakptr<Entity>& entity)
-		: _entity(entity)
-	{
-		;
-	}
-	virtual ~ComponentOLD() { ; }
-
-protected:
-	weakptr<Entity> _entity;
-};
-
-class RenderOLD final : public ComponentOLD
-{
-public:
-	RenderOLD(const weakptr<Entity>& entity)
-		: ComponentOLD(entity)
-	{
-		;
-	}
-	virtual ~RenderOLD() { ; }
-};
+class BenchTest : testing::Test { };
 
 struct measure_scoped
 {
@@ -102,46 +45,7 @@ protected:
 	result_t& _result;
 };
 
-class foo
-{
-public:
-	foo() { std::cout << "constructor empty" << std::endl; }
-
-	foo(const std::string& data)
-		: _data(data)
-	{
-		std::cout << "constructor" << std::endl;
-	}
-
-	~foo() { std::cout << "destructor" << std::endl; }
-
-	foo(const foo& other) = delete;
-	foo& operator=(const foo& other) = delete;
-
-	foo(foo&& other)
-		: _data(std::move(other._data))
-	{
-		std::cout << "constructor move &&" << std::endl;
-	}
-
-	foo& operator=(foo&& other)
-	{
-		std::cout << "asignacion move &&" << std::endl;
-		foo(std::move(other)).swap(*this);
-		return *this;
-	}
-
-	void swap(foo& other)
-	{
-		std::cout << "swap" << std::endl;
-		using std::swap;
-		swap(_data, other._data);
-	}
-
-	std::string _data;
-};
-
-int main_measured_algorithm_1(int, const char**)
+int main_measured_algorithm_1()
 {
 	std::vector<int> a;
 	for(int i=0; i<200; ++i)
@@ -160,7 +64,7 @@ int main_measured_algorithm_1(int, const char**)
 	return 0;
 }
 
-int main_measured_algorithm_2(int, const char**)
+int main_measured_algorithm_2()
 {
 	std::vector<int> a;
 	for(int i=0; i<200; ++i)
@@ -179,7 +83,7 @@ int main_measured_algorithm_2(int, const char**)
 	return 0;
 }
 
-double launch_benchmark(int argc, const char* argv[], int (*algorithm)(int, const char**))
+double launch_benchmark(int (*algorithm)())
 {
 	long long N = 1e2;
 	double elapsedtime;
@@ -187,20 +91,19 @@ double launch_benchmark(int argc, const char* argv[], int (*algorithm)(int, cons
 		measure_scoped timer(elapsedtime);
 
 		for (int i = 0; i < N; ++i)
-			volatile int result = algorithm(argc, argv);
+			volatile int result = algorithm();
 	}
 	return (elapsedtime * 1e9) / double(N);  // return mean time
 }
 
-int main(int argc, const char* argv[])
+TEST(BenchTest, TestAsyncply)
 {
-	double t1 = launch_benchmark(argc, argv, main_measured_algorithm_1);
-	double t2 = launch_benchmark(argc, argv, main_measured_algorithm_2);
-
+	double t1 = launch_benchmark(main_measured_algorithm_1);
 	std::cout << "t1 = " << t1 << " ns" << std::endl;
-	std::cout << "t2 = " << t2 << " ns" << std::endl;
-	std::cout << "diff t2 - t1 = " << t2 - t1 << std::endl;
-
-	return 0;
 }
 
+TEST(BenchTest, TestStd)
+{
+	double t2 = launch_benchmark(main_measured_algorithm_2);
+	std::cout << "t2 = " << t2 << " ns" << std::endl;
+}
