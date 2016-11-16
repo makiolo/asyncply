@@ -47,12 +47,9 @@ private:
 	std::string _data;
 };
 
-class ParallelFesTest : testing::Test
-{
+class ParallelFesTest : testing::Test { };
 
-};
-
-TEST(ParallelFesTest, Test1)
+TEST(DISABLED_ParallelFesTest, Test1)
 {
 	std::atomic<int> total;
 	{
