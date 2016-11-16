@@ -25,8 +25,11 @@ using yield_type = typename coro<T>::push_type;
 template <typename T>
 using link = boost::function<void(asyncply::pull_type<T>&, asyncply::yield_type<T>&)>;
 
+template <typename T>
+using coroptr = std::shared_ptr< asyncply::pull_type<T> >;
+
 template <typename T, typename Function>
-std::shared_ptr< asyncply::pull_type<T> > corun(Function&& f)
+coroptr<T> corun(Function&& f)
 {
 	return std::make_shared< asyncply::pull_type<T> >(std::forward<Function>(f));
 }
@@ -34,10 +37,6 @@ std::shared_ptr< asyncply::pull_type<T> > corun(Function&& f)
 template <typename T>
 class pipeline
 {
-private:
-	using coro = asyncply::pull_type<T>;
-	using coroptr = std::shared_ptr<coro>;
-
 public:
 	using in = asyncply::pull_type<T>;
 	using out = asyncply::yield_type<T>;
@@ -46,7 +45,7 @@ public:
 	template <typename Function>
 	pipeline(Function&& f)
 	{
-		std::vector<coroptr> coros;
+		std::vector<coroptr<T> > coros;
 		coros.emplace_back(
 				asyncply::corun<T>(
 					[](asyncply::yield_type<T>&) { ; }
@@ -62,7 +61,7 @@ public:
 	template <typename Function, typename ... Functions>
 	pipeline(Function&& f, Functions&& ... fs)
 	{
-		std::vector<coroptr> coros;
+		std::vector<coroptr<T> > coros;
 		coros.emplace_back(
 				asyncply::corun<T>(
 					[](asyncply::yield_type<T>&) { ; }
@@ -79,7 +78,7 @@ public:
 
 protected:
 	template <typename Function>
-	void _add(std::vector<coroptr>& coros, Function&& f)
+	void _add(std::vector<coroptr<T> >& coros, Function&& f)
 	{
 		coros.emplace_back(
 				asyncply::corun<T>(
@@ -89,7 +88,7 @@ protected:
 	}
 
 	template <typename Function, typename ... Functions>
-	void _add(std::vector<coroptr>& coros, Function&& f, Functions&& ... fs)
+	void _add(std::vector<coroptr<T> >& coros, Function&& f, Functions&& ... fs)
 	{
 		coros.emplace_back(
 				asyncply::corun<T>(

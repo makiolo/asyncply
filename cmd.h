@@ -1,7 +1,5 @@
-// Modified from work of Aldrin D'Souza.
-
-#ifndef _PIPE_H_
-#define _PIPE_H_
+#ifndef _CMD_H_
+#define _CMD_H_
 
 #include <set>
 #include <string>
@@ -16,7 +14,7 @@
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "pipeline.h"
+#include <asyncply/pipeline.h>
 
 namespace asyncply {
 
@@ -24,7 +22,7 @@ using cmd = asyncply::pipeline<std::string>;
 
 cmd::link cat(const std::string& filename)
 {
-	return [filename](cmd::in& source, cmd::out& yield)
+	return [filename](cmd::in&, cmd::out& yield)
 	{
 		std::string line;
 		std::ifstream input(filename);
@@ -250,14 +248,6 @@ cmd::link out(std::vector<std::string>& strs)
 		}
 	};
 }
-
-// cmd::link out(std::string& str)
-// {
-// 	return [&str](cmd::in& source, cmd::out&)
-// 	{
-// 		str = source();
-// 	};
-// }
 
 cmd::link out()
 {

@@ -44,3 +44,4 @@ TEST(SequenceTest, Test1)
 	flow = task->get();
 	ASSERT_FALSE(flow.code);
 }
+
