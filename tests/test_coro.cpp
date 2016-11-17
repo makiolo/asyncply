@@ -2,6 +2,7 @@
 #include <asyncply/cmd.h>
 #include <asyncply/parallel.h>
 #include <asyncply/run.h>
+#include <asyncply/algorithm.h>
 #include <gtest/gtest.h>
 
 class CoroTest : testing::Test { };
@@ -55,18 +56,17 @@ TEST(CoroTest, Test3)
 		));
 	}
 
-	bool any_updated = true;
+	std::atomic<bool> any_updated;
+	any_updated = true;
 	while(any_updated)
 	{
 		any_updated = false;
-		for(auto& c : coros)
-		{
+		asyncply::for_each_sync(coros.begin(), coros.end(), [&any_updated](auto& c) {
 			if(*c)
 			{
-				(*c)();
 				any_updated = true;
+				(*c)();
 			}
-		}
+		});
 	}
 }
-
