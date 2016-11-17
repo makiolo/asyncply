@@ -58,7 +58,7 @@ TEST(CoroTest, Test3)
 	
 	std::cout << "-- ticking coroutines" << std::endl;
 
-#if 0
+#if 1
 	// std::atomic<bool> any_updated;
 	// any_updated = true;
 	bool any_updated = true;
