@@ -11,14 +11,14 @@ using namespace asyncply;
 TEST(CoroTest, Test1)
 {
 	std::vector<std::string> lines;
-	cmd(find("tests"), grep("test_"), out(lines));
+	cmd(find("../.."), grep("test_"), out(lines));
 	for (auto& line : lines)
 		std::cout << line << std::endl;
 }
 
 TEST(CoroTest, Test2)
 {
-	cmd(find("tests"),
+	cmd(find("../.."),
 		grep(".*\\.cpp$|.*\\.h$"),
 		cat(),
 		grep("class|struct|typedef|using|void|int|double|float"),
