@@ -72,7 +72,8 @@ TEST(CoroTest, Test3)
 				any_updated = true;
 				(*c)();
 			}
-		});
+		// });
+		}
 	}
 #else
 	for(auto& co : coros) {
