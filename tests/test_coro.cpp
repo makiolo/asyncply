@@ -37,7 +37,7 @@ TEST(CoroTest, Test3)
 	for(int i=1; i<10; ++i)
 	{
 		coros.emplace_back(asyncply::make_coroutine<void>(
-			[=](asyncply::yield_type<void>& yield)
+			[=](auto& yield)
 			{
 				std::cout << "create " << i << std::endl;
 				yield();
@@ -56,12 +56,15 @@ TEST(CoroTest, Test3)
 		));
 	}
 
-	std::atomic<bool> any_updated;
-	any_updated = true;
+#if 0
+	// std::atomic<bool> any_updated;
+	// any_updated = true;
+	bool any_updated = true;
 	while(any_updated)
 	{
 		any_updated = false;
-		asyncply::for_each_sync(coros.begin(), coros.end(), [&any_updated](auto& c) {
+		// asyncply::for_each_sync(coros.begin(), coros.end(), [&any_updated](auto& c) {
+		for(auto& c : coros) {
 			if(*c)
 			{
 				any_updated = true;
@@ -69,4 +72,12 @@ TEST(CoroTest, Test3)
 			}
 		});
 	}
+#else
+	for(auto& co : coros) {
+		for(auto& c : co)
+		{
+			(*c)();
+		}
+	}
+#endif
 }
