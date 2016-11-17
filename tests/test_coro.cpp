@@ -32,10 +32,10 @@ TEST(CoroTest, Test2)
 
 TEST(CoroTest, Test3)
 {
-	std::vector<asyncply::coroptr<void> > coros;
+	std::vector<asyncply::coroutine<void> > coros;
 	for(int i=1; i<10; ++i)
 	{
-		coros.emplace_back(asyncply::corun<void>(
+		coros.emplace_back(asyncply::make_coroutine<void>(
 			[=](asyncply::yield_type<void>& yield)
 			{
 				std::cout << "create " << i << std::endl;
