@@ -33,24 +33,24 @@ TEST(CoroTest, Test2)
 
 TEST(CoroTest, Test3)
 {
-	std::vector<asyncply::coroutine<int> > coros;
+	std::vector<asyncply::coroutine<void> > coros;
 	for(int i=1; i<10; ++i)
 	{
-		coros.emplace_back(asyncply::make_coroutine<int>(
+		coros.emplace_back(asyncply::make_coroutine<void>(
 			[=](auto& yield)
 			{
 				std::cout << "create " << i << std::endl;
-				yield(0);
+				yield();
 				std::cout << "download " << i << std::endl;
-				yield(1);
+				yield();
 				std::cout << "patching " << i << std::endl;
-				yield(2);
+				yield();
 				std::cout << "compile " << i << std::endl;
-				yield(3);
+				yield();
 				std::cout << "tests " << i << std::endl;
-				yield(4);
+				yield();
 				std::cout << "packing " << i << std::endl;
-				yield(5);
+				yield();
 				std::cout << "destroy " << i << std::endl;
 			}
 		));
@@ -58,7 +58,7 @@ TEST(CoroTest, Test3)
 	
 	std::cout << "-- ticking coroutines" << std::endl;
 
-#if 1
+#if 0
 	// std::atomic<bool> any_updated;
 	// any_updated = true;
 	bool any_updated = true;
@@ -79,7 +79,7 @@ TEST(CoroTest, Test3)
 	for(auto& co : coros) {
 		for(auto& c : *co)
 		{
-			std::cout << c << std::endl;
+			;
 		}
 	}
 #endif
