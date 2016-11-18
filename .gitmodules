@@ -7,9 +7,6 @@
 [submodule "cmaki"]
 	path = cmaki
 	url = https://github.com/makiolo/cmaki.git
-[submodule "stackless_coroutine"]
-	path = stackless_coroutine
-	url = https://github.com/jbandela/stackless_coroutine.git
 [submodule "cmaki_generator"]
 	path = cmaki_generator
 	url = https://github.com/makiolo/cmaki_generator.git
