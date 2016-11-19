@@ -7,9 +7,9 @@
 #include <cmath>
 #include <atomic>
 #include <algorithm>
-#include "../algorithm.h"
-#include "../sequence.h"
-#include "../parallel.h"
+#include <asyncply/algorithm.h>
+#include <asyncply/sequence.h>
+#include <asyncply/parallel.h>
 #include <gtest/gtest.h>
 
 class BenchTest : testing::Test { };
