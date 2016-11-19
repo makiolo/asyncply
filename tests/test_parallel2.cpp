@@ -4,11 +4,11 @@
 #include <assert.h>
 #include <atomic>
 #include <algorithm>
-#include "../algorithm.h"
-#include "../parallel.h"
-#include "../sequence.h"
-#include "../async.h"
-#include "../task.h"
+#include <asyncply/algorithm.h>
+#include <asyncply/parallel.h>
+#include <asyncply/sequence.h>
+#include <asyncply/async.h>
+#include <asyncply/task.h>
 #include <gtest/gtest.h>
 
 class Parallel2Test : testing::Test { };
@@ -42,7 +42,7 @@ TEST(Parallel2Test, Test3)
 	total = 0;
 	asyncply::for_each_sync(a.begin(), a.end(), [&total](int i) {
 		total += i;
-		// std::cout << "thread " << std::this_thread::get_id() << std::endl;
+		std::cout << "thread " << std::this_thread::get_id() << std::endl;
 	});
 	ASSERT_EQ(total, 3600);
 }
