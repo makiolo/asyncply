@@ -42,7 +42,7 @@ TEST(Parallel2Test, Test3)
 	total = 0;
 	asyncply::for_each_sync(a.begin(), a.end(), [&total](int i) {
 		total += i;
-		std::cout << "thread " << std::this_thread::get_id() << std::endl;
+		// std::cout << "thread " << std::this_thread::get_id() << std::endl;
 	});
 	ASSERT_EQ(total, 3600);
 }
