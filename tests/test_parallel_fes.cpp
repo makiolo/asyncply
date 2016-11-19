@@ -7,9 +7,9 @@
 #include <fes/sync.h>
 #include <fes/async_fast.h>
 #include <fes/async_delay.h>
-#include "../parallel.h"
-#include "../task.h"
-#include "../algorithm.h"
+#include <asyncply/parallel.h>
+#include <asyncply/task.h>
+#include <asyncply/algorithm.h>
 #include <gtest/gtest.h>
 
 class foo
