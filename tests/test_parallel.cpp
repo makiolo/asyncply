@@ -2,8 +2,8 @@
 #include <vector>
 #include <cmath>
 #include <assert.h>
-#include "../parallel.h"
-#include "../task.h"
+#include <asyncply/parallel.h>
+#include <asyncply/task.h>
 #include <gtest/gtest.h>
 
 class ParallelTest : testing::Test { };
