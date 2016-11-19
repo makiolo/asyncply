@@ -1,11 +1,11 @@
 #include <iostream>
 #include <complex>
 #include <cmath>
-#include "../sequence.h"
-#include "../parallel.h"
-#include "../run.h"
 #include <thread>
 #include <vector>
+#include <asyncply/sequence.h>
+#include <asyncply/parallel.h>
+#include <asyncply/run.h>
 #include <gtest/gtest.h>
 
 class SequenceTest : testing::Test { };
