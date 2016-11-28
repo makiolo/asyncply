@@ -4,13 +4,13 @@
 #include <cstring>
 #include <atomic>
 #include <assert.h>
-#include <fes/sync.h>
-#include <fes/async_fast.h>
-#include <fes/async_delay.h>
-#include <asyncply/parallel.h>
-#include <asyncply/task.h>
-#include <asyncply/algorithm.h>
 #include <gtest/gtest.h>
+#include <fast-event-system/sync.h>
+#include <fast-event-system/async_fast.h>
+#include <fast-event-system/async_delay.h>
+#include "../parallel.h"
+#include "../task.h"
+#include "../algorithm.h"
 
 class foo
 {
