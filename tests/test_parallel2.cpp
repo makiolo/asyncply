@@ -4,12 +4,12 @@
 #include <assert.h>
 #include <atomic>
 #include <algorithm>
-#include <asyncply/algorithm.h>
-#include <asyncply/parallel.h>
-#include <asyncply/sequence.h>
-#include <asyncply/async.h>
-#include <asyncply/task.h>
 #include <gtest/gtest.h>
+#include "../algorithm.h"
+#include "../parallel.h"
+#include "../sequence.h"
+#include "../async.h"
+#include "../task.h
 
 class Parallel2Test : testing::Test { };
 
