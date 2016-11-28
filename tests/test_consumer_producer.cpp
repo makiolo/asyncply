@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <atomic>
-#include <asyncply/parallel.h>
-#include <asyncply/task.h>
 #include <gtest/gtest.h>
+#include "../parallel.h"
+#include "../task.h"
 
 class ConsumerProducerTest : testing::Test { };
 
