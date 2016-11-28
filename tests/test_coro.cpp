@@ -1,9 +1,9 @@
 #include <atomic>
-#include <asyncply/cmd.h>
-#include <asyncply/parallel.h>
-#include <asyncply/run.h>
-#include <asyncply/algorithm.h>
 #include <gtest/gtest.h>
+#include "../cmd.h"
+#include "../parallel.h"
+#include "../run.h"
+#include "../algorithm.h"
 
 class CoroTest : testing::Test { };
 
