@@ -9,7 +9,7 @@
 #include "../parallel.h"
 #include "../sequence.h"
 #include "../async.h"
-#include "../task.h
+#include "../task.h"
 
 class Parallel2Test : testing::Test { };
 
