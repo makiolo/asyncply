@@ -1,10 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include <asyncply/parallel.h>
-#include <asyncply/sequence.h>
-#include <asyncply/task.h>
 #include <gtest/gtest.h>
+#include "../parallel.h"
+#include "../sequence.h"
+#include "../task.h"
 
 class ParallelSequenceTest : testing::Test
 {
