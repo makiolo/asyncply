@@ -7,10 +7,10 @@
 #include <cmath>
 #include <atomic>
 #include <algorithm>
-#include <asyncply/algorithm.h>
-#include <asyncply/sequence.h>
-#include <asyncply/parallel.h>
 #include <gtest/gtest.h>
+#include "../algorithm.h"
+#include "../sequence.h"
+#include "../parallel.h"
 
 class BenchTest : testing::Test { };
 
