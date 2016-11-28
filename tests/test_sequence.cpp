@@ -3,10 +3,10 @@
 #include <cmath>
 #include <thread>
 #include <vector>
-#include <asyncply/sequence.h>
-#include <asyncply/parallel.h>
-#include <asyncply/run.h>
 #include <gtest/gtest.h>
+#include "../sequence.h"
+#include "../parallel.h"
+#include "../run.h"
 
 class SequenceTest : testing::Test { };
 
