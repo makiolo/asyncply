@@ -14,7 +14,7 @@
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <asyncply/pipeline.h>
+#include "pipeline.h"
 
 namespace asyncply {
 
