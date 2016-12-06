@@ -7,8 +7,6 @@ cmaki_setup()
 
 # clang fail ?
 # cmaki_find_package(boost-thread)
-include_directories(metacommon)
 include_directories(thread-pool-cpp/thread_pool)
-include_directories(fast-event-system)
 cmaki2_library(asyncply run.cpp PTHREADS)
 add_subdirectory(tests)
