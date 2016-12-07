@@ -20,7 +20,7 @@ public:
 	virtual ~foo() { std::cout << "destructor" << std::endl; }
 
 	foo(const foo& other) : _data(other._data) { std::cout << "constructor copia" << std::endl; }
-	foo& operator=(const foo& other) 
+	foo& operator=(const foo& other)
 	{
 		std::cout << "operador asignación" << std::endl;
 		foo(other).swap(*this);
