@@ -58,6 +58,5 @@ script:
   - echo TRAVIS_REPO_SLUG=github://$TRAVIS_REPO_SLUG
   - |
     if [[ $CXX == "g++-4.9" && $MODE == "Release" ]]; then
-        (cd cmaki_generator && ./build asyncply --server=http://artifacts.myftp.biz:8080)
+        (cd cmaki_generator && ./build asyncply -o --server=http://artifacts.myftp.biz:8080)
     fi
-
