@@ -49,7 +49,7 @@ private:
 
 class ParallelFesTest : testing::Test { };
 
-TEST(DISABLED_ParallelFesTest, Test1)
+TEST(ParallelFesTest, Test1)
 {
 	std::atomic<int> total;
 	total = 0;
