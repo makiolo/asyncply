@@ -113,7 +113,7 @@ TEST(ParallelFesTest, TestSync)
 	channel(foo("bar"));
 }
 
-TEST(DISABLED_ParallelFesTest, TestAsyncFast)
+TEST(ParallelFesTest, TestAsyncFast)
 {
 	fes::async_fast<foo> channel;
 	channel.connect([](const foo& f) {
@@ -125,7 +125,7 @@ TEST(DISABLED_ParallelFesTest, TestAsyncFast)
 	channel.get();
 }
 
-TEST(ParallelFesTest, TestAsyncDelay)
+TEST(DISABLED_ParallelFesTest, TestAsyncDelay)
 {
 	fes::async_delay<foo> channel;
 	channel.connect([](const foo& f) {
