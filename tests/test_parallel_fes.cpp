@@ -18,7 +18,7 @@ public:
 	explicit foo() { std::cout << "constructor empty" << std::endl; }
 	explicit foo(const std::string& data) : _data(data) { std::cout << "constructor with parms" << std::endl; }
 	virtual ~foo() { std::cout << "destructor" << std::endl; }
-	
+
 	foo(const foo& other) : _data(other._data) { std::cout << "constructor copia" << std::endl; }
 	foo& operator=(const foo& other) 
 	{
@@ -136,3 +136,4 @@ TEST(DISABLED_ParallelFesTest, TestAsyncDelay)
 	// recv foo
 	channel.get();
 }
+

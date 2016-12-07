@@ -9,3 +9,4 @@ include_directories(thread-pool-cpp/thread_pool)
 cmaki2_library(asyncply run.cpp PTHREADS)
 
 add_subdirectory(tests)
+

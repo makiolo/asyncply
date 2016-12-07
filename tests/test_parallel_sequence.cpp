@@ -54,3 +54,4 @@ TEST(ParallelSequenceTest, Test1)
 	}
 	ASSERT_EQ(aggregation, 32.0);
 }
+
