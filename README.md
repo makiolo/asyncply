@@ -11,10 +11,8 @@ Don't use it
 
 # checkout and prepare
 ```bash
-$ git clone --recursive https://github.com/makiolo/asyncply.git asyncply
-$ cd asyncply
-$ mkdir release
-$ cd release
+$ git clone --recursive https://github.com/makiolo/asyncply.git
+$ ./cmaki/run.sh
 ```
 # Option 1: use default compiler
 ```bash
