@@ -8,3 +8,8 @@
         - ./metacommon/*.h include/metacommon/ asyncply/metacommon/
     mode: dr
     source: https://github.com/makiolo/asyncply.git
+    targets:
+        - dummy:
+            info:
+                <<: *library_dynamic
+
