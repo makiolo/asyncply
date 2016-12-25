@@ -4,13 +4,17 @@
     version_manager: git
     cmake_target: null
     post_install:
-        - ./*.h include/ asyncply/
-        - ./metacommon/*.h include/metacommon/ asyncply/metacommon/
+        - ./*.h asyncply/
+        - ./metacommon/*.h asyncply/metacommon/
         - ./thread-pool-cpp/thread_pool/*.hpp asyncply/thread-pool-cpp/thread_pool/
     mode: dr
     source: https://github.com/makiolo/asyncply.git
     targets:
-        - dummy:
+        - asyncply:
             info:
-                <<: *library_dynamic
+                <<: *library_dynamic_exact
+            extra:
+                default:
+                    include:
+                        - include/asyncply/thread-pool-cpp/thread_pool/
 
