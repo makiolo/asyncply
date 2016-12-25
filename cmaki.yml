@@ -6,6 +6,7 @@
     post_install:
         - ./*.h include/ asyncply/
         - ./metacommon/*.h include/metacommon/ asyncply/metacommon/
+        - ./thread-pool-cpp/thread_pool/*.hpp asyncply/thread-pool-cpp/thread_pool/
     mode: dr
     source: https://github.com/makiolo/asyncply.git
     targets:
