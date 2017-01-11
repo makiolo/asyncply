@@ -17,11 +17,17 @@ public:
 	using return_type = R;
 	using post_type = std::function<return_type(const return_type&)>;
 
-	task(const func& method)
-		: _method(method)
-		, _result(	asyncply::_async([&]() {
-					return method();
-				} ) )
+	template <typename Function>
+	task(Function&& f)
+		, _result(	
+				std::bind(
+					asyncply::_async( 	[](Function&& f) {
+									return f();
+								} 
+						),
+					std::forward<Function>(f)
+				)
+			)
 	{ ; }
 
 	~task() { ; }
@@ -29,12 +35,18 @@ public:
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
 
-	task_t<return_type> then(const post_type& post_method)
+	template <typename Function>
+	task_t<return_type> then(Function&& post_method)
 	{
 		task_t<return_type> this_task = this->shared_from_this();
-		return asyncply::async([this_task](){
-			return post_method(this_task->get());
-		});
+		return asyncply::async( 	
+					std::bind(
+						[this_task](Function&& post_method){
+							return post_method(this_task->get());
+						},
+						std::forward<Function>(post_method)
+					)
+		);
 	}
 
 	return_type get()
@@ -43,7 +55,6 @@ public:
 	}
 
 protected:
-	func _method;
 	std::future<return_type> _result;
 };
 
@@ -55,25 +66,37 @@ public:
 	using return_type = void;
 	using post_type = std::function<return_type()>;
 
-	task(const func& method)
-		: _method(method)
-		, _result(	asyncply::_async([&](){
-					method();
-				} ) )
+	template <typename Function>
+	task(Function&& f)
+		, _result(	
+				std::bind(
+					asyncply::_async( 	[](Function&& f) {
+									f();
+								} 
+						),
+					std::forward<Function>(f)
+				)
+			)
 	{ ; }
 
 	~task() { ; }
 
 	task(const task& te) = delete;
 	task& operator=(const task& te) = delete;
-
-	task_t<return_type> then(const post_type& post_method)
+	
+	template <typename Function>
+	task_t<return_type> then(Function&& post_method)
 	{
 		task_t<return_type> this_task = this->shared_from_this();
-		return asyncply::async([this_task](){
-			this_task->get();
-			post_method();
-		});
+		return asyncply::async( 	
+					std::bind(
+						[this_task](Function&& post_method){
+							this_task->get();
+							post_method();
+						},
+						std::forward<Function>(post_method)
+					)
+		);
 	}
 
 	void get()
@@ -82,7 +105,6 @@ public:
 	}
 
 protected:
-	func _method;
 	std::future<void> _result;
 };
 
