@@ -21,12 +21,10 @@ public:
 	task(Function&& f)
 		: _result(
 				asyncply::_async(
-					std::bind( 	
-							[](Function&& f) {
-								return f();
-							},
-							std::forward<Function>(f)
-					)
+					[](Function&& f) {
+						return f();
+					},
+					std::forward<Function>(f)
 				)
 			)
 	{ ; }
@@ -71,12 +69,10 @@ public:
 	task(Function&& f)
 		: _result(
 				asyncply::_async(
-					std::bind( 	
-							[](Function&& f) {
-								f();
-							},
-							std::forward<Function>(f)
-					)
+					[](Function&& f) {
+						f();
+					},
+					std::forward<Function>(f)
 				)
 			)
 	{ ; }
