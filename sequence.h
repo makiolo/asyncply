@@ -7,47 +7,49 @@
 namespace asyncply {
 
 template <typename Data, typename Function>
-std::function<Data(Data)> _sequence(Function&& f)
+void __sequence(task_t<Data>& task, const Data& data, Function&& f)
 {
-	return [&](Data data)
+	if(!task)
 	{
-		auto job = asyncply::async( 	
+		task = asyncply::async( 	
 			[](Data d, Function&& f)
 			{
 				return f(d);
 			},
 			data, std::forward<Function>(f)
 		);
-		return Data(job->get());
-	};
+	}
+	else
+	{
+		task->then(
+			[](Data d, Function&& f)
+			{
+				return f(d);
+			},
+			std::placeholders::_1, std::forward<Function>(f)
+		);
+	}
+}
+	
+template <typename Data, typename Function>
+void _sequence(task_t<Data>& task, const Data& data, Function&& f)
+{
+	__sequence(task, data, std::forward<Function>(f));
 }
 
 template <typename Data, typename Function, typename... Functions>
-std::function<Data(Data)> _sequence(Function&& f, Functions&& ... fs)
+void _sequence(task_t<Data>& task, const Data& data, Function&& f, Functions&& ... fs)
 {
-	return [&](Data data)
-	{
-		auto then_job = asyncply::async( 	
-			[](Data d, Function&& f)
-			{
-				return f(d);
-			},
-			data, std::forward<Function>(f)
-		)->then(
-			[](Data d, Functions&&... fs)
-			{
-				return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(d);
-			},
-			std::placeholders::_1, std::forward<Functions>(fs)...
-		);
-		return Data(then_job->get());
-	};
+	__sequence(task, data, std::forward<Function>(f));
+	asyncply::_sequence<Data>(task, data, std::forward<Functions>(fs)...);
 }
 
 template <typename Data, typename... Functions>
 Data sequence_sync(Data data, Functions&&... fs)
 {
-	return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(data);
+	task_t<Data> task;
+	asyncply::_sequence<Data>(task, data, std::forward<Functions>(fs)...);
+	return task->get();
 }
 
 template <typename Data, typename... Functions>
