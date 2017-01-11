@@ -38,7 +38,7 @@ public:
 	}
 	
 	template <typename Function>
-	task_t<R> then(typename std::enable_if<(std::is_void<typename std::result_of<Function(R)>::type>::value), Function>::type&& post_method)
+	task_t<R> then(typename std::enable_if<(std::is_void<typename std::result_of<Function()>::type>::value), Function>::type&& post_method)
 	{
 		task_t<R> this_task = this->shared_from_this();
 		return asyncply::async(
