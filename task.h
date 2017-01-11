@@ -31,7 +31,7 @@ public:
 
 	task_t<return_type> then(const post_type& post_method)
 	{
-		task_t<return_type> this_task = shared_from_this();
+		task_t<return_type> this_task = this->shared_from_this();
 		return asyncply::async([this_task](){
 			return post_method(this_task->get());
 		});
@@ -69,7 +69,7 @@ public:
 
 	task_t<return_type> then(const post_type& post_method)
 	{
-		task_t<return_type> this_task = shared_from_this();
+		task_t<return_type> this_task = this->shared_from_this();
 		return asyncply::async([this_task](){
 			this_task->get();
 			post_method();
