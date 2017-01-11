@@ -58,13 +58,13 @@ Data sequence_sync(Data data, Functions&&... fs)
 }
 
 template <typename Data, typename... Functions>
-auto sequence(Data data, Functions&&... fs)
+task_t<Data> sequence(Data data, Functions&&... fs)
 {
 	return asyncply::async(
 			std::bind(
 				[](Data d, Functions&&... fs)
 				{
-					return sequence_sync<Data>(d, std::forward<Functions>(fs)...);
+					return asyncply::sequence_sync<Data>(d, std::forward<Functions>(fs)...);
 				},
 				data, std::forward<Functions>(fs)...
 			)
