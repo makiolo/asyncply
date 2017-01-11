@@ -132,25 +132,28 @@ void parallel_sync(Function&& f, Functions&&... fs)
 
 //
 
-template <  typename Function,
-			typename ... Functions>
+template <typename Function, typename ... Functions>
 auto parallel(Function&& f, Functions&&... fs)
 {
 	return asyncply::async(
-			[&f, &fs...]()
-			{
-				return asyncply::parallel_sync(std::forward<Function>(f), std::forward<Functions>(fs)...);
-			});
+		[](Function&& f, Functions&&... fs)
+		{
+			return asyncply::parallel_sync(std::forward<Function>(f), std::forward<Functions>(fs)...);
+		},
+		std::forward<Function>(f), std::forward<Functions>(fs)...
+	);
 }
 
-template <	typename Function>
+template <typename Function>
 auto parallel(Function&& f)
 {
 	return asyncply::async(
-			[&f]()
-			{
-				return asyncply::parallel_sync(std::forward<Function>(f));
-			});
+		[](Function&& f)
+		{
+			return asyncply::parallel_sync(std::forward<Function>(f));
+		},
+		std::forward<Function>(f)
+	);
 }
 
 }
