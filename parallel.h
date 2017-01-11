@@ -144,19 +144,6 @@ auto parallel(Function&& f, Functions&&... fs)
 	);
 }
 
-template <typename Function>
-auto parallel(Function&& f)
-{
-	return asyncply::async(
-		[](Function&& f)
-		{
-			return asyncply::parallel_sync(std::forward<Function>(f));
-		},
-		std::forward<Function>(f)
-	);
-}
-
 }
 
 #endif
-
