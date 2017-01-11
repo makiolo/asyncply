@@ -9,7 +9,7 @@
 namespace asyncply {
 
 template <typename R>
-class task
+class task : public std::enable_shared_from_this<task<R> >
 {
 public:
 	using func = std::function<R()>;
@@ -18,69 +18,36 @@ public:
 
 	task(const func& method)
 		: _method(method)
-		, _post_method(nullptr)
-		, _has_post(false)
-	{
-		_result = asyncply::_async([&](){
-			return _method();
-		});
-		// _result_waiting = asyncply::_async([&](){
-		// 	_result.wait();
-		// 	_post_method(_result);
-		// });
-	}
-
-	task(const func& method, const post_type& post_method)
-		: task(method)
-	{
-		then(post_method);
-	}
+		, _result(	asyncply::_async([&]() {
+					return method();
+				} ) )
+	{ ; }
 
 	~task() { ; }
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
 
-	void then(const post_type& post_method)
+	task_t<return_type> then(const post_type& post_method)
 	{
-		if(has_post())
-		{
-			throw std::exception();
-		}
-		else
-		{
-			_has_post = true;
-			_post_method = post_method;
-			_result_post = asyncply::_async([&](){
-				return _post_method(_result.get());
-			});
-		}
+		auto this_task = shared_from_this();
+		return asyncply::async([this_task](){
+			return post_method(this_task->get());
+		});
 	}
 
 	return_type get()
 	{
-		if(has_post())
-		{
-			return _result_post.get();
-		}
-		else
-		{
-			return _result.get();
-		}
+		return _result.get();
 	}
-
-	inline bool has_post() const { return (_has_post && _post_method); }
 
 protected:
 	func _method;
-	post_type _post_method;
 	std::future<return_type> _result;
-	std::future<return_type> _result_post;
-	bool _has_post;
 };
 
 template <>
-class task<void>
+class task<void> : public std::enable_shared_from_this<task<void> >
 {
 public:
 	using func = std::function<void()>;
@@ -89,77 +56,33 @@ public:
 
 	task(const func& method)
 		: _method(method)
-        , _post_method()
-		, _has_post(false)
-	{
-		_result = asyncply::_async([&](){
-			_method();
-		});
-	}
+		, _result(	asyncply::_async([&](){
+					method();
+				} ) )
+	{ ; }
 
-	task(const func& method, const post_type& post_method)
-		: task(method)
-	{
-		then(post_method);
-	}
-
-	~task() { get(); }
+	~task() { ; }
 
 	task(const task& te) = delete;
 	task& operator=(const task& te) = delete;
 
-	void then(const post_type& post_method)
+	task_t<return_type> then(const post_type& post_method)
 	{
-		if(has_post())
-		{
-			throw std::exception();
-		}
-		else
-		{
-			_has_post = true;
-			_post_method = post_method;
-			_result_post = asyncply::_async([&](){
-				_result.get();
-				_post_method();
-			});
-		}
+		auto this_task = shared_from_this();
+		return asyncply::async([this_task](){
+			this_task->get();
+			post_method();
+		});
 	}
-
-	// void invalid_post()
-	// {
-	// 	if(!has_post())
-	// 	{
-	// 		throw std::exception();
-	// 	}
-	// 	else
-	// 	{
-	// 		_has_post = false;
-	// 		_post_method = nullptr;
-	// 	}
-	// }
 
 	void get()
 	{
-		if(has_post())
-		{
-			if (_result_post.valid())
-				_result_post.get();
-		}
-		else
-		{
-			if(_result.valid())
-				_result.get();
-		}
+		_result.get();
 	}
-
-	inline bool has_post() const { return (_has_post && _post_method); }
 
 protected:
 	func _method;
-	post_type _post_method;
 	std::future<void> _result;
-	std::future<void> _result_post;
-	bool _has_post;
 };
 
 }
