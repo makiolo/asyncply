@@ -14,7 +14,6 @@ class task : public std::enable_shared_from_this<task<R> >
 {
 public:
 	using func = std::function<R()>;
-	using post_type = std::function<R(const R&)>;
 
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
