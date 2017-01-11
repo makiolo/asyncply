@@ -24,9 +24,6 @@ using shared_task = std::shared_ptr<task_of_functor<Function>>;
 template <typename Function>
 shared_task<Function> async(Function&& f);
 
-template <typename Function, typename FunctionPost>
-shared_task<Function> async(Function&& f, FunctionPost&& fp);
-
 template <typename Function>
 using future_of_functor = std::future< return_of_functor<Function> >;
 
