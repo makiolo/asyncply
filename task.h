@@ -47,7 +47,7 @@ public:
 		);
 	}
 
-	typename std::enable_if<(!std::is_void<R>::value), R>::type get()
+	typename std::enable_if<(!std::is_void<R>::value), R>::type get(int=0)
 	{
 		return _result.get();
 	}
@@ -59,7 +59,7 @@ public:
 	}
 	*/
 	
-	typename std::enable_if<(std::is_void<R>::value), void>::type get()
+	typename std::enable_if<(std::is_void<R>::value), void>::type get(long=0)
 	{
 		_result.get();
 	}
