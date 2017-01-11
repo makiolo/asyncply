@@ -21,7 +21,7 @@ void __sequence(task_t<Data>& task, const Data& data, Function&& f)
 	}
 	else
 	{
-		task->then(
+		task = task->then(
 			[](Data d, Function&& f)
 			{
 				return f(d);
