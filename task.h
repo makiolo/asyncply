@@ -77,7 +77,7 @@ public:
 	template< class Rep, class Period >
 	std::future_status wait_for( const std::chrono::duration<Rep,Period>& timeout_duration ) const
 	{
-		return _reseult.wait_for(timeout_duration);
+		return _result.wait_for(timeout_duration);
 	}
 	
 	template< class Clock, class Duration >
