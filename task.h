@@ -52,7 +52,7 @@ public:
 		return _result.get();
 	}
 	
-	typename std::enable_if<(!std::is_void<R>::value), R&>::type get()
+	typename std::enable_if<(!std::is_void<R>::value), R>::type& get()
 	{
 		return _result.get();
 	}
