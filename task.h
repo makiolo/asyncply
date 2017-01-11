@@ -8,14 +8,13 @@
 #include "async.h"
 
 namespace asyncply {
-
+	
 template <typename R>
 class task : public std::enable_shared_from_this<task<R> >
 {
 public:
 	using func = std::function<R()>;
-	using return_type = R;
-	using post_type = std::function<return_type(const return_type&)>;
+	using post_type = std::function<R(const R&)>;
 
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
@@ -28,9 +27,9 @@ public:
 	task& operator=(const task&) = delete;
 
 	template <typename Function>
-	task_t<return_type> then(Function&& post_method)
+	task_t<R> then(typename std::enable_if<(!std::is_void<typename std::result_of<Function(R)>::type>::value), Function>::type&& post_method)
 	{
-		task_t<return_type> this_task = this->shared_from_this();
+		task_t<R> this_task = this->shared_from_this();
 		return asyncply::async(
 					[this_task](Function&& post_method){
 						return post_method(this_task->get());
@@ -38,38 +37,11 @@ public:
 					std::forward<Function>(post_method)
 		);
 	}
-
-	return_type get()
-	{
-		return _result.get();
-	}
-
-protected:
-	std::future<return_type> _result;
-};
-
-template <>
-class task<void> : public std::enable_shared_from_this<task<void> >
-{
-public:
-	using func = std::function<void()>;
-	using return_type = void;
-	using post_type = std::function<return_type()>;
-
-	template <typename Function, typename ... Args>
-	task(Function&& f, Args&& ... args)
-		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
-	{ ; }
-
-	~task() { ; }
-
-	task(const task& te) = delete;
-	task& operator=(const task& te) = delete;
 	
 	template <typename Function>
-	task_t<return_type> then(Function&& post_method)
+	task_t<R> then(typename std::enable_if<(std::is_void<typename std::result_of<Function(R)>::type>::value), Function>::type&& post_method)
 	{
-		task_t<return_type> this_task = this->shared_from_this();
+		task_t<R> this_task = this->shared_from_this();
 		return asyncply::async(
 					[this_task](Function&& post_method){
 						this_task->get();
@@ -79,13 +51,13 @@ public:
 		);
 	}
 
-	void get()
+	R get()
 	{
-		_result.get();
+		return _result.get();
 	}
 
 protected:
-	std::future<void> _result;
+	std::future<R> _result;
 };
 
 }
