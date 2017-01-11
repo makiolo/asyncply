@@ -17,16 +17,9 @@ public:
 	using return_type = R;
 	using post_type = std::function<return_type(const return_type&)>;
 
-	template <typename Function>
-	task(Function&& f)
-		: _result(
-				asyncply::_async(
-					[](Function&& f) {
-						return f();
-					},
-					std::forward<Function>(f)
-				)
-			)
+	template <typename Function, typename ... Args>
+	task(Function&& f, Args&& ... args)
+		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
 	{ ; }
 
 	~task() { ; }
@@ -38,13 +31,11 @@ public:
 	task_t<return_type> then(Function&& post_method)
 	{
 		task_t<return_type> this_task = this->shared_from_this();
-		return asyncply::async( 	
-					std::bind(
-						[this_task](Function&& post_method){
-							return post_method(this_task->get());
-						},
-						std::forward<Function>(post_method)
-					)
+		return asyncply::async(
+					[this_task](Function&& post_method){
+						return post_method(this_task->get());
+					},
+					std::forward<Function>(post_method)
 		);
 	}
 
@@ -65,16 +56,9 @@ public:
 	using return_type = void;
 	using post_type = std::function<return_type()>;
 
-	template <typename Function>
-	task(Function&& f)
-		: _result(
-				asyncply::_async(
-					[](Function&& f) {
-						f();
-					},
-					std::forward<Function>(f)
-				)
-			)
+	template <typename Function, typename ... Args>
+	task(Function&& f, Args&& ... args)
+		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
 	{ ; }
 
 	~task() { ; }
@@ -86,14 +70,12 @@ public:
 	task_t<return_type> then(Function&& post_method)
 	{
 		task_t<return_type> this_task = this->shared_from_this();
-		return asyncply::async( 	
-					std::bind(
-						[this_task](Function&& post_method){
-							this_task->get();
-							post_method();
-						},
-						std::forward<Function>(post_method)
-					)
+		return asyncply::async(
+					[this_task](Function&& post_method){
+						this_task->get();
+						post_method();
+					},
+					std::forward<Function>(post_method)
 		);
 	}
 
