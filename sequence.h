@@ -58,7 +58,7 @@ task_t<Data> sequence(Data data, Functions&&... fs)
 	return asyncply::async(
 			[](Data d, Functions&&... fs)
 			{
-				return asyncply::sequence_sync<Data>(d, std::forward<Functions>(fs)...);
+				return asyncply::sequence_sync(d, std::forward<Functions>(fs)...);
 			},
 			data, std::forward<Functions>(fs)...
 	);
