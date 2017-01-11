@@ -25,11 +25,12 @@ std::function<Data(Data)> _sequence(Function&& f, Functions&&... fs)
 {
 	return [&](Data data)
 	{
-		auto job = asyncply::async(
-			[&]()
-			{
-				return f(data);
-			},
+		auto job = asyncply::async( 	[&]()
+						{
+							return f(data);
+						}
+					  );
+		auto then_job = job->then(
 #ifdef _MSC_VER
 			[&](Data d)
 #else
@@ -37,17 +38,11 @@ std::function<Data(Data)> _sequence(Function&& f, Functions&&... fs)
 			[&fs...](Data d)
 #endif
 			{
-				// if(bool(d))
-				// {
-					return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(d);
-				// }
-				// else
-				// {
-				// 	std::cout << "stoping flow!" << std::endl;
-				// 	return Data();
-				// }
-			});
-		return Data(job->get());
+				return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(d);
+			}
+		);
+		
+		return Data(then_job->get());
 	};
 }
 
