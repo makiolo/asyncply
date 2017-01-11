@@ -13,6 +13,8 @@ template <typename R>
 class task : public std::enable_shared_from_this<task<R> >
 {
 public:
+	using return_type = R;
+	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
 		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) { ; }
@@ -68,6 +70,8 @@ template <>
 class task<void> : public std::enable_shared_from_this<task<void> >
 {
 public:
+	using return_type = void;
+	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
 		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) { ; }
