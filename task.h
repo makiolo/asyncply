@@ -19,13 +19,14 @@ public:
 
 	template <typename Function>
 	task(Function&& f)
-		, _result(	
-				std::bind(
-					asyncply::_async( 	[](Function&& f) {
-									return f();
-								} 
-						),
-					std::forward<Function>(f)
+		: _result(
+				asyncply::_async(
+					std::bind( 	
+							[](Function&& f) {
+								return f();
+							},
+							std::forward<Function>(f)
+					)
 				)
 			)
 	{ ; }
@@ -68,13 +69,14 @@ public:
 
 	template <typename Function>
 	task(Function&& f)
-		, _result(	
-				std::bind(
-					asyncply::_async( 	[](Function&& f) {
-									f();
-								} 
-						),
-					std::forward<Function>(f)
+		: _result(
+				asyncply::_async(
+					std::bind( 	
+							[](Function&& f) {
+								f();
+							},
+							std::forward<Function>(f)
+					)
 				)
 			)
 	{ ; }
