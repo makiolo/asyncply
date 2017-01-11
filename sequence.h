@@ -12,29 +12,28 @@ std::function<Data(Data)> _sequence(Function&& f)
 	return [&](Data data)
 	{
 		auto job = asyncply::async( 	
-						[](Data d, Function&& f)
-						{
-							return f(d);
-						},
-						data, std::forward<Function>(f)
-					  );
+			[](Data d, Function&& f)
+			{
+				return f(d);
+			},
+			data, std::forward<Function>(f)
+		);
 		return Data(job->get());
 	};
 }
 
 template <typename Data, typename Function, typename... Functions>
-std::function<Data(Data)> _sequence(Function&& f, Functions&&... fs)
+std::function<Data(Data)> _sequence(Function&& f, Functions&& ... fs)
 {
 	return [&](Data data)
 	{
-		auto job = asyncply::async( 	
-						[](Data d, Function&& f)
-						{
-							return f(d);
-						},
-						data, std::forward<Function>(f)
-					  );
-		auto then_job = job->then(
+		auto then_job = asyncply::async( 	
+			[](Data d, Function&& f)
+			{
+				return f(d);
+			},
+			data, std::forward<Function>(f)
+		)->then(
 			[](Data d, Functions&&... fs)
 			{
 				return asyncply::_sequence<Data>(std::forward<Functions>(fs)...)(d);
