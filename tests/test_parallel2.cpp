@@ -22,9 +22,8 @@ TEST(Parallel2Test, Test1)
 TEST(Parallel2Test, Test2)
 {
 	auto f2 = asyncply::async([](){return 15;});
-	f2->then([](int data){ std::cout << "post, received: " << data << std::endl; return 6; });
-	// 6 or 15 ?
-	ASSERT_EQ(f2->get(), 6);
+	auto f3 = f2->then([](int data){ std::cout << "post, received: " << data << std::endl; return 6; });
+	ASSERT_EQ(f3->get(), 6);
 }
 
 TEST(Parallel2Test, Test3)
