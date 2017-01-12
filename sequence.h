@@ -12,21 +12,25 @@ void __sequence(task_t<Data>& task, Data data, Function&& f)
 	if(!task)
 	{
 		task = asyncply::async( 	
-			[](Data d, Function&& f)
-			{
-				return f(d);
-			},
-			data, std::forward<Function>(f)
+			std::bind(
+				[](Data d, Function&& f)
+				{
+					return f(d);
+				},
+				data, std::forward<Function>(f)
+			)
 		);
 	}
 	else
 	{
 		task = task->then(
-			[](Data d, Function&& f)
-			{
-				return f(d);
-			},
-			std::placeholders::_1, std::forward<Function>(f)
+			std::bind(
+				[](Data d, Function&& f)
+				{
+					return f(d);
+				},
+				std::placeholders::_1, std::forward<Function>(f)
+			)
 		);
 	}
 }
@@ -56,11 +60,13 @@ template <typename Data, typename... Functions>
 task_t<Data> sequence(Data data, Functions&&... fs)
 {
 	return asyncply::async(
+		std::bind(
 			[](Data d, Functions&&... fs)
 			{
 				return asyncply::sequence_sync(d, std::forward<Functions>(fs)...);
 			},
 			data, std::forward<Functions>(fs)...
+		)
 	);
 }
 
