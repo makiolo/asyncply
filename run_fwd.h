@@ -12,20 +12,14 @@ namespace asyncply {
 // functor_type
 template <typename Function, typename ... Args>
 using return_of_functor = typename std::result_of<Function(Args...)>::type;
-template <typename Function>
-using return_of_functor = typename std::result_of<Function()>::type;
 
 // task_functor
 template <typename Function, typename ... Args>
 using task_of_functor = asyncply::task< return_of_functor<Function, Args...> >;
-template <typename Function>
-using task_of_functor = asyncply::task< return_of_functor<Function> >;
 
 // future_functor
 template <typename Function, typename ... Args>
 using future_of_functor = std::future< return_of_functor<Function, Args...> >;
-template <typename Function>
-using future_of_functor = std::future< return_of_functor<Function> >;
   
 // shared_task
 template <typename Type>
@@ -33,14 +27,12 @@ using task_t = std::shared_ptr< asyncply::task<Type> >;
 
 // shared_task_functor
 template <typename Function, typename ... Args>
-using shared_task = std::shared_ptr<task_of_functor<Function, Args...> >;
-template <typename Function>
-using shared_task = std::shared_ptr<task_of_functor<Function> >;
-  
+using shared_task = std::shared_ptr< task_of_functor<Function, Args...> >;
+
+// async
 template <typename Function, typename ... Args>
 shared_task<Function, Args...> async(Function&& f, Args&& ... args);
 
 }
 
 #endif
-
