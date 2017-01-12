@@ -81,8 +81,8 @@ public:
 	task& operator=(const task&) = delete;
 
 	template <typename Function, typename ... Args>
-	//task_t<R> then(typename std::enable_if<(std::is_void<typename std::result_of<Function()>::type>::value), Function>::type&& post_method)
-	task_t<R> then(Function&& post_method, Args&& ... args)
+	//task_t<void> then(typename std::enable_if<(std::is_void<typename std::result_of<Function()>::type>::value), Function>::type&& post_method)
+	task_t<void> then(Function&& post_method, Args&& ... args)
 	{
 		task_t<void> this_task = this->shared_from_this();
 		return asyncply::async(
