@@ -23,15 +23,15 @@ public:
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
 
-	template <typename Function>
-	task_t<R> then(Function&& post_method)
+	template <typename Function, typename ... Args>
+	task_t<R> then(Function&& post_method, Args&& ... args)
 	{
 		task_t<R> this_task = this->shared_from_this();
 		return asyncply::async(
-					[this_task](Function&& post_method){
-						return post_method(this_task->get());
+					[this_task](Function&& post_method, Args&& ... args){
+						return post_method(this_task->get(), std::forward<Args>(args)...);
 					},
-					std::forward<Function>(post_method)
+					std::forward<Function>(post_method), std::forward<Args>(args)...
 		);
 	}
 
@@ -80,17 +80,17 @@ public:
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
 
-	template <typename Function>
+	template <typename Function, typename ... Args>
 	//task_t<R> then(typename std::enable_if<(std::is_void<typename std::result_of<Function()>::type>::value), Function>::type&& post_method)
-	task_t<void> then(Function&& post_method)
+	task_t<R> then(Function&& post_method, Args&& ... args)
 	{
 		task_t<void> this_task = this->shared_from_this();
 		return asyncply::async(
-					[this_task](Function&& post_method){
+					[this_task](Function&& post_method, Args&& ... args) {
 						this_task->get();
-						post_method();
+						post_method(std::forward<Args>(args)...);
 					},
-					std::forward<Function>(post_method)
+					std::forward<Function>(post_method), std::forward<Args>(args)...
 		);
 	}
 
