@@ -69,32 +69,32 @@ TEST(Parallel2Test, Test3_async)
 
 TEST(Parallel2Test, Test4)
 {
-	auto total_ps = asyncply::parallel_sync(
-				[]()
+	double total_ps = asyncply::parallel_sync(
+		[]()
+		{
+			return asyncply::sequence(1.0,
+				[](double data)
 				{
-					return asyncply::sequence(1.0,
-						[](double data)
-						{
-							return data + 1.0;
-						},
-						[](double data)
-						{
-							return data + 1.0;
-						});
+					return data + 1.0;
 				},
-				[]()
+				[](double data)
 				{
-					return asyncply::sequence(1.0,
-						[](double data)
-						{
-							return data + 1.0;
-						},
-						[](double data)
-						{
-							return data + 1.0;
-						});
-				}
-			);
+					return data + 1.0;
+				});
+		},
+		[]()
+		{
+			return asyncply::sequence(1.0,
+				[](double data)
+				{
+					return data + 1.0;
+				},
+				[](double data)
+				{
+					return data + 1.0;
+				});
+		}
+	);
 	ASSERT_EQ(total_ps, 6);
 }
 
