@@ -12,13 +12,13 @@ void __sequence(task_t<Data>& task, Data data, Function&& f)
 	if(!task)
 	{
 		task = asyncply::async( 	
-			std::bind(
+			// std::bind(
 				[](Function&& f, Data d)
 				{
 					return f(d);
 				},
 				std::forward<Function>(f), data
-			)
+			// )
 		);
 	}
 	else
