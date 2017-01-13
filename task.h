@@ -81,9 +81,10 @@ public:
 	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
-		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) { ; }
+		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
 		, _last(true)
-	~task() { if(last && valid()) get(); }
+	{ ; }
+	~task() { if(valid()) get(); }
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
@@ -105,9 +106,13 @@ public:
 	void get()
 	{
 		if(last)
+		{
 			_result.get();
+		}
 		else
+		{
 			throw std::runtime_error("only can do get() in last element in chaining tasks");
+		}
 	}
 
 	inline bool valid() const
