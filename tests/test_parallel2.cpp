@@ -123,7 +123,7 @@ TEST(Parallel2Test, Test5)
 	ASSERT_EQ(total, 3);
 }
 
-TEST(Parallel2Test, DISABLED_Test6)
+TEST(Parallel2Test, Test6)
 {
 	std::atomic<int> total;
 	total = 0;
