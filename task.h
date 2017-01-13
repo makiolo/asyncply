@@ -27,13 +27,14 @@ public:
 	task_t<R> then(Function&& post_method, Args&& ... args)
 	{
 		task_t<R> this_task = this->shared_from_this();
-		return asyncply::async(
+		_then_task = asyncply::async(
 			[this_task](Function&& post_method, Args&& ... args){
 				auto ff = std::bind(std::forward<Function>(post_method), std::forward<Args>(args)...);
 				return ff(this_task->get());
 			},
 			std::forward<Function>(post_method), std::forward<Args>(args)...
 		);
+		return _then_task;
 	}
 
 	R get()
@@ -70,6 +71,7 @@ public:
 	
 protected:
 	std::future<R> _result;
+	task_t<R> _then_task;
 };
 
 template <>
@@ -90,7 +92,7 @@ public:
 	task_t<void> then(Function&& post_method, Args&& ... args)
 	{
 		task_t<void> this_task = this->shared_from_this();
-		return asyncply::async(
+		_then_task = asyncply::async(
 			[this_task](Function&& post_method, Args&& ... args) {
 				auto ff = std::bind(std::forward<Function>(post_method), std::forward<Args>(args)...);
 				this_task->get();
@@ -98,6 +100,7 @@ public:
 			},
 			std::forward<Function>(post_method), std::forward<Args>(args)...
 		);
+		return _then_task;
 	}
 
 	void get()
@@ -134,6 +137,7 @@ public:
 
 protected:
 	std::future<void> _result;
+	task_t<void> _then_task;
 };
 
 }
