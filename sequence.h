@@ -31,8 +31,7 @@ void __sequence(task_t<Data>& task, Data data, Function&& f)
 					return f(d);
 				},
 				std::forward<Function>(f), std::placeholders::_1
-			),
-			std::placeholders::_1
+			)
 		);
 	}
 }
