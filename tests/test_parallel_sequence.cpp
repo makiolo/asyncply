@@ -13,7 +13,7 @@ class ParallelSequenceTest : testing::Test
 
 TEST(ParallelSequenceTest, Test1)
 {
-	auto task1 = asyncply::parallel(
+	double total = asyncply::parallel_sync(
 		[&]()
 		{
 			return asyncply::sequence(7.0,
@@ -38,5 +38,5 @@ TEST(ParallelSequenceTest, Test1)
 					return data + 4.0;
 				});
 		});
-	ASSERT_EQ(task1->get(), 32.0);
+	ASSERT_EQ(total, 32.0);
 }
