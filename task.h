@@ -82,7 +82,8 @@ public:
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
 		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) { ; }
-	~task() { if(valid()) get(); }
+		, _last(true)
+	~task() { if(last && valid()) get(); }
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
@@ -90,6 +91,7 @@ public:
 	template <typename Function>
 	task_t<void> then(Function&& post_method)
 	{
+		last = false;
 		task_t<void> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
 			[this_task, post_method = std::move(post_method)]() {
@@ -135,6 +137,7 @@ public:
 protected:
 	std::future<void> _result;
 	task_t<void> _then_task;
+	bool _last;
 };
 
 }
