@@ -10,7 +10,7 @@
 
 class SequenceTest : testing::Test { };
 
-TEST(SequenceTest, DISABLED_Test1)
+TEST(SequenceTest, Test1)
 {
 	struct control_flow
 	{
@@ -22,7 +22,7 @@ TEST(SequenceTest, DISABLED_Test1)
 		}
 	};
 	control_flow flow = {true};
-	auto task = asyncply::sequence(flow,
+	flow = asyncply::sequence_sync(flow,
 		[](control_flow flow) {
 			std::cout << "code 1" << std::endl;
 			return flow;
@@ -41,7 +41,5 @@ TEST(SequenceTest, DISABLED_Test1)
 			return flow;
 		}
 	);
-	flow = task->get();
 	ASSERT_FALSE(flow.code);
 }
-
