@@ -41,28 +41,33 @@ public:
 		return _result.get();
 	}
 
-	bool valid() const
+	inline bool valid() const
 	{
 		return _result.valid();
 	}
 
-	void wait() const
+	inline void wait() const
 	{
 		_result.wait();
 	}
 
 	template< class Rep, class Period >
-	std::future_status wait_for( const std::chrono::duration<Rep,Period>& timeout_duration ) const
+	inline std::future_status wait_for( const std::chrono::duration<Rep,Period>& timeout_duration ) const
 	{
 		return _result.wait_for(timeout_duration);
 	}
 
 	template< class Clock, class Duration >
-	std::future_status wait_until( const std::chrono::time_point<Clock,Duration>& timeout_time ) const
+	inline std::future_status wait_until( const std::chrono::time_point<Clock,Duration>& timeout_time ) const
 	{
 		return _result.wait_until(timeout_time);
 	}
-
+	
+	inline bool is_ready() const
+	{
+		return wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+	}
+	
 protected:
 	std::future<R> _result;
 };
@@ -100,26 +105,31 @@ public:
 		_result.get();
 	}
 
-	bool valid() const
+	inline bool valid() const
 	{
 		return _result.valid();
 	}
 
-	void wait() const
+	inline void wait() const
 	{
 		_result.wait();
 	}
 
 	template< class Rep, class Period >
-	std::future_status wait_for( const std::chrono::duration<Rep,Period>& timeout_duration ) const
+	inline std::future_status wait_for( const std::chrono::duration<Rep,Period>& timeout_duration ) const
 	{
 		return _result.wait_for(timeout_duration);
 	}
 
-	template< class Clock, class Duration >
-	std::future_status wait_until( const std::chrono::time_point<Clock,Duration>& timeout_time ) const
+	template <class Clock, class Duration>
+	inline std::future_status wait_until( const std::chrono::time_point<Clock,Duration>& timeout_time ) const
 	{
 		return _result.wait_until(timeout_time);
+	}
+
+	inline bool is_ready() const
+	{
+		return wait_for(std::chrono::seconds(0)) == std::future_status::ready;
 	}
 
 protected:
