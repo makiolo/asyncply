@@ -29,12 +29,8 @@ public:
 		task_t<R> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
 			[this_task](Function&& post_method){
-				auto ff = std::bind(	[](Function&& post_method, return_type r) {
-								post_method(r);
-							},
-							std::forward<Function>(post_method),
-							this_task->get() );
-				return ff();
+				return_type r = this_task->get();
+				return post_method(r);
 			},
 			std::forward<Function>(post_method)
 		);
