@@ -16,8 +16,7 @@ void __sequence(task_t<Data>& task, Data data, Function&& f)
 				[f = std::move(f)](Data d)
 				{
 					return f(d);
-				},
-				std::forward<Function>(f), data
+				}, data
 			)
 		);
 	}
@@ -28,8 +27,7 @@ void __sequence(task_t<Data>& task, Data data, Function&& f)
 				[f = std::move(f)](Data d)
 				{
 					return f(d);
-				},
-				std::forward<Function>(f), std::placeholders::_1
+				}, std::placeholders::_1
 			)
 		);
 	}
