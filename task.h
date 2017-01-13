@@ -20,7 +20,9 @@ public:
 		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
 		, _last(true)
 	{ ; }
-	~task() { if(valid()) get(); }
+	~task() { 
+		// if(valid()) get(); 
+	}
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
