@@ -41,7 +41,7 @@ public:
 
 	R get()
 	{
-		if(last)
+		if(_last)
 		{
 			return _result.get();
 		}
@@ -116,7 +116,7 @@ public:
 
 	void get()
 	{
-		if(last)
+		if(_last)
 		{
 			_result.get();
 		}
