@@ -105,7 +105,7 @@ template <  typename Function,
 				(!std::is_void<typename std::result_of<Function()>::type>::value)
 			>::type
 	>
-decltype(aggregation<Function, std::vector<shared_task<Function> > >) parallel_sync(Function&& f, Functions&&... fs)
+auto parallel_sync(Function&& f, Functions&&... fs)
 {
 	std::vector<shared_task<Function> > vf;
 	asyncply::_parallel(vf, std::forward<Function>(f), std::forward<Functions>(fs)...);
@@ -127,7 +127,7 @@ void parallel_sync(Function&& f, Functions&&... fs)
 //
 
 template <typename Function, typename ... Functions>
-shared_task<decltype(asyncply::parallel_sync(Function, Functions...) )> parallel(Function&& f, Functions&&... fs)
+auto parallel(Function&& f, Functions&&... fs)
 {
 	return asyncply::async(
 		[](Function&& f, Functions&&... fs)
