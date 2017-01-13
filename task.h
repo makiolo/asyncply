@@ -104,7 +104,10 @@ public:
 
 	void get()
 	{
-		_result.get();
+		if(last)
+			_result.get();
+		else
+			throw std::runtime_error("only can do get() in last element in chaining tasks");
 	}
 
 	inline bool valid() const
