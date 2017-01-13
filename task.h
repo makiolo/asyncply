@@ -31,8 +31,7 @@ public:
 			[this_task, post_method = std::move(post_method)](){
 				return_type r = this_task->get();
 				return post_method(r);
-			},
-			std::forward<Function>(post_method)
+			}
 		);
 		return _then_task;
 	}
@@ -96,8 +95,7 @@ public:
 			[this_task, post_method = std::move(post_method)]() {
 				this_task->get();
 				post_method();
-			},
-			std::forward<Function>(post_method)
+			}
 		);
 		return _then_task;
 	}
