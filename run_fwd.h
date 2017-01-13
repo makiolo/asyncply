@@ -32,6 +32,11 @@ using shared_task = std::shared_ptr< task_of_functor<Function, Args...> >;
 // async
 template <typename Function, typename ... Args>
 shared_task<Function, Args...> async(Function&& f, Args&& ... args);
+  
+// when_any
+//shared_task<Function, Args...> when_any(shared_task<Function, Args...>&& ... tasks);
+  
+// when_all
 
 }
 
