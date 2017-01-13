@@ -18,7 +18,8 @@ public:
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
 		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) { ; }
-	~task() { ; }
+		, _last(true)
+	~task() { if(valid()) get(); }
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
@@ -26,6 +27,7 @@ public:
 	template <typename Function>
 	task_t<R> then(Function&& post_method)
 	{
+		_last = false;
 		task_t<R> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
 			[this_task, post_method = std::move(post_method)](){
@@ -38,7 +40,14 @@ public:
 
 	R get()
 	{
-		return _result.get();
+		if(last)
+		{
+			return _result.get();
+		}
+		else
+		{
+			throw std::runtime_error("only can do get() in last element in chaining tasks");
+		}
 	}
 
 	inline bool valid() const
@@ -71,6 +80,7 @@ public:
 protected:
 	std::future<R> _result;
 	task_t<R> _then_task;
+	bool _last;
 };
 
 template <>
@@ -92,7 +102,7 @@ public:
 	template <typename Function>
 	task_t<void> then(Function&& post_method)
 	{
-		last = false;
+		_last = false;
 		task_t<void> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
 			[this_task, post_method = std::move(post_method)]() {
