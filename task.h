@@ -82,7 +82,7 @@ public:
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
 		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) { ; }
-	~task() { get(); }
+	~task() { if(valid()) get(); }
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
