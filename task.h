@@ -29,7 +29,14 @@ public:
 		task_t<R> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
 			[this_task](Function&& post_method, Args&& ... args){
-				auto ff = std::bind(std::forward<Function>(post_method), std::forward<Args>(args)...);
+				auto ff = std::bind(  	
+							[](Function&& post_method, return_type r, Args&& ... args) {
+								post_method(r, args...);
+							},
+							std::forward<Function>(post_method),
+							std::placeholders::_1,
+							std::forward<Args>(args)...
+						   );
 				return ff(this_task->get());
 			},
 			std::forward<Function>(post_method), std::forward<Args>(args)...
