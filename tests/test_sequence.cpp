@@ -10,7 +10,7 @@
 
 class SequenceTest : testing::Test { };
 
-TEST(SequenceTest, Test1)
+TEST(SequenceTest, DISABLED_Test1)
 {
 	struct control_flow
 	{
