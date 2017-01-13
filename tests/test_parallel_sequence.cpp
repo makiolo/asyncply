@@ -13,8 +13,7 @@ class ParallelSequenceTest : testing::Test
 
 TEST(ParallelSequenceTest, Test1)
 {
-	std::vector<asyncply::task_t< asyncply::task_t<double> > > vjobs;
-	asyncply::_parallel(vjobs,
+	auto task1 = asyncply::parallel(
 		[&]()
 		{
 			return asyncply::sequence(7.0,
@@ -39,19 +38,5 @@ TEST(ParallelSequenceTest, Test1)
 					return data + 4.0;
 				});
 		});
-	double aggregation = 0.0;
-	for (auto& job : vjobs)
-	{
-		try
-		{
-			double partial = job->get()->get();
-			aggregation += partial;
-		}
-		catch (std::exception& e)
-		{
-			std::cout << "exception: " << e.what() << std::endl;
-		}
-	}
-	ASSERT_EQ(aggregation, 32.0);
+	ASSERT_EQ(task1->get(), 32.0);
 }
-
