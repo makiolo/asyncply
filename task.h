@@ -17,8 +17,9 @@ public:
 	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
-		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) { ; }
+		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
 		, _last(true)
+	{ ; }
 	~task() { if(valid()) get(); }
 
 	task(const task&) = delete;
