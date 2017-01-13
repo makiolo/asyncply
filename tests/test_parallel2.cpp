@@ -128,7 +128,7 @@ TEST(Parallel2Test, Test6)
 	std::atomic<int> total;
 	total = 0;
 	{
-		auto process2 = asyncply::parallel(
+		auto process = asyncply::parallel(
 					[&total]()
 					{
 						std::cout << "hi" << std::endl;
@@ -140,11 +140,13 @@ TEST(Parallel2Test, Test6)
 						total += 1;
 					}
 				);
-		process2->then([&total]()
+		auto process2 = process->then([&total]()
 				{
 					std::cout << "no accum" << std::endl;
 					total += 1;
 				});
+		// wait end
+		process2->get();
 	}
 	ASSERT_EQ(total, 3);
 }
