@@ -140,13 +140,11 @@ TEST(Parallel2Test, Test6)
 						total += 1;
 					}
 				);
-		auto process2 = process->then([&total]()
+		process->then([&total]()
 				{
 					std::cout << "no accum" << std::endl;
 					total += 1;
 				});
-		// wait end
-		process2->get();
 	}
 	ASSERT_EQ(total, 3);
 }
