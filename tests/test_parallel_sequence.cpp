@@ -40,3 +40,34 @@ TEST(ParallelSequenceTest, Test1)
 		});
 	ASSERT_EQ(total, 32.0);
 }
+
+TEST(ParallelSequenceTest, Test1)
+{
+	double task = asyncply::parallel(
+		[&]()
+		{
+			return asyncply::sequence(7.0,
+				[](double data)
+				{
+					return data + 3.0;
+				},
+				[](double data)
+				{
+					return data + 4.0;
+				});
+		},
+		[&]()
+		{
+			return asyncply::sequence(9.0,
+				[](double data)
+				{
+					return data + 5.0;
+				},
+				[](double data)
+				{
+					return data + 4.0;
+				});
+		});
+	double total = task->get();
+	ASSERT_EQ(total, 32.0);
+}
