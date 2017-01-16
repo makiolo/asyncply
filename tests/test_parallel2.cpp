@@ -61,11 +61,10 @@ TEST(Parallel2Test, Test3_async)
 	}
 	std::atomic<int> total;
 	total = 0;
-	{
-		auto task = asyncply::for_each(a.begin(), a.end(), [&total](int i) {
-			total += i;
-		});
-	}
+	auto task = asyncply::for_each(a.begin(), a.end(), [&total](int i) {
+		total += i;
+	});
+	task->get();
 	ASSERT_EQ(total, 3600);
 }
 
@@ -147,6 +146,7 @@ TEST(Parallel2Test, Test6)
 					std::cout << "no accum" << std::endl;
 					total += 1;
 				});
+		process_then->get();
 	}
 	ASSERT_EQ(total, 3);
 }
