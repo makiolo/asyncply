@@ -68,7 +68,7 @@ TEST(Parallel2Test, Test3_async)
 	ASSERT_EQ(total, 3600);
 }
 
-TEST(Parallel2Test, Test4)
+TEST(Parallel2Test, collapse_double)
 {
 	double total_ps = asyncply::parallel_sync(
 		[]()
@@ -97,6 +97,37 @@ TEST(Parallel2Test, Test4)
 		}
 	);
 	ASSERT_EQ(total_ps, 6);
+}
+
+TEST(Parallel2Test, collapse_bool)
+{
+	bool result = asyncply::parallel_sync(
+		[]()
+		{
+			return asyncply::sequence(true,
+				[](bool data)
+				{
+					return data;
+				},
+				[](bool data)
+				{
+					return data;
+				});
+		},
+		[]()
+		{
+			return asyncply::sequence(false,
+				[](bool data)
+				{
+					return data;
+				},
+				[](bool data)
+				{
+					return data;
+				});
+		}
+	);
+	ASSERT_EQ(result, false);
 }
 
 TEST(Parallel2Test, Test5)
