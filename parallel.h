@@ -28,7 +28,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t<double> >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, task_t< typename std::result_of<Function()>::type::element_type::return_type > >::value)
 			>::type
 	>
 std::vector<typename std::result_of<Function()>::type> aggregation(Container&& vf)
@@ -45,7 +45,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t<double> >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, task_t< typename std::result_of<Function()>::type::element_type::return_type > >::value)
 			>::type
 	>
 typename std::result_of<Function()>::type aggregation(Container&& vf)
@@ -62,7 +62,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t<double> >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, task_t< typename std::result_of<Function()>::type::element_type::return_type > >::value)
 			>::type
 	>
 bool aggregation(Container&& vf)
