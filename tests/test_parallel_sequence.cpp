@@ -41,7 +41,7 @@ TEST(ParallelSequenceTest, Test1)
 	ASSERT_EQ(total, 32.0);
 }
 
-TEST(ParallelSequenceTest, Test1)
+TEST(ParallelSequenceTest, Test2)
 {
 	double task = asyncply::parallel(
 		[&]()
