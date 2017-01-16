@@ -61,9 +61,11 @@ TEST(Parallel2Test, Test3_async)
 	}
 	std::atomic<int> total;
 	total = 0;
-	asyncply::for_each(a.begin(), a.end(), [&total](int i) {
-		total += i;
-	});
+	{
+		auto task = asyncply::for_each(a.begin(), a.end(), [&total](int i) {
+			total += i;
+		});
+	}
 	ASSERT_EQ(total, 3600);
 }
 
