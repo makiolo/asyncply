@@ -45,12 +45,9 @@ public:
 	{
 		if(_last)
 		{
-			return _result.get();
+			_value = _result.get();
 		}
-		else
-		{
-			throw std::runtime_error("only can do get() in last element in chaining tasks");
-		}
+		return _value;
 	}
 
 	inline bool valid() const
@@ -84,6 +81,7 @@ protected:
 	std::future<R> _result;
 	task_t<R> _then_task;
 	bool _last;
+	R _value;
 };
 
 template <>
@@ -123,10 +121,6 @@ public:
 		if(_last)
 		{
 			_result.get();
-		}
-		else
-		{
-			throw std::runtime_error("only can do get() in last element in chaining tasks");
 		}
 	}
 
