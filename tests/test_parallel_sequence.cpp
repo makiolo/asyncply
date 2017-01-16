@@ -43,7 +43,7 @@ TEST(ParallelSequenceTest, Test1)
 
 TEST(ParallelSequenceTest, Test2)
 {
-	double task = asyncply::parallel(
+	auto task = asyncply::parallel(
 		[&]()
 		{
 			return asyncply::sequence(7.0,
