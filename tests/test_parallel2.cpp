@@ -140,7 +140,7 @@ TEST(Parallel2Test, Test6)
 						total += 1;
 					}
 				);
-		process->then([&total]()
+		auto process_then = process->then([&total]()
 				{
 					std::cout << "no accum" << std::endl;
 					total += 1;
