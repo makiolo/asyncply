@@ -125,7 +125,7 @@ TEST(ParallelFesTest, TestAsyncFast)
 	channel.get();
 }
 
-TEST(DISABLED_ParallelFesTest, TestAsyncDelay)
+TEST(ParallelFesTest, TestAsyncDelay)
 {
 	fes::async_delay<foo> channel;
 	channel.connect([](const foo& f) {
