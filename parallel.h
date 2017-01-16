@@ -25,10 +25,11 @@ void _parallel(std::vector<shared_task<Function> >& vf, Function&& f, Functions&
 
 template <  typename Function,
 			typename Container,
+			typename Someone,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t< typename std::result_of<Function()>::type > >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, task_t<Someone> >::value)
 			>::type
 	>
 std::vector<typename std::result_of<Function()>::type> aggregation(Container&& vf)
@@ -42,10 +43,11 @@ std::vector<typename std::result_of<Function()>::type> aggregation(Container&& v
 
 template <  typename Function,
 			typename Container,
+			typename Someone,
 			class = typename std::enable_if<
 				(std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t< typename std::result_of<Function()>::type > >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, task_t<Someone> >::value)
 			>::type
 	>
 typename std::result_of<Function()>::type aggregation(Container&& vf)
@@ -59,10 +61,11 @@ typename std::result_of<Function()>::type aggregation(Container&& vf)
 
 template <  typename Function,
 			typename Container,
+			typename Someone,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t< typename std::result_of<Function()>::type > >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, task_t<Someone> >::value)
 			>::type
 	>
 bool aggregation(Container&& vf)
@@ -76,10 +79,11 @@ bool aggregation(Container&& vf)
 
 template <  typename Function,
 			typename Container,
+			typename Someone,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(std::is_same<typename std::result_of<Function()>::type, task_t< typename std::result_of<Function()>::type > >::value)
+				(std::is_same<typename std::result_of<Function()>::type, task_t<Someone> >::value)
 			>::type
 	>
 // TODO: only works with double
