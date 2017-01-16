@@ -21,7 +21,7 @@ public:
 		, _last(true)
 	{ ; }
 	~task() {
-		if(valid() && _last) get();
+		if(_last) get();
 	}
 
 	task(const task&) = delete;
@@ -43,7 +43,7 @@ public:
 
 	R get()
 	{
-		if(_last)
+		if(valid())
 		{
 			_value = _result.get();
 		}
@@ -96,7 +96,7 @@ public:
 		, _last(true)
 	{ ; }
 	~task() {
-		if(valid() && _last) get();
+		if(_last) get();
 	}
 
 	task(const task&) = delete;
@@ -118,7 +118,7 @@ public:
 
 	void get()
 	{
-		if(_last)
+		if(valid())
 		{
 			_result.get();
 		}
