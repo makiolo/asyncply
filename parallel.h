@@ -15,24 +15,8 @@ struct is_task : std::false_type {};
 template<class Function>
 struct is_task<std::shared_ptr<> > : std::true_type {};
 */
-	
-template<typename T>
-class is_task
-{
-	typedef char(&yes)[2];
 
-	template<typename> struct Exists;
-
-	template<typename V>
-	static yes CheckMember(Exists<decltype(&V::element_type::return_type)>*);
-	template<typename>
-	static char CheckMember(...);
-
-public:
-	static const bool value = (sizeof(CheckMember<T>(0)) == sizeof(yes));
-};
-
-template <typename T, class = typename std::enable_if< is_task<T>::value >::type>
+template <typename T>
 auto wtf_return_type_is_this()
 {
 	return [](){
