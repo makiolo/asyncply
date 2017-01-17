@@ -244,12 +244,11 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
 template <typename Func, typename... Args>
 auto submit(Func&& func, Args&&... args)
 {
-    auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
-    using ResultType = std::result_of_t<decltype(boundTask)()>;
+    using ResultType = std::result_of<Func(Args...)>::type;
     using PackagedTask = std::packaged_task<ResultType()>;
     using TaskType = ThreadTask<PackagedTask>;
 
-    PackagedTask task{std::move(boundTask)};
+    PackagedTask task{std::bind(std::forward<Func>(func), std::forward<Args>(args)...)};
     TaskFuture<ResultType> result{task.get_future()};
     m_workQueue.push(std::make_unique<TaskType>(std::move(task)));
     return result;
