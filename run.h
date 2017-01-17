@@ -244,7 +244,7 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
 template <typename Func, typename... Args>
 auto submit(Func&& func, Args&&... args)
 {
-    using ResultType = std::result_of<Func(Args...)>::type;
+    using ResultType = typename std::result_of<Func(Args...)>::type;
     using PackagedTask = std::packaged_task<ResultType()>;
     using TaskType = ThreadTask<PackagedTask>;
 
