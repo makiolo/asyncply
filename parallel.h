@@ -37,7 +37,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t<double> >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, task_t< decltype(wtf_return_type_is_this<Function>()) > >::value)
 			>::type
 	>
 std::vector<typename std::result_of<Function()>::type> aggregation(Container&& vf)
@@ -54,7 +54,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t<double> >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, task_t< decltype(wtf_return_type_is_this<Function>()) > >::value)
 			>::type
 	>
 typename std::result_of<Function()>::type aggregation(Container&& vf)
@@ -71,7 +71,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t<double> >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, task_t< decltype(wtf_return_type_is_this<Function>()) > >::value)
 			>::type
 	>
 bool aggregation(Container&& vf)
@@ -88,7 +88,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(std::is_same<typename std::result_of<Function()>::type, task_t<double> >::value)
+				(std::is_same<typename std::result_of<Function()>::type, task_t< decltype(wtf_return_type_is_this<Function>()) > >::value)
 			>::type
 	>
 // TODO: only works with double
