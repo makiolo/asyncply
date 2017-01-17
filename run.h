@@ -18,7 +18,6 @@
 #include <fast-event-system/async_fast.h>
 #include "run_fwd.h"
 #include "task.h"
-#include "future.h"
  
 // http://roar11.com/2016/01/a-platform-independent-thread-pool-using-c14/
 namespace asyncply
