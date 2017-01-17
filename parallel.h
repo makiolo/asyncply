@@ -10,9 +10,10 @@ namespace asyncply {
 
 template <typename Function>
 auto wtf_return_type_is_this()
+{
 	using ret_t = typename std::result_of<Function()>::type::element_type::return_type;
 	return ret_t();
-};
+}
 
 template <typename Function>
 void _parallel(std::vector<shared_task<Function> >& vf, Function&& f)
