@@ -8,7 +8,8 @@ namespace asyncply {
 template <typename Function, typename ... Args>
 future_of_functor<Function, Args...> _async(Function&& f, Args&& ... data)
 {
-	return std::async(std::launch::async, std::forward<Function>(f), std::forward<Args>(data)...);
+	// return std::async(std::launch::async, std::forward<Function>(f), std::forward<Args>(data)...);
+	return asyncply::submitJob(std::forward<Function>(f), std::forward<Args>(data)...);
 }
 
 }
