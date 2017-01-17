@@ -11,7 +11,7 @@ namespace asyncply {
 
 // forward
 class ThreadPool;
-template <typename T> class ThreadPool::TaskFuture;
+template <typename T> class TaskFuture;
 
 // functor_type
 template <typename Function, typename ... Args>
