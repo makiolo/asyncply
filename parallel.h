@@ -32,28 +32,10 @@ public:
 	static const bool value = (sizeof(CheckMember<T>(0)) == sizeof(yes));
 };
 	
-template <typename Function,
-		class = typename std::enable_if<
-			(is_task<typename std::result_of<Function()>::type>::value)
-		>::type
-	>
 auto wtf_return_type_is_this()
 {
 	return [](){
 		using ret_t = typename std::result_of<Function()>::type::element_type::return_type;
-		return ret_t();
-	};
-}
-
-template <typename Function,
-		class = typename std::enable_if<
-			(!is_task<typename std::result_of<Function()>::type>::value)
-		>::type
-	>
-auto wtf_return_type_is_this()
-{
-	return [](){
-		using ret_t = typename std::result_of<Function()>::type;
 		return ret_t();
 	};
 }
