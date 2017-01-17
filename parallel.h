@@ -31,7 +31,8 @@ class is_task
 public:
 	static const bool value = (sizeof(CheckMember<T>(0)) == sizeof(yes));
 };
-	
+
+template <typename Function>
 auto wtf_return_type_is_this()
 {
 	return [](){
