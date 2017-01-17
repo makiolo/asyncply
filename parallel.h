@@ -8,19 +8,11 @@
 
 namespace asyncply {
 
-/*
-template<class Function>
-struct is_task : std::false_type {};
-	
-template<class Function>
-struct is_task<std::shared_ptr<> > : std::true_type {};
-*/
-
-template <typename T>
+template <typename Function>
 auto wtf_return_type_is_this()
 {
 	return [](){
-		using ret_t = typename T::element_type::return_type;
+		using ret_t = typename typename std::result_of<Function()>::type::element_type::return_type;
 		return ret_t();
 	};
 }
@@ -106,7 +98,7 @@ auto aggregation(Container&& vf)
 	std::vector<ret0_t> results0;
 	for(auto& v : vf)
 		results0.emplace_back(v->get());
-	return std::move( aggregation<decltype(wtf_return_type_is_this<typename std::result_of<Function()>::type>())>(results0) );
+	return std::move( aggregation<decltype(wtf_return_type_is_this<Function>())>(results0) );
 }
 
 //
