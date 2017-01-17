@@ -18,45 +18,11 @@
 #include <fast-event-system/async_fast.h>
 #include "run_fwd.h"
 #include "task.h"
+#include "future.h"
  
 // http://roar11.com/2016/01/a-platform-independent-thread-pool-using-c14/
 namespace asyncply
 {
-
-/**
- * A wrapper around a std::future that adds the behavior of futures returned from std::async.
- * Specifically, this object will block and wait for execution to finish before going out of scope.
- */
-template <typename T>
-class TaskFuture
-{
-public:
-    TaskFuture(std::future<T>&& future)
-	:m_future{std::move(future)}
-    {
-    }
-
-    TaskFuture(const TaskFuture& rhs) = delete;
-    TaskFuture& operator=(const TaskFuture& rhs) = delete;
-    TaskFuture(TaskFuture&& other) = default;
-    TaskFuture& operator=(TaskFuture&& other) = default;
-    ~TaskFuture(void)
-    {
-	if(m_future.valid())
-	{
-	    m_future.get();
-	}
-    }
-
-    auto get(void)
-    {
-	return m_future.get();
-    }
-
-
-private:
-    std::future<T> m_future;
-};
 	
 template <typename T>
 class ThreadSafeQueue
