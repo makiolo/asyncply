@@ -11,8 +11,10 @@ namespace asyncply {
 template <typename Function>
 auto wtf_return_type_is_this()
 {
-	using ret_t = typename std::result_of<Function()>::type::element_type::return_type;
-	return ret_t();
+	return [](){
+		using ret_t = typename std::result_of<Function()>::type::element_type::return_type;
+		return ret_t();
+	}
 }
 
 template <typename Function>
