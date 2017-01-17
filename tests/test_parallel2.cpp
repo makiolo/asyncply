@@ -15,7 +15,7 @@ class Parallel2Test : testing::Test { };
 
 TEST(Parallel2Test, Test1)
 {
-	std::future<int> f1 = asyncply::_async([](int data){return data;}, 10);
+	auto f1 = asyncply::_async([](int data){return data;}, 10);
 	ASSERT_EQ(f1.get(), 10);
 }
 
