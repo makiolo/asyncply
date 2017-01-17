@@ -337,16 +337,16 @@ namespace asyncply
         template <typename Func, typename... Args>
         inline auto submitJob(Func&& func, Args&&... args)
         {
-            return getThreadPool().submit(std::forward<Func>(func), std::forward<Args>(args)...);
+            return DefaultThreadPool::getThreadPool().submit(std::forward<Func>(func), std::forward<Args>(args)...);
         }
  
         /**
          * Get the default thread pool for the application.
          * This pool is created with std::thread::hardware_concurrency() - 1 threads.
          */
-        inline ThreadPool& getThreadPool(void)
+        inline asyncply::ThreadPool& getThreadPool(void)
         {
-            static ThreadPool defaultPool;
+            static asyncply::ThreadPool defaultPool;
             return defaultPool;
         }
     }
