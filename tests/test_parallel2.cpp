@@ -99,6 +99,7 @@ TEST(Parallel2Test, collapse_double)
 	ASSERT_EQ(total_ps, 6);
 }
 
+/*
 TEST(Parallel2Test, DISABLED_collapse_bool)
 {
 	bool result = asyncply::parallel_sync(
@@ -129,6 +130,7 @@ TEST(Parallel2Test, DISABLED_collapse_bool)
 	);
 	ASSERT_EQ(result, false);
 }
+*/
 
 TEST(Parallel2Test, Test5)
 {
