@@ -32,11 +32,11 @@ public:
 	static const bool value = (sizeof(CheckMember<T>(0)) == sizeof(yes));
 };
 
-template <typename Function>
+template <typename T, class = typename std::enable_if< is_task<T>::value >::type>
 auto wtf_return_type_is_this()
 {
 	return [](){
-		using ret_t = typename std::result_of<Function()>::type::element_type::return_type;
+		using ret_t = typename T::element_type::return_type;
 		return ret_t();
 	};
 }
@@ -122,7 +122,7 @@ auto aggregation(Container&& vf)
 	std::vector<ret0_t> results0;
 	for(auto& v : vf)
 		results0.emplace_back(v->get());
-	return std::move( aggregation<decltype(wtf_return_type_is_this<Function>())>(results0) );
+	return std::move( aggregation<decltype(wtf_return_type_is_this<typename std::result_of<Function()>::type>())>(results0) );
 }
 
 //
