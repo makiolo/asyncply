@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <type_traits>
-#include <future>
 #include "api.h"
 #include "task_fwd.h"
 
@@ -37,8 +36,8 @@ using shared_task = std::shared_ptr< task_of_functor<Function, Args...> >;
 template <typename Function, typename ... Args>
 shared_task<Function, Args...> async(Function&& f, Args&& ... args);
 
-template <typename Func, typename... Args>
-inline auto submitJob(Func&& func, Args&&... args);
+template <typename Function, typename... Args>
+inline auto submitJob(Function&& func, Args&&... args);
 
 ThreadPool& getThreadPool(void);
 
