@@ -78,7 +78,7 @@ public:
 	}
 	
 protected:
-	std::future<R> _result;
+	TaskFuture<R> _result;
 	task_t<R> _then_task;
 	bool _last;
 	R _value;
@@ -152,7 +152,7 @@ public:
 	}
 
 protected:
-	std::future<void> _result;
+	TaskFuture<void> _result;
 	task_t<void> _then_task;
 	bool _last;
 };
