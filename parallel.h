@@ -8,6 +8,11 @@
 
 namespace asyncply {
 
+auto wtf_return_type_is_this()
+	using ret_t = typename std::result_of<Function()>::type::element_type::return_type;
+	return ret_t();
+};
+
 template <typename Function>
 void _parallel(std::vector<shared_task<Function> >& vf, Function&& f)
 {
@@ -89,12 +94,7 @@ auto aggregation(Container&& vf)
 	std::vector<ret0_t> results0;
 	for(auto& v : vf)
 		results0.emplace_back(v->get());
-
-	auto f = [](){
-		using ret_t = typename std::result_of<Function()>::type::element_type::return_type;
-		return ret_t();
-	};
-	return std::move( aggregation<decltype(f)>(results0) );
+	return std::move( aggregation<decltype(wtf_return_type_is_this())>(results0) );
 }
 
 //
