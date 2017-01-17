@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 #include <thread>
+#include "future.h"
 #include "run_fwd.h"
 #include "async.h"
 
