@@ -14,7 +14,7 @@ auto wtf_return_type_is_this()
 	return [](){
 		using ret_t = typename std::result_of<Function()>::type::element_type::return_type;
 		return ret_t();
-	}
+	};
 }
 
 template <typename Function>
