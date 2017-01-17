@@ -42,7 +42,7 @@ public:
 		return _then_task;
 	}
 
-	R get()
+	auto get(void)
 	{
 		if(valid())
 		{
