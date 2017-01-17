@@ -33,6 +33,9 @@ using shared_task = std::shared_ptr< task_of_functor<Function, Args...> >;
 template <typename Function, typename ... Args>
 shared_task<Function, Args...> async(Function&& f, Args&& ... args);
 
+// forward
+class ThreadPool;
+
 template <typename Func, typename... Args>
 inline auto submitJob(Func&& func, Args&&... args);
 
