@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <numeric>
+#include <boost/hana.hpp>
 #include <metacommon/common.h>
 #include "run.h"
 
