@@ -13,31 +13,32 @@ template <typename T> class TaskFuture;
 class ThreadPool;
 
 // functor_type
-template <typename Function>
-using return_of_functor = typename std::result_of<Function()>::type;
+template <typename Function, typename ... Args>
+using return_of_functor = typename std::result_of<Function(Args...)>::type;
 
 // task_functor
-template <typename Function>
-using task_of_functor = asyncply::task< return_of_functor<Function> >;
+template <typename Function, typename ... Args>
+using task_of_functor = asyncply::task< return_of_functor<Function, Args...> >;
 
 // future_functor
-template <typename Function>
-using future_of_functor = TaskFuture< return_of_functor<Function> >;
+template <typename Function, typename ... Args>
+using future_of_functor = TaskFuture< return_of_functor<Function, Args...> >;
 
 // shared_task
 template <typename Type>
 using task_t = std::shared_ptr< asyncply::task<Type> >;
 
 // shared_task_functor
-template <typename Function>
-using shared_task = std::shared_ptr< task_of_functor<Function> >;
+template <typename Function, typename ... Args>
+using shared_task = std::shared_ptr< task_of_functor<Function, Args...> >;
 
+// submitJob
+template <typename Function, typename... Args>
+inline future_of_functor<Func, Args...> submitJob(Function&& func, Args&&... args);
+  
 // async
 template <typename Function, typename ... Args>
-shared_task<Function> async(Function&& f, Args&& ... args);
-
-template <typename Function, typename... Args>
-inline auto submitJob(Function&& func, Args&&... args);
+shared_task<Function, Args...> async(Function&& f, Args&& ... args);
 
 ThreadPool& getThreadPool(void);
 
