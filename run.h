@@ -17,6 +17,10 @@
 #include <queue>
 #include "run_fwd.h"
 #include "task.h"
+
+// sfinae modern
+// https://jguegant.github.io/blogs/tech/sfinae-introduction.html
+// #include <boost/hana.hpp>
  
 // http://roar11.com/2016/01/a-platform-independent-thread-pool-using-c14/
 namespace asyncply
