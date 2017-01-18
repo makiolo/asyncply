@@ -22,7 +22,7 @@ using task_of_functor = asyncply::task< return_of_functor<Function, Args...> >;
 
 // future_functor
 template <typename Function, typename ... Args>
-using future_of_functor = TaskFuture< decltype(return_of_functor<Function, Args...>()) >;
+using future_of_functor = TaskFuture< typename std::result_of<decltype(return_of_functor<Function, Args...>)()>::type >;
 
 // shared_task
 template <typename Type>
