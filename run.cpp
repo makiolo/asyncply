@@ -3,15 +3,10 @@
 
 namespace asyncply {
 
-register_asyncply::register_asyncply()
+ThreadPool& getThreadPool(void)
 {
-
-}
-
-register_asyncply::~register_asyncply()
-{
-
+    static ThreadPool defaultPool;
+    return defaultPool;
 }
 
 }
-
