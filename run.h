@@ -307,7 +307,7 @@ inline auto submitJob(Func&& func, Args&&... args)
 ThreadPool& getThreadPool(void);
 
 template <typename Function, typename ... Args>
-shared_task<Function, Args...> async(Function&& f, Args&& ... args)
+shared_task<Function> async(Function&& f, Args&& ... args)
 {
 	return std::make_shared< task_of_functor<Function, Args...> >(std::forward<Function>(f), std::forward<Args>(args)...);
 }
