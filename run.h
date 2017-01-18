@@ -241,14 +241,13 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
  * Submit a job to be run by the thread pool.
  */
 template <typename Func, typename... Args>
-auto submit(Func&& func, Args&&... args)
+future_of_functor<Func> submit(Func&& func, Args&&... args)
 {
-    using ResultType = typename std::result_of<Func(Args...)>::type;
-    using PackagedTask = std::packaged_task<ResultType()>;
+    using PackagedTask = std::packaged_task<return_of_functor<Func>()>;
     using TaskType = ThreadTask<PackagedTask>;
 
     PackagedTask task{std::bind(std::forward<Func>(func), std::forward<Args>(args)...)};
-    TaskFuture<ResultType> result{task.get_future()};
+    future_of_functor<Func> result{task.get_future()};
     m_workQueue.push(std::make_unique<TaskType>(std::move(task)));
     return result;
 }
@@ -295,7 +294,7 @@ private:
  * Submit a job to the default thread pool.
  */
 template <typename Func, typename... Args>
-inline auto submitJob(Func&& func, Args&&... args)
+inline future_of_functor<Func> submitJob(Func&& func, Args&&... args)
 {
     return getThreadPool().submit(std::forward<Func>(func), std::forward<Args>(args)...);
 }
