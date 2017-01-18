@@ -15,7 +15,6 @@
 #include <condition_variable>
 #include <mutex>
 #include <queue>
-#include <fast-event-system/async_fast.h>
 #include "run_fwd.h"
 #include "task.h"
  
