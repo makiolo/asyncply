@@ -305,18 +305,7 @@ inline auto submitJob(Func&& func, Args&&... args)
  * Get the default thread pool for the application.
  * This pool is created with std::thread::hardware_concurrency() - 1 threads.
  */
-ThreadPool& getThreadPool(void)
-{
-    static ThreadPool defaultPool;
-    return defaultPool;
-}
-
-struct asyncply_API register_asyncply
-{
-	register_asyncply();
-	~register_asyncply();
-};
-asyncply_API register_asyncply _reg;
+ThreadPool& getThreadPool(void);
 
 template <typename Function, typename ... Args>
 shared_task<Function, Args...> async(Function&& f, Args&& ... args)
