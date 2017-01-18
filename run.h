@@ -243,7 +243,7 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
 template <typename Func, typename... Args>
 future_of_functor<Func, Args...> submit(Func&& func, Args&&... args)
 {
-    using PackagedTask = std::packaged_task< return_of_functor<Func>() >;
+    using PackagedTask = std::packaged_task< return_of_functor<Func, Args...>() >;
     using TaskType = ThreadTask<PackagedTask>;
 
     PackagedTask task{std::bind(std::forward<Func>(func), std::forward<Args>(args)...)};
