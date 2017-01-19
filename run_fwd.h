@@ -13,11 +13,11 @@ template <typename T> class TaskFuture;
 class ThreadPool;
 
 // functor_type
-// template <typename Function, typename ... Args>
-// using return_of_functor = typename std::result_of<Function(Args...)>::type;
+template <typename Function, typename ... Args>
+using return_of_functor = typename std::result_of<Function(Args...)>::type;
 
 template <typename Function, typename ... Args>
-using result_type = typename std::result_of<decltype(Function(Args...))()>::type;
+using result_type = typename std::result_of< return_of_functor<Function, Args...>() >::type;
   
 // task_functor
 template <typename Function, typename ... Args>
