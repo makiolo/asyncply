@@ -37,6 +37,10 @@ using task_t = std::shared_ptr< asyncply::task<Type> >;
 template <typename Function, typename ... Args>
 using shared_task = std::shared_ptr< task_of_functor<Function, Args...> >;
   
+// __async
+template <typename Function, typename ... Args>
+future_of_functor<Function, Args...> __async(Function&& f, Args&& ... data);
+  
 // async
 template <typename Function, typename ... Args>
 shared_task<Function, Args...> async(Function&& f, Args&& ... args);
