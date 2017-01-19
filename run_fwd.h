@@ -14,7 +14,8 @@ class ThreadPool;
 
 // functor_type
 template <typename Function, typename ... Args>
-using return_of_functor = typename std::result_of<Function(Args...)>::type;
+// using return_of_functor = typename std::result_of<Function(Args...)>::type;
+using return_of_functor = decltype(std::declval<Function>()(std::declval<Args>()...);
 
 template <typename Function, typename ... Args>
 using result_type = typename std::result_of< return_of_functor<Function, Args...>() >::type;
