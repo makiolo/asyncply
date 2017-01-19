@@ -7,8 +7,8 @@ namespace asyncply {
 	{
 		std::vector<task_t<void> > vf;
 		for (; a != b; ++a) {
-			auto desref = *a;
-			vf.emplace_back(asyncply::async([&f, desref]() {
+			auto& desref = *a;
+			vf.emplace_back(asyncply::async([f = std::forward<Function>(f), desref = std::forward<decltype(desref)>(desref)]() {
 				f(desref);
 			}));
 		}
@@ -22,7 +22,7 @@ namespace asyncply {
 		return asyncply::async(
 				[a, b, &f]()
 				{
-					for_each_sync(a, b, std::forward<Function>(f));
+					for_each(a, b, std::forward<Function>(f));
 				});
 	}
 
