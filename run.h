@@ -246,7 +246,7 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
  * Submit a job to be run by the thread pool.
  */
 template <typename Func, typename... Args>	
-auto submit(Func&& func, Args&&... args) -> future_of_functor<Func, Args...>
+auto submit(Func&& func, Args&&... args) -> typename std::enable_if<(!std::is_void< result_type<Func, Args...> >::value), future_of_functor<Func, Args...> >::type
 {
 	auto boundTask = std::bind< result_type<Func, Args...>() >(std::forward<Func>(func), std::forward<Args>(args)...);
 	using PackagedTask = std::packaged_task< result_type<Func, Args...>() >;
@@ -276,6 +276,19 @@ auto submit(Func&& func, Args&&... args) -> future_of_functor<Func, Args...>
 	*/
 }
 
+template <typename Func, typename... Args>	
+auto submit(Func&& func, Args&&... args) -> typename std::enable_if<(std::is_void< result_type<Func, Args...> >::value), TaskFuture<void> >::type
+{
+	auto boundTask = std::bind<void()>(std::forward<Func>(func), std::forward<Args>(args)...);
+	using PackagedTask = std::packaged_task<void()>;
+	using TaskType = ThreadTask<PackagedTask>;
+
+	PackagedTask task( std::move(boundTask) );
+	TaskFuture<void> result( task.get_future() );
+	m_workQueue.push( std::make_unique<TaskType>(std::move(task)) );
+	return result;
+}
+	
 private:
 /**
  * Constantly running function each thread uses to acquire work items from the queue.
