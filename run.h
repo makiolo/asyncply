@@ -321,11 +321,11 @@ private:
 ThreadPool& getThreadPool(void);
 
 template <typename Function, typename ... Args>
-future_of_functor<Function, Args...> __async(Function&& f, Args&& ... data)
+future_of_functor<Function, Args...> __async(Function&& f, Args&& ... args)
 {
-	return getThreadPool().submit(std::forward<Func>(func), std::forward<Args>(args)...);
+	return getThreadPool().submit(std::forward<Func>(f), std::forward<Args>(args)...);
 }
-	
+
 template <typename Function, typename ... Args>
 shared_task<Function, Args...> async(Function&& f, Args&& ... args)
 {
