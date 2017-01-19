@@ -22,7 +22,7 @@ namespace asyncply {
 		return asyncply::async(
 				[a, b, &f]()
 				{
-					for_each(a, b, std::forward<Function>(f));
+					asyncply::for_each(a, b, std::forward<Function>(f));
 				});
 	}
 
