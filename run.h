@@ -15,6 +15,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <queue>
+#include <metacommon/common.h>
 #include "run_fwd.h"
 #include "task.h"
 
@@ -247,6 +248,7 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
 template <typename Func, typename... Args>
 future_of_functor<Func, Args...> submit(Func&& func, Args&&... args)
 {
+	/*
 	using PackagedTask = std::packaged_task< result_type<Func, Args...>() >;
 	using TaskType = ThreadTask<PackagedTask>;
 
@@ -254,21 +256,20 @@ future_of_functor<Func, Args...> submit(Func&& func, Args&&... args)
 	future_of_functor<Func, Args...> result{task.get_future()};
 	m_workQueue.push(std::make_unique<TaskType>(std::move(task)));
 	return result;
-	
+	*/
 	
 	// auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
-	// using ResultType = std::result_of_t<decltype(boundTask)()>;
-	// using PackagedTask = std::packaged_task<ResultType()>;
-	// using TaskType = ThreadTask<PackagedTask>;
+	auto boundTask = mc::bind(std::forward<Func>(func), std::forward<Args>(args)...);
+	using ResultType = std::result_of_t<decltype(boundTask)()>;
+	using PackagedTask = std::packaged_task<ResultType()>;
+	using TaskType = ThreadTask<PackagedTask>;
 	
-	// static_assert(std::is_same< future_of_functor<Func, Args...>, TaskFuture<ResultType> >::value, "error in is_same");
+	static_assert(std::is_same< future_of_functor<Func, Args...>, TaskFuture<ResultType> >::value, "error in is_same");
 	
-	/*
 	PackagedTask task{std::move(boundTask)};
 	TaskFuture<ResultType> result{task.get_future()};
 	m_workQueue.push(std::make_unique<TaskType>(std::move(task)));
 	return result;
-	*/
 }
 
 private:
