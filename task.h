@@ -34,7 +34,8 @@ public:
 		_last = false;
 		task_t<R> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
-			[this_task, post_method = std::move(post_method)](){
+			[this_task, post_method = std::move(post_method)]() -> return_type
+			{
 				return_type r = this_task->get();
 				return post_method(r);
 			}
@@ -109,7 +110,8 @@ public:
 		_last = false;
 		task_t<void> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
-			[this_task, post_method = std::move(post_method)]() {
+			[this_task, post_method = std::move(post_method)]()
+			{
 				this_task->get();
 				post_method();
 			}
