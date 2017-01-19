@@ -318,7 +318,7 @@ private:
  * Submit a job to the default thread pool.
  */
 template <typename Func, typename... Args>
-inline future_of_functor<Func, Args...> submitJob(Func&& func, Args&&... args)
+inline future_of_functor<Func, Args...> __async(Func&& func, Args&&... args)
 {
     return getThreadPool().submit(std::forward<Func>(func), std::forward<Args>(args)...);
 }
