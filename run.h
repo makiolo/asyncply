@@ -245,14 +245,14 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
 /**
  * Submit a job to be run by the thread pool.
  */
-template <typename Func, typename... Args>
-future_of_functor<Func, Args...> submit(Func&& func, Args&&... args)
+template <typename Func, typename... Args>	
+auto submit(Func&& func, Args&&... args) -> future_of_functor<Func, Args...>
 {
 	auto boundTask = mc::bind(std::forward<Func>(func), std::forward<Args>(args)...);
 	using PackagedTask = std::packaged_task< result_type<Func, Args...>() >;
 	using TaskType = ThreadTask<PackagedTask>;
 
-	static_assert(std::is_same< result_type<Func, Args...>, decltype(boundTask) >::value, "error in is_same");
+	static_assert(std::is_same< result_type<Func, Args...>, decltype(boundTask()) >::value, "error in is_same");
 	static_assert(std::is_same< future_of_functor<Func, Args...>, TaskFuture< result_type<Func, Args...> > >::value, "error in is_same");
 	
 	PackagedTask task( std::move(boundTask) );
