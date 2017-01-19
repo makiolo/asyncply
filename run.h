@@ -246,7 +246,7 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
  * Submit a job to be run by the thread pool.
  */
 template <typename Func, typename... Args>	
-auto submit(Func&& func, Args&&... args) -> typename std::enable_if<(!std::is_void< result_type<Func, Args...> >::value), future_of_functor<Func, Args...> >::type
+auto submit(Func&& func, Args&&... args) -> std::enable_if_t<(!std::is_void< result_type<Func, Args...> >::value), future_of_functor<Func, Args...> >
 {
 	auto boundTask = std::bind< result_type<Func, Args...>() >(std::forward<Func>(func), std::forward<Args>(args)...);
 	using PackagedTask = std::packaged_task< result_type<Func, Args...>() >;
@@ -277,7 +277,7 @@ auto submit(Func&& func, Args&&... args) -> typename std::enable_if<(!std::is_vo
 }
 
 template <typename Func, typename... Args>	
-auto submit(Func&& func, Args&&... args) -> typename std::enable_if<(std::is_void< result_type<Func, Args...> >::value), TaskFuture<void> >::type
+auto submit(Func&& func, Args&&... args) -> std::enable_if_t<(std::is_void< result_type<Func, Args...> >::value), TaskFuture<void> >
 {
 	auto boundTask = std::bind<void()>(std::forward<Func>(func), std::forward<Args>(args)...);
 	using PackagedTask = std::packaged_task<void()>;
