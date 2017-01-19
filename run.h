@@ -248,7 +248,7 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
 template <typename Func, typename... Args>
 future_of_functor<Func, Args...> submit(Func&& func, Args&&... args)
 {
-	/*
+	
 	using PackagedTask = std::packaged_task< result_type<Func, Args...>() >;
 	using TaskType = ThreadTask<PackagedTask>;
 
@@ -256,8 +256,9 @@ future_of_functor<Func, Args...> submit(Func&& func, Args&&... args)
 	future_of_functor<Func, Args...> result{task.get_future()};
 	m_workQueue.push(std::make_unique<TaskType>(std::move(task)));
 	return result;
-	*/
 	
+	
+	/*
 	auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
 	// auto boundTask = mc::bind(std::forward<Func>(func), std::forward<Args>(args)...);
 	using ResultType = std::result_of_t<decltype(boundTask)()>;
@@ -270,6 +271,7 @@ future_of_functor<Func, Args...> submit(Func&& func, Args&&... args)
 	TaskFuture<ResultType> result{task.get_future()};
 	m_workQueue.push(std::make_unique<TaskType>(std::move(task)));
 	return result;
+	*/
 }
 
 private:
