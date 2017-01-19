@@ -43,7 +43,7 @@ future_of_functor<Function, Args...> __async(Function&& f, Args&& ... data);
   
 // async
 template <typename Function, typename ... Args>
-shared_task<Function, Args...> async(Function&& f, Args&& ... args);
+auto async(Function&& f, Args&& ... args) -> shared_task<Function, Args...>;
 
 ThreadPool& getThreadPool(void);
 
