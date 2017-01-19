@@ -327,7 +327,7 @@ future_of_functor<Function, Args...> __async(Function&& f, Args&& ... args)
 }
 
 template <typename Function, typename ... Args>
-shared_task<Function, Args...> async(Function&& f, Args&& ... args)
+auto async(Function&& f, Args&& ... args) -> shared_task<Function, Args...>
 {
 	return std::make_shared< task_of_functor<Function, Args...> >(std::forward<Function>(f), std::forward<Args>(args)...);
 }
