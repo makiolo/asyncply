@@ -248,16 +248,17 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
 template <typename Func, typename... Args>
 future_of_functor<Func, Args...> submit(Func&& func, Args&&... args)
 {
-	
+	auto boundTask = mc::bind(std::forward<Func>(func), std::forward<Args>(args)...);
 	using PackagedTask = std::packaged_task< result_type<Func, Args...>() >;
 	using TaskType = ThreadTask<PackagedTask>;
 
-	PackagedTask task( mc::bind(std::forward<Func>(func), std::forward<Args>(args)...) );
-	// PackagedTask task( std::forward<Func>(func) );
+	static_assert(std::is_same< result_type<Func, Args...>, decltype(boundTask) >::value, "error in is_same");
+	static_assert(std::is_same< future_of_functor<Func, Args...>, TaskFuture< result_type<Func, Args...> > >::value, "error in is_same");
+	
+	PackagedTask task( std::move(boundTask) );
 	future_of_functor<Func, Args...> result( task.get_future() );
 	m_workQueue.push( std::make_unique<TaskType>(std::move(task)) );
 	return result;
-	
 	
 	/*
 	auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
