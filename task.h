@@ -18,7 +18,7 @@ public:
 	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
-		: std::forward<TaskFuture<R> >(_result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ))
+		: _result(std::forward<TaskFuture<R> >(asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) )
 		, _last(true)
 	{ ; }
 	~task() {
