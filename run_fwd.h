@@ -39,7 +39,7 @@ using shared_task = std::shared_ptr< task_of_functor<Function, Args...> >;
 
 // submitJob
 template <typename Func, typename... Args>
-inline future_of_functor<Func, Args...> submitJob(Func&& func, Args&&... args);
+inline future_of_functor<Func, Args...> __async(Func&& func, Args&&... args);
   
 // async
 template <typename Function, typename ... Args>
