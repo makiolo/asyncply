@@ -252,8 +252,8 @@ future_of_functor<Func, Args...> submit(Func&& func, Args&&... args)
 	using PackagedTask = std::packaged_task< result_type<Func, Args...>() >;
 	using TaskType = ThreadTask<PackagedTask>;
 
-	// PackagedTask task( std::bind(std::forward<Func>(func), std::forward<Args>(args)...) );
-	PackagedTask task( std::forward<Func>(func) );
+	PackagedTask task( mc::bind(std::forward<Func>(func), std::forward<Args>(args)...) );
+	// PackagedTask task( std::forward<Func>(func) );
 	future_of_functor<Func, Args...> result( task.get_future() );
 	m_workQueue.push( std::make_unique<TaskType>(std::move(task)) );
 	return result;
