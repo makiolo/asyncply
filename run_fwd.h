@@ -39,7 +39,7 @@ using shared_task = std::shared_ptr< task_of_functor<Function, Args...> >;
   
 // __async
 template <typename Function, typename ... Args>
-future_of_functor<Function, Args...> __async(Function&& f, Args&& ... data);
+auto __async(Function&& f, Args&& ... data) -> future_of_functor<Function, Args...>;
   
 // async
 template <typename Function, typename ... Args>
