@@ -6,9 +6,9 @@
 namespace asyncply {
 
 template <typename Function, typename ... Args>
-future_of_functor<Function, Args...> _async(Function&& f, Args&& ... data)
+future_of_functor<Function, Args...> _async(Function&& f, Args&& ... args)
 {
-	return __async(std::forward<Function>(func), std::forward<Args>(args)...);
+	return __async(std::forward<Function>(f), std::forward<Args>(args)...);
 }
 
 }
