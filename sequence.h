@@ -49,7 +49,7 @@ Data sequence_sync(Data&& data, Functions&&... fs)
 {
 	task_t<Data> task;
 	asyncply::_sequence(task, std::forward<Data>(data), std::forward<Functions>(fs)...);
-	return task->get();
+	return std::move(task->get());
 }
 
 template <typename Data, typename... Functions>
