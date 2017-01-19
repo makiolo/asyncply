@@ -321,7 +321,7 @@ private:
 ThreadPool& getThreadPool(void);
 
 template <typename Function, typename ... Args>
-future_of_functor<Function, Args...> __async(Function&& f, Args&& ... args)
+auto __async(Function&& f, Args&& ... args) -> future_of_functor<Function, Args...>
 {
 	return getThreadPool().submit(std::forward<Function>(f), std::forward<Args>(args)...);
 }
