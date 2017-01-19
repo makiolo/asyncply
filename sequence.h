@@ -12,7 +12,7 @@ void __sequence(task_t<Data>& task, Data data, Function&& f)
 	if(!task)
 	{
 		task = asyncply::async( 	
-			[f = std::move(f)](Data d)
+			[f = std::move(f)](Data d) -> Data
 			{
 				return f(d);
 			}, data
@@ -22,7 +22,7 @@ void __sequence(task_t<Data>& task, Data data, Function&& f)
 	{
 		task = task->then(
 			std::bind(
-				[f = std::move(f)](Data d)
+				[f = std::move(f)](Data d) -> Data
 				{
 					return f(d);
 				}, std::placeholders::_1
