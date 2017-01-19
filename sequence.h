@@ -56,7 +56,7 @@ template <typename Data, typename... Functions>
 task_t<Data> sequence(Data data, Functions&&... fs)
 {
 	return asyncply::async(
-		[](Data d, Functions&&... fs)
+		[](Data d, Functions&&... fs) -> Data
 		{
 			return asyncply::sequence_sync(d, std::forward<Functions>(fs)...);
 		},
