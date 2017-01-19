@@ -13,9 +13,7 @@ namespace asyncply {
 			}));
 		}
 		for(auto& v : vf)
-		{
 			v->get();
-		}
 	}
 
 	template <typename Iterator, typename Function>
