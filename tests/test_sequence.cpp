@@ -22,7 +22,7 @@ TEST(SequenceTest, Test1)
 		}
 	};
 	control_flow flow = {true};
-	flow = asyncply::sequence_sync(flow,
+	control_flow flow_out = asyncply::sequence_sync(flow,
 		[](control_flow flow) {
 			std::cout << "code 1" << std::endl;
 			return flow;
@@ -41,5 +41,5 @@ TEST(SequenceTest, Test1)
 			return flow;
 		}
 	);
-	ASSERT_FALSE(flow.code);
+	ASSERT_FALSE(flow_out.code);
 }
