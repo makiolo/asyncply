@@ -58,7 +58,7 @@ int main_measured_algorithm_1()
 	}
 	std::atomic<int> total;
 	total = 0;
-	asyncply::for_each_sync(a.begin(), a.end(), [&total](int i) {
+	asyncply::for_each(a.begin(), a.end(), [&total](int i) {
 		total += i;
 	});
 	return 0;
