@@ -70,11 +70,11 @@ TEST(Parallel2Test, Test3_async)
 
 TEST(Parallel2Test, collapse_double)
 {
-	double total_ps = asyncply::parallel_sync<double>(
+	double total_ps = asyncply::parallel_sync(
 		[]()
 		{
 			double data = 1.0;
-			return asyncply::sequence(data,
+			return asyncply::sequence_sync(data,
 				[](double data)
 				{
 					return data + 1.0;
@@ -87,7 +87,7 @@ TEST(Parallel2Test, collapse_double)
 		[]()
 		{
 			double data = 1.0;
-			return asyncply::sequence(data,
+			return asyncply::sequence_sync(data,
 				[](double data)
 				{
 					return data + 1.0;
