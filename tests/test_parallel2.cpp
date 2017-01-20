@@ -70,7 +70,7 @@ TEST(Parallel2Test, Test3_async)
 
 TEST(Parallel2Test, collapse_double)
 {
-	double total_ps = asyncply::parallel_sync(
+	double total_ps = asyncply::parallel_sync<double>(
 		[]()
 		{
 			double data = 1.0;
