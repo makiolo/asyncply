@@ -49,8 +49,8 @@ auto sequence_sync(Data data, Functions&&... fs)
 {
 	task_t<Data> task;
 	// copy data
-	Data d = std::move(data);
-	asyncply::_sequence(task, std::forward<Data>(d), std::forward<Functions>(fs)...);
+	Data d = data;
+	asyncply::_sequence(task, d, std::forward<Functions>(fs)...);
 	return task->get();
 }
 
