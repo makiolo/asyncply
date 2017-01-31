@@ -45,11 +45,11 @@ void _sequence(task_t<Data>& task, Data&& data, Function&& f, Functions&& ... fs
 }
 
 template <typename Data, typename... Functions>
-auto sequence_sync(Data&& data, Functions&&... fs)
+auto sequence_sync(Data data, Functions&&... fs)
 {
 	task_t<Data> task;
-	asyncply::_sequence(task, std::forward<Data>(data), std::forward<Functions>(fs)...);
-	return std::forward<Data>(task->get());
+	asyncply::_sequence(task, std::move(data), std::forward<Functions>(fs)...);
+	return task->get();
 }
 
 template <typename Data, typename... Functions>
