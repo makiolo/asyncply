@@ -48,7 +48,8 @@ template <typename Data, typename... Functions>
 auto sequence_sync(Data data, Functions&&... fs)
 {
 	task_t<Data> task;
-	asyncply::_sequence(task, std::move(data), std::forward<Functions>(fs)...);
+	// copy data
+	asyncply::_sequence(task, data, std::forward<Functions>(fs)...);
 	return task->get();
 }
 
