@@ -47,7 +47,7 @@ std::vector<typename std::result_of<Function()>::type> aggregation(Container&& v
 	std::vector<ret_t> results;
 	for(auto& v : vf)
 		results.emplace_back(v->get());
-	return std::move(results);
+	return results;
 }
 
 template <  typename Function,
@@ -64,7 +64,7 @@ typename std::result_of<Function()>::type aggregation(Container&& vf)
 	std::vector<ret_t> results;
 	for(auto& v : vf)
 		results.emplace_back(v->get());
-	return std::move( std::accumulate(results.begin(), results.end(), ret_t(0), std::plus<ret_t>()) );
+	return std::accumulate(results.begin(), results.end(), ret_t(0), std::plus<ret_t>());
 }
 
 template <  typename Function,
@@ -81,7 +81,7 @@ bool aggregation(Container&& vf)
 	std::vector<ret_t> results;
 	for(auto& v : vf)
 		results.emplace_back(v->get());
-	return std::move( std::accumulate(results.begin(), results.end(), true, std::logical_and<bool>()) );
+	return std::accumulate(results.begin(), results.end(), true, std::logical_and<bool>());
 }
 
 template <  typename Function,
@@ -99,7 +99,7 @@ auto aggregation(Container&& vf)
 	std::vector<ret0_t> results0;
 	for(auto& v : vf)
 		results0.emplace_back(v->get());
-	return std::move( aggregation<decltype(wtf_return_type_is_this<Function>())>(results0) );
+	return aggregation<decltype(wtf_return_type_is_this<Function>())>(results0);
 }
 
 //
@@ -114,7 +114,7 @@ auto parallel_sync(Function&& f, Functions&&... fs)
 {
 	std::vector<shared_task<Function> > vf;
 	asyncply::_parallel(vf, std::forward<Function>(f), std::forward<Functions>(fs)...);
-	return std::move( aggregation<Function>(vf) );
+	return aggregation<Function>(vf);
 }
 
 template <  typename Function,
