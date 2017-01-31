@@ -56,7 +56,5 @@ install:
 script:
   - (cd metacommon && git pull origin master)
   - ./cmaki/run.sh $MODE
-  - |
-    if [[ $CXX == "g++-4.9" && $MODE == "Release" ]]; then
-        (cd cmaki_generator && ./build github://$TRAVIS_REPO_SLUG -o --server=http://artifacts.myftp.biz:8080)
-    fi
+  - (cd cmaki_generator && ./build github://$TRAVIS_REPO_SLUG -o --server=http://artifacts.myftp.biz:8080)
+

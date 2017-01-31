@@ -9,3 +9,4 @@ cmaki2_gtest(sequence test_sequence.cpp DEPENDS asyncply)
 
 cmaki_find_package(fast-event-system)
 cmaki2_gtest(parallel_fes test_parallel_fes.cpp DEPENDS asyncply)
+
