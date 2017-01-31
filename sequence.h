@@ -7,7 +7,7 @@
 namespace asyncply {
 
 template <typename Data, typename Function>
-void __sequence(task_t<Data>& task, Data&& data, Function&& f)
+void __sequence(task_t<Data>& task, Data data, Function&& f)
 {
 	if(!task)
 	{
@@ -32,15 +32,15 @@ void __sequence(task_t<Data>& task, Data&& data, Function&& f)
 }
 	
 template <typename Data, typename Function>
-void _sequence(task_t<Data>& task, Data&& data, Function&& f)
+void _sequence(task_t<Data>& task, Data data, Function&& f)
 {
-	asyncply::__sequence(task, std::forward<Data>(data), std::forward<Function>(f));
+	asyncply::__sequence(task, data, std::forward<Function>(f));
 }
 
 template <typename Data, typename Function, typename... Functions>
-void _sequence(task_t<Data>& task, Data&& data, Function&& f, Functions&& ... fs)
+void _sequence(task_t<Data>& task, Data data, Function&& f, Functions&& ... fs)
 {
-	asyncply::__sequence(task, std::forward<Data>(data), std::forward<Function>(f));
+	asyncply::__sequence(task, data, std::forward<Function>(f));
 	asyncply::_sequence(task, std::forward<Data>(data), std::forward<Functions>(fs)...);
 }
 
