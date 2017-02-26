@@ -8,7 +8,7 @@
 #include <fast-event-system/sync.h>
 #include <fast-event-system/async_fast.h>
 #include <fast-event-system/async_delay.h>
-#include "../parallel.h"
+#include "../parallel_async.h"
 #include "../task.h"
 #include "../algorithm.h"
 
@@ -57,7 +57,7 @@ TEST(ParallelFesTest, Test1)
 	channel.connect([&total](int data) {
 		total += data;
 	});
-	asyncply::parallel_sync(
+	asyncply::parallel(
 		[&]()
 		{
 			// consumer

@@ -5,7 +5,6 @@
 #include <numeric>
 #include <metacommon/common.h>
 #include "run.h"
-// #include <boost/hana.hpp>
 
 namespace asyncply {
 
@@ -31,7 +30,7 @@ void _parallel(std::vector<shared_task<Function> >& vf, Function&& f, Functions&
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
 }
 
-//
+/////////////////////////////////////////////////////////
 
 template <  typename Function,
 			typename Container,
@@ -92,7 +91,6 @@ template <  typename Function,
 				(std::is_same<typename std::result_of<Function()>::type, task_t< double > >::value)
 			>::type
 	>
-// TODO: only works with double
 auto aggregation(Container&& vf)
 {
 	using ret0_t = typename std::result_of<Function()>::type;
@@ -102,7 +100,7 @@ auto aggregation(Container&& vf)
 	return aggregation<decltype(wtf_return_type_is_this<Function>())>(results0);
 }
 
-//
+////////////////////////////////////////////////////////
 
 template <  typename Function,
 			typename ... Functions,
@@ -110,11 +108,20 @@ template <  typename Function,
 				(!std::is_void<typename std::result_of<Function()>::type>::value)
 			>::type
 	>
-auto parallel_sync(Function&& f, Functions&&... fs)
+auto _parallel_sync(shared_task<Function>& task, Function&& f_, Functions&&... fs_)
 {
-	std::vector<shared_task<Function> > vf;
-	asyncply::_parallel(vf, std::forward<Function>(f), std::forward<Functions>(fs)...);
-	return aggregation<Function>(vf);
+	assert(task == nullptr);
+	task = asyncply::async(
+		std::bind(
+			[f = std::move(f_)](auto&& ... fs)
+			{
+				std::vector<shared_task<Function> > vf;
+				asyncply::_parallel(vf, f, fs...);
+				return aggregation<Function>(vf);
+			}, std::forward<Functions>(fs_)...
+		)
+	);
+	return task;
 }
 
 template <  typename Function,
@@ -123,28 +130,55 @@ template <  typename Function,
 				(std::is_void<typename std::result_of<Function()>::type>::value)
 			>::type
 	>
-void parallel_sync(Function&& f, Functions&&... fs)
+void _parallel_sync(shared_task<Function>& task, Function&& f_, Functions&&... fs_)
 {
-	std::vector<shared_task<Function> > vf;
-	asyncply::_parallel(vf, std::forward<Function>(f), std::forward<Functions>(fs)...);
-}
-
-//
-
-/*
-template <typename Function, typename ... Functions>
-auto parallel(Function&& f, Functions&&... fs)
-{
-	return asyncply::async(
-		[](Function&& f, Functions&&... fs)
-		{
-			return asyncply::parallel_sync(std::forward<Function>(f), std::forward<Functions>(fs)...);
-		},
-		std::forward<Function>(f), std::forward<Functions>(fs)...
+	assert(task == nullptr);
+	task = asyncply::async(
+		std::bind(
+			[f = std::move(f_)](auto&& ... fs)
+			{
+				std::vector<shared_task<Function> > vf;
+				asyncply::_parallel(vf, f, fs...);
+			}, std::forward<Functions>(fs_)...
+		)
 	);
 }
-*/
+
+template <  typename Function,
+			typename ... Functions,
+			class = typename std::enable_if<
+				(!std::is_void<typename std::result_of<Function()>::type>::value)
+			>::type
+	>
+auto parallel(Function&& f, Functions&&... fs)
+{
+	shared_task<Function> task;
+	asyncply::_parallel_sync(task, std::forward<Function>(f), std::forward<Functions>(fs)...);
+	return task->get();
+}
+
+template <  typename Function,
+			typename ... Functions,
+			class = typename std::enable_if<
+				(std::is_void<typename std::result_of<Function()>::type>::value)
+			>::type
+	>
+void parallel(Function&& f, Functions&&... fs)
+{
+	shared_task<Function> task;
+	asyncply::_parallel_sync(task, std::forward<Function>(f), std::forward<Functions>(fs)...);
+	task->get();
+}
+
+template <typename Function, typename... Functions>
+auto parallel_async(Function&& f, Functions&&... fs)
+{
+	shared_task<Function> task;
+	asyncply::_parallel_sync(task, std::forward<Function>(f), std::forward<Functions>(fs)...);
+	return task;
+}
 
 }
 
 #endif
+

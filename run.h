@@ -252,8 +252,8 @@ auto submit(Func&& func, Args&&... args) -> std::enable_if_t<(!std::is_void< res
 	using PackagedTask = std::packaged_task< result_type<Func, Args...>() >;
 	using TaskType = ThreadTask<PackagedTask>;
 
-	//static_assert(std::is_same< result_type<Func, Args...>, decltype(boundTask()) >::value, "error in is_same");
-	//static_assert(std::is_same< future_of_functor<Func, Args...>, TaskFuture< result_type<Func, Args...> > >::value, "error in is_same");
+	static_assert(std::is_same< result_type<Func, Args...>, decltype(boundTask()) >::value, "error in is_same");
+	static_assert(std::is_same< future_of_functor<Func, Args...>, TaskFuture< result_type<Func, Args...> > >::value, "error in is_same");
 	
 	PackagedTask task( std::move(boundTask) );
 	future_of_functor<Func, Args...> result( task.get_future() );
@@ -297,11 +297,11 @@ void worker(void)
 {
     while(!m_done)
     {
-	std::unique_ptr<IThreadTask> pTask{nullptr};
-	if(m_workQueue.waitPop(pTask))
-	{
-	    pTask->execute();
-	}
+		std::unique_ptr<IThreadTask> pTask{nullptr};
+		if(m_workQueue.waitPop(pTask))
+		{
+			pTask->execute();
+		}
     }
 }
 
@@ -314,10 +314,10 @@ void destroy(void)
     m_workQueue.invalidate();
     for(auto& thread : m_threads)
     {
-	if(thread.joinable())
-	{
-	    thread.join();
-	}
+		if(thread.joinable())
+		{
+			thread.join();
+		}
     }
 }
 

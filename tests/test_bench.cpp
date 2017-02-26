@@ -9,8 +9,8 @@
 #include <algorithm>
 #include <gtest/gtest.h>
 #include "../algorithm.h"
-#include "../sequence.h"
-#include "../parallel.h"
+#include "../sequence_async.h"
+#include "../parallel_async.h"
 
 class BenchTest : testing::Test { };
 

@@ -3,14 +3,14 @@
 #include <cmath>
 #include <assert.h>
 #include <gtest/gtest.h>
-#include "../parallel.h"
+#include "../parallel_async.h"
 #include "../task.h"
 
 class ParallelTest : testing::Test { ; };
 
-TEST(ParallelTest, Test1)
+TEST(ParallelTest, test_parallel)
 {
-	auto result = asyncply::parallel_sync(
+	auto result = asyncply::parallel(
 		[]()
 		{
 			return 9.0;

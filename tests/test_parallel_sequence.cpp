@@ -2,8 +2,8 @@
 #include <vector>
 #include <cmath>
 #include <gtest/gtest.h>
-#include "../parallel.h"
-#include "../sequence.h"
+#include "../parallel_async.h"
+#include "../sequence_async.h"
 #include "../task.h"
 
 class ParallelSequenceTest : testing::Test
@@ -11,12 +11,12 @@ class ParallelSequenceTest : testing::Test
 
 };
 
-TEST(ParallelSequenceTest, Test1)
+TEST(ParallelSequenceTest, test_sequence_and_parallel)
 {
-	double total = asyncply::parallel_sync(
+	double total = asyncply::parallel(
 		[&]()
 		{
-			return asyncply::sequence_sync(7.0,
+			return asyncply::sequence(7.0,
 				[](double data)
 				{
 					return data + 3.0;
@@ -28,7 +28,7 @@ TEST(ParallelSequenceTest, Test1)
 		},
 		[&]()
 		{
-			return asyncply::sequence_sync(9.0,
+			return asyncply::sequence(9.0,
 				[](double data)
 				{
 					return data + 5.0;

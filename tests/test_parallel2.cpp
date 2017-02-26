@@ -6,8 +6,8 @@
 #include <algorithm>
 #include <gtest/gtest.h>
 #include "../algorithm.h"
-#include "../parallel.h"
-#include "../sequence.h"
+#include "../parallel_async.h"
+#include "../sequence_async.h"
 #include "../async.h"
 #include "../task.h"
 
@@ -70,11 +70,11 @@ TEST(Parallel2Test, Test3_async)
 
 TEST(Parallel2Test, collapse_double)
 {
-	double total_ps = asyncply::parallel_sync(
+	double total_ps = asyncply::parallel(
 		[]()
 		{
 			double data = 1.0;
-			return asyncply::sequence_sync(data,
+			return asyncply::sequence(data,
 				[](double data)
 				{
 					return data + 1.0;
@@ -87,7 +87,7 @@ TEST(Parallel2Test, collapse_double)
 		[]()
 		{
 			double data = 1.0;
-			return asyncply::sequence_sync(data,
+			return asyncply::sequence(data,
 				[](double data)
 				{
 					return data + 1.0;
@@ -104,10 +104,10 @@ TEST(Parallel2Test, collapse_double)
 /*
 TEST(Parallel2Test, DISABLED_collapse_bool)
 {
-	bool result = asyncply::parallel_sync(
+	bool result = asyncply::parallel(
 		[]()
 		{
-			return asyncply::sequence(true,
+			return asyncply::sequence_async(true,
 				[](bool data)
 				{
 					return data;
@@ -119,7 +119,7 @@ TEST(Parallel2Test, DISABLED_collapse_bool)
 		},
 		[]()
 		{
-			return asyncply::sequence(false,
+			return asyncply::sequence_async(false,
 				[](bool data)
 				{
 					return data;
@@ -134,37 +134,37 @@ TEST(Parallel2Test, DISABLED_collapse_bool)
 }
 */
 
-// TEST(Parallel2Test, Test5)
-// {
-// 	// std::atomic<int> total;
-// 	// total = 0;
-// 	auto total = asyncply::parallel_sync(
-// 				[&total]()
-// 				{
-// 					std::cout << "hi" << std::endl;
-// 					total += 1;
-// 				},
-// 				[&total]()
-// 				{
-// 					std::cout << "bye" << std::endl;
-// 					total += 1;
-// 				}
-// 			);
-// 	// auto process2 = process->then([&total]()
-// 	// 		{
-// 	// 			std::cout << "no accum" << std::endl;
-// 	// 			total += 1;
-// 	// 		});
-// 	// process2->get();
-// 	ASSERT_EQ(total, 3);
-// }
+TEST(Parallel2Test, Test5)
+{
+	std::atomic<int> total;
+	total = 0;
+	auto process = asyncply::parallel_async(
+				[&total]()
+				{
+					std::cout << "hi" << std::endl;
+					total += 1;
+				},
+				[&total]()
+				{
+					std::cout << "bye" << std::endl;
+					total += 1;
+				}
+			);
+	auto process2 = process->then([&total]()
+			{
+				std::cout << "no accum" << std::endl;
+				total += 1;
+			});
+	process2->get();
+	ASSERT_EQ(total, 3);
+}
 
 TEST(Parallel2Test, Test6)
 {
 	std::atomic<int> total;
 	total = 0;
 	{
-		asyncply::parallel_sync(
+		asyncply::parallel(
 					[&total]()
 					{
 						std::cout << "hi" << std::endl;
