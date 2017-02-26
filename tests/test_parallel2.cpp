@@ -101,39 +101,6 @@ TEST(Parallel2Test, collapse_double)
 	ASSERT_EQ(total_ps, 6);
 }
 
-/*
-TEST(Parallel2Test, DISABLED_collapse_bool)
-{
-	bool result = asyncply::parallel(
-		[]()
-		{
-			return asyncply::sequence_async(true,
-				[](bool data)
-				{
-					return data;
-				},
-				[](bool data)
-				{
-					return data;
-				});
-		},
-		[]()
-		{
-			return asyncply::sequence_async(false,
-				[](bool data)
-				{
-					return data;
-				},
-				[](bool data)
-				{
-					return data;
-				});
-		}
-	);
-	ASSERT_EQ(result, false);
-}
-*/
-
 TEST(Parallel2Test, Test5)
 {
 	std::atomic<int> total;
@@ -164,7 +131,7 @@ TEST(Parallel2Test, Test6)
 	std::atomic<int> total;
 	total = 0;
 	{
-		asyncply::parallel(
+		auto process = asyncply::parallel_async(
 					[&total]()
 					{
 						std::cout << "hi" << std::endl;
@@ -176,13 +143,13 @@ TEST(Parallel2Test, Test6)
 						total += 1;
 					}
 				);
-		// auto process_then = process->then([&total]()
-		// 		{
-		// 			std::cout << "no accum" << std::endl;
-		// 			total += 1;
-		// 		});
-		// process_then->get();
+		auto process_then = process->then([&total]()
+				{
+					std::cout << "no accum" << std::endl;
+					total += 1;
+				});
+		process_then->get();
 	}
-	ASSERT_EQ(total, 2);
+	ASSERT_EQ(total, 3);
 }
 

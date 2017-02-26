@@ -21,8 +21,7 @@ TEST(SequenceTest, test_sequence_sync)
 			return code;
 		}
 	};
-	control_flow flow = {true};
-	control_flow flow_out = asyncply::sequence(flow,
+	control_flow flow_out = asyncply::sequence(control_flow{true},
 		[](control_flow flow) {
 			std::cout << "code 1" << std::endl;
 			return flow;
@@ -55,8 +54,7 @@ TEST(SequenceTest, test_sequence_async)
 			return code;
 		}
 	};
-	control_flow flow = {true};
-	auto task = asyncply::sequence_async(flow,
+	auto task = asyncply::sequence_async(control_flow{true},
 		[](control_flow flow) {
 			std::cout << "code 1" << std::endl;
 			return flow;
