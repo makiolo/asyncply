@@ -16,7 +16,7 @@ TEST(ParallelSequenceTest, Test1)
 	double total = asyncply::parallel_sync(
 		[&]()
 		{
-			return asyncply::sequence(7.0,
+			return asyncply::sequence_sync(7.0,
 				[](double data)
 				{
 					return data + 3.0;
@@ -28,7 +28,7 @@ TEST(ParallelSequenceTest, Test1)
 		},
 		[&]()
 		{
-			return asyncply::sequence(9.0,
+			return asyncply::sequence_sync(9.0,
 				[](double data)
 				{
 					return data + 5.0;
@@ -41,33 +41,3 @@ TEST(ParallelSequenceTest, Test1)
 	ASSERT_EQ(total, 32.0);
 }
 
-TEST(ParallelSequenceTest, Test2)
-{
-	auto task = asyncply::parallel(
-		[&]()
-		{
-			return asyncply::sequence(7.0,
-				[](double data)
-				{
-					return data + 3.0;
-				},
-				[](double data)
-				{
-					return data + 4.0;
-				});
-		},
-		[&]()
-		{
-			return asyncply::sequence(9.0,
-				[](double data)
-				{
-					return data + 5.0;
-				},
-				[](double data)
-				{
-					return data + 4.0;
-				});
-		});
-	double total = task->get();
-	ASSERT_EQ(total, 32.0);
-}

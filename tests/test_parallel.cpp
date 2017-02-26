@@ -10,7 +10,7 @@ class ParallelTest : testing::Test { ; };
 
 TEST(ParallelTest, Test1)
 {
-	auto task_parallel = asyncply::parallel(
+	auto result = asyncply::parallel_sync(
 		[]()
 		{
 			return 9.0;
@@ -27,5 +27,6 @@ TEST(ParallelTest, Test1)
 		{
 			return 6.0;
 		});
-	ASSERT_EQ(task_parallel->get(), 32.0);
+	ASSERT_EQ(result, 32.0);
 }
+

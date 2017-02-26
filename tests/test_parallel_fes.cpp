@@ -125,15 +125,15 @@ TEST(ParallelFesTest, TestAsyncFast)
 	channel.get();
 }
 
-TEST(ParallelFesTest, DISABLED_TestAsyncDelay)
-{
-	fes::async_delay<foo> channel;
-	channel.connect([](const foo& f) {
-		std::cout << "<async_delay> received foo" << std::endl;
-	});
-	// send foo
-	channel(foo("bar"));
-	// recv foo
-	channel.get();
-}
+// TEST(ParallelFesTest, DISABLED_TestAsyncDelay)
+// {
+// 	fes::async_delay<foo> channel;
+// 	channel.connect([](auto& f) {
+// 		std::cout << "<async_delay> received foo" << std::endl;
+// 	});
+// 	// send foo
+// 	channel(foo("bar"));
+// 	// recv foo
+// 	channel.get();
+// }
 

@@ -134,37 +134,37 @@ TEST(Parallel2Test, DISABLED_collapse_bool)
 }
 */
 
-TEST(Parallel2Test, Test5)
-{
-	std::atomic<int> total;
-	total = 0;
-	auto process = asyncply::parallel(
-				[&total]()
-				{
-					std::cout << "hi" << std::endl;
-					total += 1;
-				},
-				[&total]()
-				{
-					std::cout << "bye" << std::endl;
-					total += 1;
-				}
-			);
-	auto process2 = process->then([&total]()
-			{
-				std::cout << "no accum" << std::endl;
-				total += 1;
-			});
-	process2->get();
-	ASSERT_EQ(total, 3);
-}
+// TEST(Parallel2Test, Test5)
+// {
+// 	// std::atomic<int> total;
+// 	// total = 0;
+// 	auto total = asyncply::parallel_sync(
+// 				[&total]()
+// 				{
+// 					std::cout << "hi" << std::endl;
+// 					total += 1;
+// 				},
+// 				[&total]()
+// 				{
+// 					std::cout << "bye" << std::endl;
+// 					total += 1;
+// 				}
+// 			);
+// 	// auto process2 = process->then([&total]()
+// 	// 		{
+// 	// 			std::cout << "no accum" << std::endl;
+// 	// 			total += 1;
+// 	// 		});
+// 	// process2->get();
+// 	ASSERT_EQ(total, 3);
+// }
 
 TEST(Parallel2Test, Test6)
 {
 	std::atomic<int> total;
 	total = 0;
 	{
-		auto process = asyncply::parallel(
+		asyncply::parallel_sync(
 					[&total]()
 					{
 						std::cout << "hi" << std::endl;
@@ -176,12 +176,13 @@ TEST(Parallel2Test, Test6)
 						total += 1;
 					}
 				);
-		auto process_then = process->then([&total]()
-				{
-					std::cout << "no accum" << std::endl;
-					total += 1;
-				});
-		process_then->get();
+		// auto process_then = process->then([&total]()
+		// 		{
+		// 			std::cout << "no accum" << std::endl;
+		// 			total += 1;
+		// 		});
+		// process_then->get();
 	}
-	ASSERT_EQ(total, 3);
+	ASSERT_EQ(total, 2);
 }
+

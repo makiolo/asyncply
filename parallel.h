@@ -131,6 +131,7 @@ void parallel_sync(Function&& f, Functions&&... fs)
 
 //
 
+/*
 template <typename Function, typename ... Functions>
 auto parallel(Function&& f, Functions&&... fs)
 {
@@ -142,6 +143,7 @@ auto parallel(Function&& f, Functions&&... fs)
 		std::forward<Function>(f), std::forward<Functions>(fs)...
 	);
 }
+*/
 
 }
 

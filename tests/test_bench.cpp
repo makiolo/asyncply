@@ -61,6 +61,7 @@ int main_measured_algorithm_1()
 	asyncply::for_each(a.begin(), a.end(), [&total](int i) {
 		total += i;
 	});
+	// std::cout << "total = " << total << std::endl;
 	return 0;
 }
 
@@ -80,6 +81,7 @@ int main_measured_algorithm_2()
 	std::for_each(a.begin(), a.end(), [&total](int i) {
 		total += i;
 	});
+	// std::cout << "total = " << total << std::endl;
 	return 0;
 }
 
