@@ -105,7 +105,7 @@ TEST(Parallel2Test, collapse_double)
 
 #endif
 
-#if 1
+#if 0
 
 TEST(Parallel2Test, Test5)
 {
