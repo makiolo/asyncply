@@ -48,6 +48,8 @@ TEST(Parallel2Test, Test3)
 	ASSERT_EQ(total, 3600);
 }
 
+#if 0
+
 TEST(Parallel2Test, Test3_async)
 {
 	std::vector<int> a;
@@ -67,8 +69,6 @@ TEST(Parallel2Test, Test3_async)
 	task->get();
 	ASSERT_EQ(total, 3600);
 }
-
-#if 0
 
 TEST(Parallel2Test, collapse_double)
 {
