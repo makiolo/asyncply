@@ -6,11 +6,8 @@
 #include "../sequence_async.h"
 #include "../task.h"
 
-class ParallelSequenceTest : testing::Test
-{
+class ParallelSequenceTest : testing::Test { ; };
 
-};
-/**
 TEST(ParallelSequenceTest, test_sequence_and_parallel)
 {
 	double total = asyncply::parallel(
@@ -40,4 +37,4 @@ TEST(ParallelSequenceTest, test_sequence_and_parallel)
 		});
 	ASSERT_EQ(total, 32.0);
 }
-*/
+

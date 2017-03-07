@@ -49,7 +49,6 @@ private:
 
 class ParallelFesTest : testing::Test { };
 
-/*
 TEST(ParallelFesTest, Test1)
 {
 	std::atomic<int> total;
@@ -103,7 +102,6 @@ TEST(ParallelFesTest, Test1)
 		});
 	ASSERT_EQ(total, 405);
 }
-*/
 
 TEST(ParallelFesTest, TestSync)
 {

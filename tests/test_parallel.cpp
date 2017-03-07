@@ -8,7 +8,6 @@
 
 class ParallelTest : testing::Test { ; };
 
-/*
 TEST(ParallelTest, test_parallel)
 {
 	auto result = asyncply::parallel(
@@ -30,5 +29,4 @@ TEST(ParallelTest, test_parallel)
 		});
 	ASSERT_EQ(result, 32.0);
 }
-*/
 

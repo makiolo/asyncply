@@ -7,8 +7,6 @@
 
 class ConsumerProducerTest : testing::Test { };
 
-#if 0
-
 TEST(ConsumerProducerTest, Test1)
 {
 	const size_t N = 100;
@@ -32,6 +30,4 @@ TEST(ConsumerProducerTest, Test1)
 	task->get();
 	ASSERT_EQ(f, N);
 }
-
-#endif
 
