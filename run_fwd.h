@@ -6,6 +6,10 @@
 #include "api.h"
 #include "task_fwd.h"
 
+namespace ctpl {
+  class thread_pool;
+}
+
 namespace asyncply {
 
 // forward
