@@ -13,7 +13,7 @@ namespace ctpl {
 namespace asyncply {
 
 // forward
-template <typename T> class TaskFuture;
+// template <typename T> class TaskFuture;
 class ThreadPool;
 
 // thread pool
@@ -30,7 +30,7 @@ using task_of_functor = asyncply::task< result_type<Function, Args...> >;
   
 // future_functor
 template <typename Function, typename ... Args>
-using future_of_functor = TaskFuture< result_type<Function, Args...> >;
+using future_of_functor = std::future< result_type<Function, Args...> >;
 
 // shared_task
 template <typename Type>
