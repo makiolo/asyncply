@@ -113,12 +113,12 @@ auto _parallel_sync(shared_task<Function>& task, Function&& f_, Functions&&... f
 	assert(task == nullptr);
 	task = asyncply::async(
 		std::bind(
-			[f = std::move(f_)](auto&& ... fs)
+			[](auto&& f, auto&& ... fs)
 			{
 				std::vector<shared_task<Function> > vf;
 				asyncply::_parallel(vf, f, fs...);
 				return aggregation<Function>(vf);
-			}, std::forward<Functions>(fs_)...
+			}, std::forward<Function>(f_), std::forward<Functions>(fs_)...
 		)
 	);
 	return task;
@@ -135,11 +135,11 @@ void _parallel_sync(shared_task<Function>& task, Function&& f_, Functions&&... f
 	assert(task == nullptr);
 	task = asyncply::async(
 		std::bind(
-			[f = std::move(f_)](auto&& ... fs)
+			[](auto&& f, auto&& ... fs)
 			{
 				std::vector<shared_task<Function> > vf;
 				asyncply::_parallel(vf, f, fs...);
-			}, std::forward<Functions>(fs_)...
+			}, std::forward<Function>(f_, )std::forward<Functions>(fs_)...
 		)
 	);
 }
