@@ -576,7 +576,8 @@ template <typename Function, typename ... Args>
 auto __async(Function&& f, Args&& ... args) -> future_of_functor<Function, Args...>
 {
 	LOGV("ThreadPool::__async");
-	return getThreadPool().submit(std::forward<Function>(f), std::forward<Args>(args)...);
+	// return getThreadPool().submit(std::forward<Function>(f), std::forward<Args>(args)...);
+	return getThreadPool().push(std::forward<Function>(f), std::forward<Args>(args)...);
 }
 
 template <typename Function, typename ... Args>
