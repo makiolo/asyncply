@@ -5,7 +5,7 @@ namespace asyncply {
 	template <typename Iterator, typename Function>
 	void for_each(Iterator a, Iterator b, Function&& f)
 	{
-		std::vector<task_t<void> > vf;
+		std::vector<shared_task<void> > vf;
 		for (; a != b; ++a) {
 			auto& desref = *a;
 			vf.emplace_back(asyncply::async([f = std::forward<Function>(f), desref = std::forward<decltype(desref)>(desref)]() {

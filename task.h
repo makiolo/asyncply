@@ -17,7 +17,7 @@ public:
 	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
-		: _result( asyncply::__async(std::forward<Function>(f), std::forward<Args>(args)...) )
+		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
 		, _last(true)
 	{ ; }
 	~task() {
@@ -28,10 +28,10 @@ public:
 	task& operator=(const task&) = delete;
 
 	template <typename Function>
-	task_t<R> then(Function&& post_method)
+	shared_task<R> then(Function&& post_method)
 	{
 		_last = false;
-		task_t<R> this_task = this->shared_from_this();
+		shared_task<R> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
 			[this_task, post_method = std::move(post_method)]() -> return_type
 			{
@@ -80,7 +80,7 @@ public:
 	
 protected:
 	std::future<R> _result;
-	task_t<R> _then_task;
+	shared_task<R> _then_task;
 	bool _last;
 	R _value;
 };
@@ -93,7 +93,7 @@ public:
 	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
-		: _result( asyncply::__async(std::forward<Function>(f), std::forward<Args>(args)...) )
+		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
 		, _last(true)
 	{ ; }
 	~task() {
@@ -104,10 +104,10 @@ public:
 	task& operator=(const task&) = delete;
 
 	template <typename Function>
-	task_t<void> then(Function&& post_method)
+	shared_task<void> then(Function&& post_method)
 	{
 		_last = false;
-		task_t<void> this_task = this->shared_from_this();
+		shared_task<void> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
 			[this_task, post_method = std::move(post_method)]()
 			{
@@ -155,7 +155,7 @@ public:
 
 protected:
 	std::future<void> _result;
-	task_t<void> _then_task;
+	shared_task<void> _then_task;
 	bool _last;
 };
 

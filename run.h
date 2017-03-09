@@ -168,8 +168,8 @@ namespace ctpl {
         }
 
         template<typename F, typename... Rest>
-        auto push(F&& f, Rest&&... rest) ->std::future< asyncply::result_type<F, int, Rest...> > {
-            auto pck = std::make_shared<std::packaged_task< asyncply::result_type<F, int, Rest...>(int)> >(
+        auto push(F&& f, Rest&&... rest) ->std::future< asyncply::functor_type<F, int, Rest...> > {
+            auto pck = std::make_shared<std::packaged_task< asyncply::functor_type<F, int, Rest...>(int)> >(
                 std::bind(std::forward<F>(f), std::placeholders::_1, std::forward<Rest>(rest)...)
             );
 
@@ -187,8 +187,8 @@ namespace ctpl {
         // run the user's function that excepts argument int - id of the running thread. returned value is templatized
         // operator returns std::future, where the user can get the result and rethrow the catched exceptins
         template<typename F>
-        auto push(F&& f) -> std::future< asyncply::result_type<F, int> > {
-            auto pck = std::make_shared<std::packaged_task< asyncply::result_type<F, int>(int)>>(std::forward<F>(f));
+        auto push(F&& f) -> std::future< asyncply::functor_type<F, int> > {
+            auto pck = std::make_shared<std::packaged_task< asyncply::functor_type<F, int>(int)>>(std::forward<F>(f));
 
             auto _f = new std::function<void(int id)>([pck](int id) {
                 (*pck)(id);
@@ -494,25 +494,25 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
  * Submit a job to be run by the thread pool.
  */
 template <typename Func, typename... Args>	
-auto submit(Func&& func, Args&&... args) -> std::enable_if_t<(!std::is_void< result_type<Func, Args...> >::value), future_of_functor<Func, Args...> >
+auto submit(Func&& func, Args&&... args) -> std::enable_if_t<(!std::is_void< functor_type<Func, Args...> >::value), future_functor<Func, Args...> >
 {
 	LOGV("ThreadPool::submit (non-void)");
 	
-	auto boundTask = std::bind< result_type<Func, Args...> >(std::forward<Func>(func), std::forward<Args>(args)...);
-	using PackagedTask = std::packaged_task< result_type<Func, Args...>() >;
+	auto boundTask = std::bind< functor_type<Func, Args...> >(std::forward<Func>(func), std::forward<Args>(args)...);
+	using PackagedTask = std::packaged_task< functor_type<Func, Args...>() >;
 	using TaskType = ThreadTask<PackagedTask>;
 
-	static_assert(std::is_same< result_type<Func, Args...>, decltype(boundTask()) >::value, "error in is_same");
-	static_assert(std::is_same< future_of_functor<Func, Args...>, TaskFuture< result_type<Func, Args...> > >::value, "error in is_same");
+	static_assert(std::is_same< functor_type<Func, Args...>, decltype(boundTask()) >::value, "error in is_same");
+	static_assert(std::is_same< future_functor<Func, Args...>, TaskFuture< functor_type<Func, Args...> > >::value, "error in is_same");
 	
 	PackagedTask task( std::move(boundTask) );
-	future_of_functor<Func, Args...> result( task.get_future() );
+	future_functor<Func, Args...> result( task.get_future() );
 	m_workQueue.push( std::make_unique<TaskType>(std::move(task)) );
 	return result;
 }
 
 template <typename Func, typename... Args>	
-auto submit(Func&& func, Args&&... args) -> std::enable_if_t<(std::is_void< result_type<Func, Args...> >::value), TaskFuture<void> >
+auto submit(Func&& func, Args&&... args) -> std::enable_if_t<(std::is_void< functor_type<Func, Args...> >::value), TaskFuture<void> >
 {
 	LOGV("ThreadPool::submit (void)");
 	
@@ -573,19 +573,19 @@ private:
 asyncply::thread_pool& getThreadPool(void);
 
 template <typename Function, typename ... Args>
-auto __async(Function&& f, Args&& ... args) -> future_of_functor<Function, Args...>
+auto _async(Function&& f, Args&& ... args) -> future_functor<Function, Args...>
 {
-	LOGV("ThreadPool::__async");
+	LOGV("ThreadPool::_async");
 	// return getThreadPool().submit(std::forward<Function>(f), std::forward<Args>(args)...);
 	ctpl::thread_pool& pool = getThreadPool();
 	return pool.push( std::bind(std::forward<Function>(f), std::forward<Args>(args)...) );
 }
 
 template <typename Function, typename ... Args>
-auto async(Function&& f, Args&& ... args) -> shared_task<Function, Args...>
+auto async(Function&& f, Args&& ... args) -> shared_task_functor<Function, Args...>
 {
 	LOGV("ThreadPool::async");
-	return std::make_shared< task_of_functor<Function, Args...> >(std::forward<Function>(f), std::forward<Args>(args)...);
+	return std::make_shared< task_functor<Function, Args...> >(std::forward<Function>(f), std::forward<Args>(args)...);
 }
 
 }

@@ -18,13 +18,13 @@ auto wtf_return_type_is_this()
 }
 
 template <typename Function>
-void _parallel(std::vector<shared_task<Function> >& vf, Function&& f)
+void _parallel(std::vector<shared_task_functor<Function> >& vf, Function&& f)
 {
 	vf.emplace_back(asyncply::async(std::forward<Function>(f)));
 }
 
 template <typename Function, typename... Functions>
-void _parallel(std::vector<shared_task<Function> >& vf, Function&& f, Functions&&... fs)
+void _parallel(std::vector<shared_task_functor<Function> >& vf, Function&& f, Functions&&... fs)
 {
 	vf.emplace_back(asyncply::async(std::forward<Function>(f)));
 	asyncply::_parallel(vf, std::forward<Functions>(fs)...);
@@ -37,7 +37,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t< double > >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, shared_task< double > >::value)
 			>::type
 	>
 std::vector<typename std::result_of<Function()>::type> aggregation(Container&& vf)
@@ -54,7 +54,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t< double > >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, shared_task< double > >::value)
 			>::type
 	>
 typename std::result_of<Function()>::type aggregation(Container&& vf)
@@ -71,7 +71,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(!std::is_same<typename std::result_of<Function()>::type, task_t< double > >::value)
+				(!std::is_same<typename std::result_of<Function()>::type, shared_task< double > >::value)
 			>::type
 	>
 bool aggregation(Container&& vf)
@@ -88,7 +88,7 @@ template <  typename Function,
 			class = typename std::enable_if<
 				(!std::is_arithmetic<typename std::result_of<Function()>::type>::value) &&
 				(!std::is_same<typename std::result_of<Function()>::type, bool>::value) &&
-				(std::is_same<typename std::result_of<Function()>::type, task_t< double > >::value)
+				(std::is_same<typename std::result_of<Function()>::type, shared_task< double > >::value)
 			>::type
 	>
 auto aggregation(Container&& vf)
@@ -108,14 +108,14 @@ template <  typename Function,
 				(!std::is_void<typename std::result_of<Function()>::type>::value)
 			>::type
 	>
-auto _parallel_sync(shared_task<Function>& task, Function&& f_, Functions&&... fs_)
+auto _parallel_sync(shared_task_functor<Function>& task, Function&& f_, Functions&&... fs_)
 {
 	assert(task == nullptr);
 	task = asyncply::async(
 		std::bind(
 			[](auto&& f, auto&& ... fs)
 			{
-				std::vector<shared_task<Function> > vf;
+				std::vector<shared_task_functor<Function> > vf;
 				asyncply::_parallel(vf, f, fs...);
 				return aggregation<Function>(vf);
 			}, std::forward<Function>(f_), std::forward<Functions>(fs_)...
@@ -130,14 +130,14 @@ template <  typename Function,
 				(std::is_void<typename std::result_of<Function()>::type>::value)
 			>::type
 	>
-void _parallel_sync(shared_task<Function>& task, Function&& f_, Functions&&... fs_)
+void _parallel_sync(shared_task_functor<Function>& task, Function&& f_, Functions&&... fs_)
 {
 	assert(task == nullptr);
 	task = asyncply::async(
 		std::bind(
 			[](auto&& f, auto&& ... fs)
 			{
-				std::vector<shared_task<Function> > vf;
+				std::vector<shared_task_functor<Function> > vf;
 				asyncply::_parallel(vf, f, fs...);
 			}, std::forward<Function>(f_), std::forward<Functions>(fs_)...
 		)
@@ -152,7 +152,7 @@ template <  typename Function,
 	>
 auto parallel(Function&& f, Functions&&... fs)
 {
-	shared_task<Function> task;
+	shared_task_functor<Function> task;
 	asyncply::_parallel_sync(task, std::forward<Function>(f), std::forward<Functions>(fs)...);
 	return task->get();
 }
@@ -165,7 +165,7 @@ template <  typename Function,
 	>
 void parallel(Function&& f, Functions&&... fs)
 {
-	shared_task<Function> task;
+	shared_task_functor<Function> task;
 	asyncply::_parallel_sync(task, std::forward<Function>(f), std::forward<Functions>(fs)...);
 	task->get();
 }
@@ -173,7 +173,7 @@ void parallel(Function&& f, Functions&&... fs)
 template <typename Function, typename... Functions>
 auto parallel_async(Function&& f, Functions&&... fs)
 {
-	shared_task<Function> task;
+	shared_task_functor<Function> task;
 	asyncply::_parallel_sync(task, std::forward<Function>(f), std::forward<Functions>(fs)...);
 	return task;
 }
