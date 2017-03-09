@@ -54,6 +54,7 @@ install:
   - pip install --user poster
 
 script:
+  - gcc -dumpspecs | grep pthread
   - (cd metacommon && git pull origin master)
   - export NOCACHE_LOCAL=TRUE
   - export NOCACHE_REMOTE=FALSE

@@ -53,6 +53,7 @@ class ParallelFesTest : testing::Test { };
 
 TEST(ParallelFesTest, Test1)
 {
+	const int N = 100;
 	std::atomic<int> total;
 	total = 0;
 	fes::async_fast<int> channel;
@@ -63,25 +64,25 @@ TEST(ParallelFesTest, Test1)
 		[&]()
 		{
 			// consumer
-			for(int i=0; i<10; ++i)
+			for(int i=0; i<N; ++i)
 				channel.get();
 		},
 		[&]()
 		{
 			// consumer
-			for(int i=0; i<10; ++i)
+			for(int i=0; i<N; ++i)
 				channel.get();
 		},
 		[&]()
 		{
 			// consumer
-			for(int i=0; i<10; ++i)
+			for(int i=0; i<N; ++i)
 				channel.get();
 		},
 		[&]()
 		{
 			// producer
-			for(int i=0; i<10; ++i)
+			for(int i=0; i<N; ++i)
 			{
 				channel(i*2);
 			}
@@ -89,7 +90,7 @@ TEST(ParallelFesTest, Test1)
 		[&]()
 		{
 			// producer
-			for(int i=0; i<10; ++i)
+			for(int i=0; i<N; ++i)
 			{
 				channel(i*3);
 			}
@@ -97,12 +98,12 @@ TEST(ParallelFesTest, Test1)
 		[&]()
 		{
 			// producer
-			for(int i=0; i<10; ++i)
+			for(int i=0; i<N; ++i)
 			{
 				channel(i*4);
 			}
 		});
-	ASSERT_EQ(total, 405);
+	ASSERT_EQ(total, 44550);
 }
 
 #endif
