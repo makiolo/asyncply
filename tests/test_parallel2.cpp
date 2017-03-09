@@ -72,6 +72,8 @@ TEST(Parallel2Test, Test3_async)
 	ASSERT_EQ(total, 3600);
 }
 
+#if 0
+
 TEST(Parallel2Test, collapse_double)
 {
 	double total_ps = asyncply::parallel(
@@ -104,8 +106,6 @@ TEST(Parallel2Test, collapse_double)
 	);
 	ASSERT_EQ(total_ps, 6);
 }
-
-#if 0
 
 TEST(Parallel2Test, Test5)
 {
