@@ -11,10 +11,12 @@ namespace asyncply {
 // forward
 template <typename T> class TaskFuture;
 class ThreadPool;
+  
+// thread pool
+using thread_pool = ThreadPool;
 
 // functor_type
 template <typename Function, typename ... Args>
-// using result_type = typename std::result_of<Function(Args...)>::type;
 using result_type = decltype(std::declval<Function>()(std::declval<Args>()...));
 
 // task_functor
@@ -40,8 +42,6 @@ auto __async(Function&& f, Args&& ... data) -> future_of_functor<Function, Args.
 // async
 template <typename Function, typename ... Args>
 auto async(Function&& f, Args&& ... args) -> shared_task<Function, Args...>;
-
-// ThreadPool& getThreadPool(void);
 
 // when_any
 
