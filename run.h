@@ -570,7 +570,7 @@ private:
  * Get the default thread pool for the application.
  * This pool is created with std::thread::hardware_concurrency() - 1 threads.
  */
-ThreadPool& getThreadPool(void);
+asyncply::thread_pool& getThreadPool(void);
 
 template <typename Function, typename ... Args>
 auto __async(Function&& f, Args&& ... args) -> future_of_functor<Function, Args...>
