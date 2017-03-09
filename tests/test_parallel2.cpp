@@ -8,14 +8,13 @@
 #include "../algorithm.h"
 #include "../parallel_async.h"
 #include "../sequence_async.h"
-#include "../async.h"
 #include "../task.h"
 
 class Parallel2Test : testing::Test { };
 
 TEST(Parallel2Test, Test1)
 {
-	auto f1 = asyncply::_async([](int data){return data;}, 10);
+	auto f1 = asyncply::__async([](int data){return data;}, 10);
 	ASSERT_EQ(f1.get(), 10);
 }
 
@@ -29,7 +28,7 @@ TEST(Parallel2Test, Test2)
 	ASSERT_EQ(f2->get(), 15 + 6);
 }
 
-#if 0
+#if 1
 
 TEST(Parallel2Test, Test3)
 {

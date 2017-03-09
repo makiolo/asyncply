@@ -6,7 +6,6 @@
 #include <thread>
 #include "future.h"
 #include "run_fwd.h"
-#include "async.h"
 
 namespace asyncply {
 
@@ -18,7 +17,7 @@ public:
 	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
-		: _result(std::forward<std::future<R> >(asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) )
+		: _result( asyncply::__async(std::forward<Function>(f), std::forward<Args>(args)...) )
 		, _last(true)
 	{ ; }
 	~task() {
@@ -94,7 +93,7 @@ public:
 	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
-		: _result( std::forward<std::future<void> >(asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) )
+		: _result( asyncply::__async(std::forward<Function>(f), std::forward<Args>(args)...) )
 		, _last(true)
 	{ ; }
 	~task() {
