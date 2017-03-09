@@ -18,7 +18,7 @@ public:
 	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
-		: _result(std::forward<TaskFuture<R> >(asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) )
+		: _result(std::forward<std::future<R> >(asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) )
 		, _last(true)
 	{ ; }
 	~task() {
@@ -80,7 +80,7 @@ public:
 	}
 	
 protected:
-	TaskFuture<R> _result;
+	std::future<R> _result;
 	task_t<R> _then_task;
 	bool _last;
 	R _value;
@@ -94,7 +94,7 @@ public:
 	
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
-		: _result( std::forward<TaskFuture<void> >(asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) )
+		: _result( std::forward<std::future<void> >(asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) ) )
 		, _last(true)
 	{ ; }
 	~task() {
@@ -155,7 +155,7 @@ public:
 	}
 
 protected:
-	TaskFuture<void> _result;
+	std::future<void> _result;
 	task_t<void> _then_task;
 	bool _last;
 };
