@@ -15,6 +15,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <queue>
+#include <teelogging/teelogging.h>
 #include "metacommon/common.h"
 #include "run_fwd.h"
 #include "task.h"
@@ -36,7 +37,8 @@ public:
  */
 ~ThreadSafeQueue(void)
 {
-    invalidate();
+	LOGV("ThreadSafeQueue::destructor");
+	invalidate();
 }
 
 /**
@@ -45,14 +47,15 @@ public:
  */
 bool tryPop(T& out)
 {
-    std::lock_guard<std::mutex> lock{m_mutex};
-    if(m_queue.empty() || !m_valid)
-    {
-	return false;
-    }
-    out = std::move(m_queue.front());
-    m_queue.pop();
-    return true;
+	std::lock_guard<std::mutex> lock{m_mutex};
+	if(m_queue.empty() || !m_valid)
+	{
+		return false;
+	}
+	LOGV("ThreadSafeQueue::tryPop");
+	out = std::move(m_queue.front());
+	m_queue.pop();
+	return true;
 }
 
 /**
@@ -75,6 +78,7 @@ bool waitPop(T& out)
     {
 	return false;
     }
+	LOGV("ThreadSafeQueue::waitPop");
     out = std::move(m_queue.front());
     m_queue.pop();
     return true;
@@ -85,9 +89,10 @@ bool waitPop(T& out)
  */
 void push(T value)
 {
-    std::lock_guard<std::mutex> lock{m_mutex};
-    m_queue.push(std::move(value));
-    m_condition.notify_one();
+	std::lock_guard<std::mutex> lock{m_mutex};
+	LOGV("ThreadSafeQueue::push");
+	m_queue.push(std::move(value));
+	m_condition.notify_one();
 }
 
 /**
@@ -95,8 +100,9 @@ void push(T value)
  */
 bool empty(void) const
 {
-    std::lock_guard<std::mutex> lock{m_mutex};
-    return m_queue.empty();
+	std::lock_guard<std::mutex> lock{m_mutex};
+	LOGV("ThreadSafeQueue::empty");
+	return m_queue.empty();
 }
 
 /**
@@ -104,12 +110,13 @@ bool empty(void) const
  */
 void clear(void)
 {
-    std::lock_guard<std::mutex> lock{m_mutex};
-    while(!m_queue.empty())
-    {
-	m_queue.pop();
-    }
-    m_condition.notify_all();
+	std::lock_guard<std::mutex> lock{m_mutex};
+	while(!m_queue.empty())
+	{
+		m_queue.pop();
+	}
+	m_condition.notify_all();
+	LOGV("ThreadSafeQueue::clear");
 }
 
 /**
@@ -121,9 +128,10 @@ void clear(void)
  */
 void invalidate(void)
 {
-    std::lock_guard<std::mutex> lock{m_mutex};
-    m_valid = false;
-    m_condition.notify_all();
+	std::lock_guard<std::mutex> lock{m_mutex};
+	LOGV("ThreadSafeQueue::invalidate");
+	m_valid = false;
+	m_condition.notify_all();
 }
 
 /**
@@ -131,8 +139,9 @@ void invalidate(void)
  */
 bool isValid(void) const
 {
-    std::lock_guard<std::mutex> lock{m_mutex};
-    return m_valid;
+	std::lock_guard<std::mutex> lock{m_mutex};
+	LOGV("ThreadSafeQueue::isValid");
+	return m_valid;
 }
 
 private:
@@ -148,17 +157,17 @@ private:
 	class IThreadTask
 	{
 	public:
-	    IThreadTask(void) = default;
-	    virtual ~IThreadTask(void) = default;
-	    IThreadTask(const IThreadTask& rhs) = delete;
-	    IThreadTask& operator=(const IThreadTask& rhs) = delete;
-	    IThreadTask(IThreadTask&& other) = default;
-	    IThreadTask& operator=(IThreadTask&& other) = default;
+		IThreadTask(void) = default;
+		virtual ~IThreadTask(void) = default;
+		IThreadTask(const IThreadTask& rhs) = delete;
+		IThreadTask& operator=(const IThreadTask& rhs) = delete;
+		IThreadTask(IThreadTask&& other) = default;
+		IThreadTask& operator=(IThreadTask&& other) = default;
 
-	    /**
-	     * Run the task.
-	     */
-	    virtual void execute() = 0;
+		/**
+		* Run the task.
+		*/
+		virtual void execute() = 0;
 	};
 
 	template <typename Func>
@@ -168,6 +177,7 @@ private:
 	    ThreadTask(Func&& func)
 		:m_func{std::move(func)}
 	    {
+		    LOGV("ThreadTask::constructor");
 	    }
 
 	    ~ThreadTask(void) override = default;
@@ -181,7 +191,9 @@ private:
 	     */
 	    void execute() override
 	    {
+		LOGV("ThreadTask::execute begin");
 		m_func();
+		LOGV("ThreadTask::execute end");
 	    }
 
 	private:
@@ -195,11 +207,12 @@ public:
 ThreadPool(void)
     :ThreadPool{std::max(std::thread::hardware_concurrency(), 2u) - 1u}
 {
-    /*
-     * Always create at least one thread.  If hardware_concurrency() returns 0,
-     * subtracting one would turn it to UINT_MAX, so get the maximum of
-     * hardware_concurrency() and 2 before subtracting 1.
-     */
+	/*
+	* Always create at least one thread.  If hardware_concurrency() returns 0,
+	* subtracting one would turn it to UINT_MAX, so get the maximum of
+	* hardware_concurrency() and 2 before subtracting 1.
+	*/
+	LOGV("ThreadPool::constructor");
 }
 
 /**
@@ -219,6 +232,7 @@ explicit ThreadPool(const std::uint32_t numThreads)
     }
     catch(...)
     {
+	LOGV("ThreadPool::exception");
 	destroy();
 	throw;
     }
@@ -248,6 +262,8 @@ ThreadPool& operator=(const ThreadPool& rhs) = delete;
 template <typename Func, typename... Args>	
 auto submit(Func&& func, Args&&... args) -> std::enable_if_t<(!std::is_void< result_type<Func, Args...> >::value), future_of_functor<Func, Args...> >
 {
+	LOGV("ThreadPool::submit (non-void)");
+	
 	auto boundTask = std::bind< result_type<Func, Args...> >(std::forward<Func>(func), std::forward<Args>(args)...);
 	using PackagedTask = std::packaged_task< result_type<Func, Args...>() >;
 	using TaskType = ThreadTask<PackagedTask>;
@@ -259,26 +275,13 @@ auto submit(Func&& func, Args&&... args) -> std::enable_if_t<(!std::is_void< res
 	future_of_functor<Func, Args...> result( task.get_future() );
 	m_workQueue.push( std::make_unique<TaskType>(std::move(task)) );
 	return result;
-	
-	/*
-	auto boundTask = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
-	// auto boundTask = mc::bind(std::forward<Func>(func), std::forward<Args>(args)...);
-	using ResultType = std::result_of_t<decltype(boundTask)()>;
-	using PackagedTask = std::packaged_task<ResultType()>;
-	using TaskType = ThreadTask<PackagedTask>;
-	
-	static_assert(std::is_same< future_of_functor<Func, Args...>, TaskFuture<ResultType> >::value, "error in is_same");
-	
-	PackagedTask task{std::move(boundTask)};
-	TaskFuture<ResultType> result{task.get_future()};
-	m_workQueue.push(std::make_unique<TaskType>(std::move(task)));
-	return result;
-	*/
 }
 
 template <typename Func, typename... Args>	
 auto submit(Func&& func, Args&&... args) -> std::enable_if_t<(std::is_void< result_type<Func, Args...> >::value), TaskFuture<void> >
 {
+	LOGV("ThreadPool::submit (void)");
+	
 	auto boundTask = std::bind<void>(std::forward<Func>(func), std::forward<Args>(args)...);
 	using PackagedTask = std::packaged_task<void()>;
 	using TaskType = ThreadTask<PackagedTask>;
@@ -297,6 +300,7 @@ void worker(void)
 {
     while(!m_done)
     {
+		LOGV("ThreadPool::working ...");
 		std::unique_ptr<IThreadTask> pTask{nullptr};
 		if(m_workQueue.waitPop(pTask))
 		{
@@ -310,15 +314,16 @@ void worker(void)
  */
 void destroy(void)
 {
-    m_done = true;
-    m_workQueue.invalidate();
-    for(auto& thread : m_threads)
-    {
+	m_done = true;
+	m_workQueue.invalidate();
+	for(auto& thread : m_threads)
+	{
 		if(thread.joinable())
 		{
 			thread.join();
 		}
-    }
+	}
+	LOGV("ThreadPool::joined workers");
 }
 
 private:
@@ -336,12 +341,14 @@ ThreadPool& getThreadPool(void);
 template <typename Function, typename ... Args>
 auto __async(Function&& f, Args&& ... args) -> future_of_functor<Function, Args...>
 {
+	LOGV("ThreadPool::__async");
 	return getThreadPool().submit(std::forward<Function>(f), std::forward<Args>(args)...);
 }
 
 template <typename Function, typename ... Args>
 auto async(Function&& f, Args&& ... args) -> shared_task<Function, Args...>
 {
+	LOGV("ThreadPool::async");
 	return std::make_shared< task_of_functor<Function, Args...> >(std::forward<Function>(f), std::forward<Args>(args)...);
 }
 
