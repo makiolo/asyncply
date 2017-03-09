@@ -8,6 +8,8 @@
 
 class ParallelSequenceTest : testing::Test { ; };
 
+#if 0
+
 TEST(ParallelSequenceTest, test_sequence_and_parallel)
 {
 	double total = asyncply::parallel(
@@ -38,3 +40,4 @@ TEST(ParallelSequenceTest, test_sequence_and_parallel)
 	ASSERT_EQ(total, 32.0);
 }
 
+#endif
