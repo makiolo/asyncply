@@ -3,10 +3,9 @@
 
 namespace asyncply {
 
-ThreadPool& getThreadPool(void)
+asyncply::thread_pool& getThreadPool(void)
 {
-    static ctpl::thread_pool otherPool;
-    static ThreadPool defaultPool;
+    static asyncply::thread_pool defaultPool;
     return defaultPool;
 }
 
