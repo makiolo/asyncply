@@ -139,7 +139,7 @@ void _parallel_sync(shared_task<Function>& task, Function&& f_, Functions&&... f
 			{
 				std::vector<shared_task<Function> > vf;
 				asyncply::_parallel(vf, f, fs...);
-			}, std::forward<Function>(f_, )std::forward<Functions>(fs_)...
+			}, std::forward<Function>(f_), std::forward<Functions>(fs_)...
 		)
 	);
 }
