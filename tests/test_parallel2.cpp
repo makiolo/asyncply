@@ -29,6 +29,8 @@ TEST(Parallel2Test, Test2)
 	ASSERT_EQ(f2->get(), 15 + 6);
 }
 
+#if 0
+
 TEST(Parallel2Test, Test3)
 {
 	std::vector<int> a;
@@ -47,6 +49,8 @@ TEST(Parallel2Test, Test3)
 	});
 	ASSERT_EQ(total, 3600);
 }
+
+#endif
 
 TEST(Parallel2Test, Test3_async)
 {
@@ -101,6 +105,8 @@ TEST(Parallel2Test, collapse_double)
 	ASSERT_EQ(total_ps, 6);
 }
 
+#if 0
+
 TEST(Parallel2Test, Test5)
 {
 	std::atomic<int> total;
@@ -125,6 +131,8 @@ TEST(Parallel2Test, Test5)
 	process2->get();
 	ASSERT_EQ(total, 3);
 }
+
+#endif
 
 TEST(Parallel2Test, Test6)
 {
