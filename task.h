@@ -18,10 +18,9 @@ public:
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
 		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
-		, _last(true)
 	{ ; }
 	~task() {
-		if(_last) get();
+		if(_then_task == nullptr) get();
 	}
 
 	task(const task&) = delete;
@@ -30,7 +29,6 @@ public:
 	template <typename Function>
 	shared_task<R> then(Function&& post_method)
 	{
-		_last = false;
 		shared_task<R> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
 			[this_task, post_method = std::move(post_method)]() -> return_type
@@ -42,7 +40,7 @@ public:
 		return _then_task;
 	}
 
-	auto get(void)
+	return_type get()
 	{
 		if(valid())
 		{
@@ -81,7 +79,6 @@ public:
 protected:
 	std::future<R> _result;
 	shared_task<R> _then_task;
-	bool _last;
 	R _value;
 };
 
@@ -94,10 +91,9 @@ public:
 	template <typename Function, typename ... Args>
 	task(Function&& f, Args&& ... args)
 		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
-		, _last(true)
 	{ ; }
 	~task() {
-		if(_last) get();
+		if(_then_task == nullptr) get();
 	}
 
 	task(const task&) = delete;
@@ -106,7 +102,6 @@ public:
 	template <typename Function>
 	shared_task<void> then(Function&& post_method)
 	{
-		_last = false;
 		shared_task<void> this_task = this->shared_from_this();
 		_then_task = asyncply::async(
 			[this_task, post_method = std::move(post_method)]()
@@ -156,7 +151,6 @@ public:
 protected:
 	std::future<void> _result;
 	shared_task<void> _then_task;
-	bool _last;
 };
 
 }
