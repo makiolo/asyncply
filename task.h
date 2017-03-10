@@ -19,11 +19,9 @@ public:
 	task(Function&& f, Args&& ... args)
 		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
 	{ ; }
-	/*
-	~task() {
+	virtual ~task() {
 		if(_then_task == nullptr) get();
 	}
-	*/
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
@@ -94,11 +92,9 @@ public:
 	task(Function&& f, Args&& ... args)
 		: _result( asyncply::_async(std::forward<Function>(f), std::forward<Args>(args)...) )
 	{ ; }
-	/*
-	~task() {
+	virtual ~task() {
 		if(_then_task == nullptr) get();
 	}
-	*/
 
 	task(const task&) = delete;
 	task& operator=(const task&) = delete;
