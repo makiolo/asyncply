@@ -2,7 +2,7 @@
 #include <vector>
 #include <atomic>
 #include <gtest/gtest.h>
-#include "../parallel_async.h"
+#include "../parallel.h"
 #include "../task.h"
 
 class ConsumerProducerTest : testing::Test { };

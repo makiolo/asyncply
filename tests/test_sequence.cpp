@@ -4,8 +4,8 @@
 #include <thread>
 #include <vector>
 #include <gtest/gtest.h>
-#include "../sequence_async.h"
-#include "../parallel_async.h"
+#include "../sequence.h"
+#include "../parallel.h"
 #include "../run.h"
 
 class SequenceTest : testing::Test { };

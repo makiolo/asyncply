@@ -2,8 +2,8 @@
 #include <vector>
 #include <cmath>
 #include <gtest/gtest.h>
-#include "../parallel_async.h"
-#include "../sequence_async.h"
+#include "../parallel.h"
+#include "../sequence.h"
 #include "../task.h"
 
 class ParallelSequenceTest : testing::Test { ; };

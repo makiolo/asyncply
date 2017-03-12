@@ -6,8 +6,8 @@
 #include <algorithm>
 #include <gtest/gtest.h>
 #include "../algorithm.h"
-#include "../parallel_async.h"
-#include "../sequence_async.h"
+#include "../parallel.h"
+#include "../sequence.h"
 #include "../task.h"
 
 class Parallel2Test : testing::Test { };
