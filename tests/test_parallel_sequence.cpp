@@ -8,7 +8,7 @@
 
 class ParallelSequenceTest : testing::Test { ; };
 
-#if 1
+#if 0
 
 TEST(ParallelSequenceTest, test_sequence_and_parallel)
 {

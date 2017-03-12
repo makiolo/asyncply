@@ -49,7 +49,7 @@ private:
 
 class ParallelFesTest : testing::Test { };
 
-#if 1
+#if 0
 
 TEST(ParallelFesTest, Test1)
 {
