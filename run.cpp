@@ -1,10 +1,11 @@
 #include "run.h"
-// 
 
-#ifdef _WIN32
-#define STATIC_MULTITHREAD __declspec(thread) static
-#else
+#if defined(__clang__)
+#define STATIC_MULTITHREAD static
+#elif defined(__GNUC__) || defined(__GNUG__)
 #define STATIC_MULTITHREAD static __thread
+#elif defined(_MSC_VER)
+#define STATIC_MULTITHREAD __declspec(thread) static
 #endif
 
 namespace asyncply {
