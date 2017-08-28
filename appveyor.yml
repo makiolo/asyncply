@@ -1,22 +1,13 @@
-version: 0.1.{build}
+version: 1.0.0.{build}
 
 platform:
+  - x86
   - x64
 
+configuration:
+  - Debug
+  - Release
+
+build: off
 install:
-  - cmd: git submodule update --init --recursive
-  - cmd: pip install pyyaml
-  - cmd: pip install poster
-
-build_script:
-  - cmd: set || exit 0
-  - cmd: cd cmaki && git pull origin master && cd ..
-  - cmd: cd cmaki_generator && git pull origin master && cd ..
-  - cmd: .\cmaki\run.cmd
-
-test_script:
-  - cmd: ctest . --no-compress-output --output-on-failure -T Test -C Release -V
-
-on_success:
-    - cmd: echo APPVEYOR_REPO_NAME=$(APPVEYOR_REPO_NAME)
-    - cmd: cd cmaki_generator && build github://makiolo/asyncply -o --server=http://artifacts.myftp.biz:8080 && cd ..
+  - ps: $source = "https://raw.githubusercontent.com/makiolo/cmaki/master/ci.cmd"; $dest = $env:TEMP + "\ci.cmd"; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile($source,$dest); Invoke-Expression $dest

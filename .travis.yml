@@ -1,12 +1,13 @@
 sudo: required
 dist: trusty
-
 language: c
 cache: ccache
+services: docker
 
 matrix:
   include:
-    - compiler: gcc
+    - os: linux
+      compiler: gcc
       addons:
         apt:
           sources:
@@ -15,9 +16,9 @@ matrix:
             - cmake
             - g++-4.9
             - lcov
-      env:
-        - CXX=g++-4.9 CC=gcc-4.9 MODE=Debug
-    - compiler: clang
+      env: CXX=g++-4.9 CC=gcc-4.9 MODE=Debug COVERAGE=TRUE
+    - os: linux
+      compiler: clang
       addons:
         apt:
           sources:
@@ -26,9 +27,9 @@ matrix:
           packages:
             - cmake
             - clang-3.6
-      env:
-        - CXX=clang++-3.6 CC=clang-3.6 MODE=Debug
-    - compiler: gcc
+      env: CXX=clang++-3.6 CC=clang-3.6 MODE=Debug
+    - os: linux
+      compiler: gcc
       addons:
         apt:
           sources:
@@ -36,9 +37,9 @@ matrix:
           packages:
             - cmake
             - g++-4.9
-      env:
-        - CXX=g++-4.9 CC=gcc-4.9 MODE=Release
-    - compiler: clang
+      env: CXX=g++-4.9 CC=gcc-4.9 MODE=Release
+    - os: linux
+      compiler: clang
       addons:
         apt:
           sources:
@@ -48,32 +49,16 @@ matrix:
             - cmake
             - clang-3.6
             - valgrind
-      env:
-        - CXX=clang++-3.6 CC=clang-3.6 MODE=Release
-
-install:
-  # python deps
-  - pip install --user pyyaml
-  - pip install --user poster
-  - pip install --user codecov
-  # Installing lcov
-  # - wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.13.orig.tar.gz
-  # - tar xf lcov_1.13.orig.tar.gz
-  # - (cd lcov-1.13/ && sudo make install && rm -Rf lcov-1.13/)
+      env: CXX=clang++-3.6 CC=clang-3.6 MODE=Release
+    - os: osx
+      compiler: clang
+      env: CXX=clang++ CC=clang MODE=Debug
+      osx_image: xcode7.3
+    - os: osx
+      compiler: clang
+      env: CXX=clang++ CC=clang MODE=Release
+      osx_image: xcode7.3
 
 script:
-  - set -e
-  - (cd cmaki && git pull origin master)
-  - ./cmaki/run.sh
-  - export NOCACHE_LOCAL=TRUE
-  - export NOCACHE_REMOTE=FALSE
-  - (cd cmaki_generator && ./build github://$TRAVIS_REPO_SLUG -o --server=http://artifacts.myftp.biz:8080)
-  - set +e
+  - bash <(curl -s https://raw.githubusercontent.com/makiolo/cmaki/master/ci.sh)
 
-notifications:
-  webhooks: http://artifacts.myftp.biz:3000/api/webhooks
-  on_start: always   # default: never
-  on_success: always # default: always
-  on_failure: always # default: always
-  on_error: always # default: always
-  on_cancel: always # default: always
