@@ -1,5 +1,5 @@
 project(asyncply CXX)
-cmake_minimum_required(VERSION 3.2.2)
+cmake_minimum_required(VERSION 3.0)
 
 set(CMAKI_REPOSITORY "http://artifacts.myftp.biz:8080")
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/../cmaki")
