@@ -1,0 +1,40 @@
+{
+  "name": "asyncply",
+  "version": "1.0.0",
+  "description": "Async-Await implementation in C++11/14 for humans",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "ci": "cmaki ci",
+    "clean": "cmaki clean",
+    "setup": "cmaki setup",
+    "compile": "cmaki compile",
+    "install": "cmaki install",
+    "test": "cmaki tests",
+    "upload": "cmaki upload"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/makiolo/asyncply.git"
+  },
+  "keywords": [
+    "c++",
+    "async"
+  ],
+  "author": "Ricardo Marmolejo García",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/makiolo/asyncply/issues"
+  },
+  "homepage": "https://github.com/makiolo/asyncply#readme",
+  "dependencies": {
+	"teelogging": "makiolo/teelogging",
+	"metacommon": "makiolo/metacommon"
+  },
+  "devDependencies": {
+    "cmaki": "makiolo/cmaki",
+    "cmaki_generator": "makiolo/cmaki_generator"
+  }
+}
