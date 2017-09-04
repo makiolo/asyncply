@@ -3,11 +3,17 @@
     version: 0.0.0.0
     version_manager: git
     cmake_target: null
+    depends:
+        - metacommon
     post_install:
         - ./*.h include/asyncply/
-        - ./metacommon/*.h include/asyncply/metacommon/
     mode: dr
     source: https://github.com/makiolo/asyncply.git
+    build:
+        |
+            #!/bin/bash
+            source find.script
+            CMAKI_PWD=$(pwd) CMAKI_INSTALL=$SELFHOME/.. npm install
     targets:
         - asyncply:
             info:
