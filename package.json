@@ -31,7 +31,6 @@
   "homepage": "https://github.com/makiolo/asyncply#readme",
   "dependencies": {
 	"teelogging": "makiolo/teelogging",
-	"fast-event-system": "makiolo/fast-event-system",
 	"metacommon": "makiolo/metacommon"
   },
   "devDependencies": {
