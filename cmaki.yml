@@ -3,6 +3,9 @@
     version: 0.0.0.0
     version_manager: git
     cmake_target: null
+    depends:
+        - metacommon
+        - coroutine
     post_install:
         - ./*.h include/asyncply/
     mode: dr
