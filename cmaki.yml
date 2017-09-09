@@ -3,8 +3,6 @@
     version: 0.0.0.0
     version_manager: git
     cmake_target: null
-    depends:
-        - metacommon
     post_install:
         - ./*.h include/asyncply/
     mode: dr
@@ -13,8 +11,10 @@
         |
             #!/bin/bash
             source find.script
-            CMAKI_PWD=$(pwd) CMAKI_INSTALL=$SELFHOME/.. npm install
+            export PATH=$CMAKI_INSTALL:$PATH
+            CMAKI_INSTALL=$SELFHOME/.. npm install
     targets:
         - asyncply:
             info:
                 <<: *library_dynamic_exact
+
