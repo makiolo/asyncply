@@ -1,23 +1,16 @@
 - asyncply:
     <<: *thirdparty_defaults
-    version: 0.0.0.0
-    version_manager: git
-    cmake_target: null
     depends:
         - metacommon
         - coroutine
     post_install:
         - ./*.h include/asyncply/
-    mode: dr
     source: https://github.com/makiolo/asyncply.git
     build:
         |
             #!/bin/bash
-            source find.script
-            export PATH=$CMAKI_INSTALL:$PATH
-            CMAKI_INSTALL=$SELFHOME/.. npm install
+            CMAKI_INSTALL=$SELFHOME npm install
     targets:
         - asyncply:
             info:
                 <<: *library_dynamic_exact
-
