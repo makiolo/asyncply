@@ -3,6 +3,5 @@ cmake_minimum_required(VERSION 3.0)
 include("$ENV{CMAKI_PWD}/node_modules/cmaki/cmaki.cmake")
 cmaki_find_package(boost-headers)
 cmaki_find_package(teelogging)
-cmaki2_library(asyncply run.cpp PTHREADS)
+cmaki_library(asyncply run.cpp PTHREADS)
 add_subdirectory(tests)
-
