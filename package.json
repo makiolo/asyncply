@@ -5,13 +5,14 @@
   "directories": {
     "test": "tests"
   },
-  "scripts": {
-    "ci": "cmaki ci",
+  "scripts": {   
+    "ci": "curl -s https://raw.githubusercontent.com/makiolo/cmaki_scripts/master/ci.sh | bash",
+    "docker": "curl -s https://raw.githubusercontent.com/makiolo/cmaki_scripts/master/docker.sh | bash",
     "clean": "cmaki clean",
     "setup": "cmaki setup",
     "compile": "cmaki compile",
-    "install": "cmaki install",
-    "test": "cmaki tests",
+    "install": "cmaki setup && cmaki compile",
+    "test": "cmaki test",
     "upload": "cmaki upload"
   },
   "repository": {
@@ -28,14 +29,12 @@
     "url": "https://github.com/makiolo/asyncply/issues"
   },
   "homepage": "https://github.com/makiolo/asyncply#readme",
-  "devDependencies": {
-    "cmaki": "github:makiolo/cmaki",
-    "cmaki_generator": "github:makiolo/cmaki_generator",
-    "cmaki_scripts": "github:makiolo/cmaki_scripts",
-    "cmaki_identifier": "github:makiolo/cmaki_identifier"
-  },
   "dependencies": {
-	"metacommon": "github:makiolo/metacommon",
-	"coroutine": "github:makiolo/coroutine"
+    "cmaki": "git+https://github.com/makiolo/cmaki.git",
+    "cmaki_generator": "git+https://github.com/makiolo/cmaki_generator.git",
+    "cmaki_identifier": "git+https://github.com/makiolo/cmaki_identifier.git",
+    "cmaki_scripts": "git+https://github.com/makiolo/cmaki_scripts.git",
+    "metacommon": "git+https://github.com/makiolo/metacommon.git",
+    "coroutine": "git+https://github.com/makiolo/coroutine.git"
   }
 }
