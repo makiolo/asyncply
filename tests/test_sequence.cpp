@@ -77,3 +77,18 @@ TEST(SequenceTest, test_sequence_async)
 	ASSERT_FALSE(flow_out.code);
 }
 
+TEST(SequenceTest, Test_await)
+{
+	auto fib = []() {
+		return cu::pull_type<void>(
+			[&](cu::push_type<void>& yield)
+			{
+				int n = asyncply::await(yield, [](){
+					return 233 + 1;
+				});
+			}
+		);
+	};
+	fib();
+}
+

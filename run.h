@@ -312,7 +312,6 @@ bool waitPop(T& out)
     {
 	return false;
     }
-	LOGV("ThreadSafeQueue::waitPop");
     out = std::move(m_queue.front());
     m_queue.pop();
     return true;
@@ -324,7 +323,6 @@ bool waitPop(T& out)
 void push(T value)
 {
 	std::lock_guard<std::mutex> lock{m_mutex};
-	LOGV("ThreadSafeQueue::push");
 	m_queue.push(std::move(value));
 	m_condition.notify_one();
 }
@@ -335,7 +333,6 @@ void push(T value)
 bool empty(void) const
 {
 	std::lock_guard<std::mutex> lock{m_mutex};
-	LOGV("ThreadSafeQueue::empty");
 	return m_queue.empty();
 }
 
@@ -350,7 +347,6 @@ void clear(void)
 		m_queue.pop();
 	}
 	m_condition.notify_all();
-	LOGV("ThreadSafeQueue::clear");
 }
 
 /**
@@ -363,7 +359,6 @@ void clear(void)
 void invalidate(void)
 {
 	std::lock_guard<std::mutex> lock{m_mutex};
-	LOGV("ThreadSafeQueue::invalidate");
 	m_valid = false;
 	m_condition.notify_all();
 }
@@ -374,7 +369,6 @@ void invalidate(void)
 bool isValid(void) const
 {
 	std::lock_guard<std::mutex> lock{m_mutex};
-	LOGV("ThreadSafeQueue::isValid");
 	return m_valid;
 }
 
@@ -405,13 +399,13 @@ private:
 	};
 
 	template <typename Func>
-	class ThreadTask: public IThreadTask
+	class ThreadTask : public IThreadTask
 	{
 	public:
 	    ThreadTask(Func&& func)
-		:m_func{std::move(func)}
+		: m_func{std::move(func)}
 	    {
-		    LOGV("ThreadTask::constructor");
+			;
 	    }
 
 	    ~ThreadTask(void) override = default;
@@ -425,9 +419,7 @@ private:
 	     */
 	    void execute() override
 	    {
-		LOGV("ThreadTask::execute begin");
-		m_func();
-		LOGV("ThreadTask::execute end");
+			m_func();
 	    }
 
 	private:
@@ -453,22 +445,22 @@ ThreadPool(void)
  * Constructor.
  */
 explicit ThreadPool(const std::uint32_t numThreads)
-    :m_done{false},
+    : m_done{false},
     m_workQueue{},
     m_threads{}
 {
     try
     {
-	for(std::uint32_t i = 0u; i < numThreads; ++i)
-	{
-	    m_threads.emplace_back(&ThreadPool::worker, this);
-	}
+		for(std::uint32_t i = 0u; i < numThreads; ++i)
+		{
+			m_threads.emplace_back(&ThreadPool::worker, this);
+		}
     }
     catch(...)
     {
-	LOGV("ThreadPool::exception");
-	destroy();
-	throw;
+		LOGV("ThreadPool::exception");
+		destroy();
+		throw;
     }
 }
 
@@ -534,7 +526,6 @@ void worker(void)
 {
     while(!m_done)
     {
-		LOGV("ThreadPool::working ...");
 		std::unique_ptr<IThreadTask> pTask{nullptr};
 		if(m_workQueue.waitPop(pTask))
 		{
@@ -575,8 +566,6 @@ asyncply::thread_pool& getThreadPool(void);
 template <typename Function, typename ... Args>
 auto _async(Function&& f, Args&& ... args) -> future_functor<Function, Args...>
 {
-	LOGV("ThreadPool::_async");
-	// return getThreadPool().submit(std::forward<Function>(f), std::forward<Args>(args)...);
 	ctpl::thread_pool& pool = getThreadPool();
 	return pool.push( std::bind(std::forward<Function>(f), std::forward<Args>(args)...) );
 }
@@ -584,9 +573,7 @@ auto _async(Function&& f, Args&& ... args) -> future_functor<Function, Args...>
 template <typename Function, typename ... Args>
 auto async(Function&& f, Args&& ... args) -> shared_task_functor<Function, Args...>
 {
-	LOGV("ThreadPool::async");
 	return std::make_shared< task_functor<Function, Args...> >(std::forward<Function>(f), std::forward<Args>(args)...);
-	// return std::shared_ptr<task_functor<Function, Args...> >(new task_functor<Function, Args...>(std::forward<Function>(f), std::forward<Args>(args)...));
 }
 
 template <typename Function, typename ... Args>
