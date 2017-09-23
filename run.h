@@ -589,6 +589,24 @@ auto async(Function&& f, Args&& ... args) -> shared_task_functor<Function, Args.
 	return std::shared_ptr<task_functor<Function, Args...> >(new task_functor<Function, Args...>(std::forward<Function>(f), std::forward<Args>(args)...));
 }
 
+template <typename Function, typename ... Args>
+auto await(cu::yield_type& yield, Function&& f, Args&& ... args) -> functor_type<Function, Args...>
+{
+	auto func = std::bind(std::forward<Function>(f), std::forward<Args>(args)...);
+	auto task = asyncply::async(
+		[&]()
+		{
+			return func();
+		}
+	);
+	while(!task->is_ready())
+	{
+		yield();
+	}
+	return task->get();
+}
+
 }
 
 #endif
+

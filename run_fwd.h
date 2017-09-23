@@ -5,6 +5,7 @@
 #include <type_traits>
 #include "api.h"
 #include "task_fwd.h"
+#include <coroutine/coroutine.h>
 
 namespace ctpl {
   class thread_pool;
@@ -34,6 +35,9 @@ auto _async(Function&& f, Args&& ... data) -> future_functor<Function, Args...>;
 
 template <typename Function, typename ... Args>
 auto async(Function&& f, Args&& ... args) -> shared_task_functor<Function, Args...>;
+
+template <typename Function, typename ... Args>
+auto await(cu::yield_type& yield, Args&& ... args) -> functor_type<Function, Args...>;
 
 // when_any
 

@@ -5,7 +5,7 @@
   "directories": {
     "test": "tests"
   },
-  "scripts": {   
+  "scripts": {
     "ci": "curl -s https://raw.githubusercontent.com/makiolo/cmaki_scripts/master/ci.sh | bash",
     "docker": "curl -s https://raw.githubusercontent.com/makiolo/cmaki_scripts/master/docker.sh | bash",
     "clean": "cmaki clean",
