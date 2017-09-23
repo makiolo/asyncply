@@ -585,8 +585,8 @@ template <typename Function, typename ... Args>
 auto async(Function&& f, Args&& ... args) -> shared_task_functor<Function, Args...>
 {
 	LOGV("ThreadPool::async");
-	//return std::make_shared< task_functor<Function, Args...> >(std::forward<Function>(f), std::forward<Args>(args)...);
-	return std::shared_ptr<task_functor<Function, Args...> >(new task_functor<Function, Args...>(std::forward<Function>(f), std::forward<Args>(args)...));
+	return std::make_shared< task_functor<Function, Args...> >(std::forward<Function>(f), std::forward<Args>(args)...);
+	// return std::shared_ptr<task_functor<Function, Args...> >(new task_functor<Function, Args...>(std::forward<Function>(f), std::forward<Args>(args)...));
 }
 
 template <typename Function, typename ... Args>
