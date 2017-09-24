@@ -1,3 +1,6 @@
+#ifndef _ASYNCPLY_ALGORITHM_H_
+#define _ASYNCPLY_ALGORITHM_H_
+
 #include "run.h"
 
 namespace asyncply {
@@ -27,4 +30,6 @@ namespace asyncply {
 	}
 
 }
+
+#endif
 
