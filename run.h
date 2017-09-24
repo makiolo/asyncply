@@ -576,6 +576,16 @@ auto async(Function&& f, Args&& ... args) -> shared_task_functor<Function, Args.
 	return std::make_shared< task_functor<Function, Args...> >(std::forward<Function>(f), std::forward<Args>(args)...);
 }
 
+template <typename T>
+auto await(cu::yield_type& yield, shared_task<T> task) -> T
+{
+	while(!task->is_ready())
+	{
+		yield();
+	}
+	return task->get();
+}
+
 template <typename Function, typename ... Args>
 auto await(cu::yield_type& yield, Function&& f, Args&& ... args) -> functor_type<Function, Args...>
 {

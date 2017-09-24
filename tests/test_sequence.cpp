@@ -54,7 +54,7 @@ TEST(SequenceTest, test_sequence_async)
 			return code;
 		}
 	};
-	auto task = asyncply::sequence_async(control_flow{true},
+	auto task = asyncply::asequence(control_flow{true},
 		[](control_flow flow) {
 			std::cout << "code 1" << std::endl;
 			return flow;
@@ -86,6 +86,9 @@ TEST(SequenceTest, Test_await)
 				int n = asyncply::await(yield, [](){
 					return 233 + 1;
 				});
+				int n2 = asyncply::await(yield, asyncply::async([](){
+					return 233 + 1;
+				}));
 			}
 		);
 	};

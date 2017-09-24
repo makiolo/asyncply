@@ -171,7 +171,7 @@ void parallel(Function&& f, Functions&&... fs)
 }
 
 template <typename Function, typename... Functions>
-auto parallel_async(Function&& f, Functions&&... fs)
+auto aparallel(Function&& f, Functions&&... fs)
 {
 	shared_task_functor<Function> task;
 	asyncply::_parallel_sync(task, std::forward<Function>(f), std::forward<Functions>(fs)...);

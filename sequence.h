@@ -53,7 +53,7 @@ auto sequence(Data data, Functions&&... fs)
 }
 
 template <typename Data, typename... Functions>
-auto sequence_async(Data data, Functions&&... fs)
+auto asequence(Data data, Functions&&... fs)
 {
 	shared_task<Data> task;
 	asyncply::_sequence(task, std::forward<Data>(data), std::forward<Functions>(fs)...);

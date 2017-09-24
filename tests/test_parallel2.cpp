@@ -106,7 +106,7 @@ TEST(Parallel2Test, Test5)
 {
 	std::atomic<int> total;
 	total = 0;
-	auto process = asyncply::parallel_async(
+	auto process = asyncply::aparallel(
 				[&total]()
 				{
 					std::cout << "hi" << std::endl;
@@ -132,7 +132,7 @@ TEST(Parallel2Test, Test6)
 	std::atomic<int> total;
 	total = 0;
 	{
-		auto process = asyncply::parallel_async(
+		auto process = asyncply::aparallel(
 					[&total]()
 					{
 						std::cout << "hi" << std::endl;

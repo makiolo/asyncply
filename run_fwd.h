@@ -36,6 +36,9 @@ auto _async(Function&& f, Args&& ... data) -> future_functor<Function, Args...>;
 template <typename Function, typename ... Args>
 auto async(Function&& f, Args&& ... args) -> shared_task_functor<Function, Args...>;
 
+template <typename T>
+auto await(cu::yield_type& yield, shared_task<T> task) -> T;
+
 template <typename Function, typename ... Args>
 auto await(cu::yield_type& yield, Args&& ... args) -> functor_type<Function, Args...>;
 

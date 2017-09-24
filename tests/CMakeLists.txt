@@ -4,8 +4,6 @@ cmaki_google_test(parallel test_parallel.cpp DEPENDS asyncply PTHREADS)
 cmaki_google_test(consumer_producer test_consumer_producer.cpp DEPENDS asyncply PTHREADS)
 cmaki_google_test(parallel2 test_parallel2.cpp DEPENDS asyncply PTHREADS)
 cmaki_google_test(parallel_sequence test_parallel_sequence.cpp DEPENDS asyncply PTHREADS)
-
-cmaki_find_package(boost-coroutine2)
 cmaki_google_test(sequence test_sequence.cpp DEPENDS asyncply PTHREADS)
 
 cmaki_find_package(fast-event-system)
