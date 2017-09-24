@@ -109,3 +109,4 @@ TEST(BenchTest, TestStd)
 	double t2 = launch_benchmark(main_measured_algorithm_2);
 	std::cout << "t2 = " << t2 << " ns" << std::endl;
 }
+

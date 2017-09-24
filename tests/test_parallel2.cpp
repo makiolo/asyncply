@@ -28,7 +28,7 @@ TEST(Parallel2Test, Test2)
 	ASSERT_EQ(f2->get(), 15 + 6);
 }
 
-#if 0
+#if 1
 
 TEST(Parallel2Test, Test3)
 {
@@ -155,3 +155,4 @@ TEST(Parallel2Test, Test6)
 }
 
 #endif
+

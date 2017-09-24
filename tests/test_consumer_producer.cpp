@@ -7,7 +7,7 @@
 
 class ConsumerProducerTest : testing::Test { };
 
-#if 0
+#if 1
 
 TEST(ConsumerProducerTest, Test1)
 {
@@ -34,3 +34,4 @@ TEST(ConsumerProducerTest, Test1)
 }
 
 #endif
+
