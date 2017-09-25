@@ -106,6 +106,8 @@ TEST(Parallel2Test, collapse_double)
 	ASSERT_EQ(total_ps, 6);
 }
 
+#endif
+
 TEST(Parallel2Test, Test5)
 {
 	std::atomic<int> total;
@@ -157,6 +159,3 @@ TEST(Parallel2Test, Test6)
 	}
 	ASSERT_EQ(total, 3);
 }
-
-#endif
-
