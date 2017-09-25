@@ -5,6 +5,8 @@
 
 namespace asyncply {
 
+	// read: http://www.andythomason.com/2016/08/21/c-multithreading-an-effective-parallel-for-loop/
+	
 	template <typename Iterator, typename Function>
 	void for_each(Iterator a, Iterator b, Function&& f)
 	{
