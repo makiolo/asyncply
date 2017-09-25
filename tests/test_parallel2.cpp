@@ -28,7 +28,7 @@ TEST(Parallel2Test, Test2)
 	ASSERT_EQ(f2->get(), 15 + 6);
 }
 
-#if 0
+#if 1
 
 TEST(Parallel2Test, Test3)
 {
@@ -68,6 +68,10 @@ TEST(Parallel2Test, Test3_async)
 	task->get();
 	ASSERT_EQ(total, 3600);
 }
+
+#endif
+
+#if 0
 
 TEST(Parallel2Test, collapse_double)
 {
