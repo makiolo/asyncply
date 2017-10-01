@@ -80,8 +80,8 @@ TEST(SequenceTest, test_sequence_async)
 TEST(SequenceTest, Test_await)
 {
 	auto fib = []() {
-		return cu::pull_type<void>(
-			[&](cu::push_type<void>& yield)
+		return cu::pull_type<cu::control_type>(
+			[&](cu::push_type<cu::control_type>& yield)
 			{
 				int n = asyncply::await(yield, [](){
 					return 233 + 1;

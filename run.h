@@ -582,7 +582,7 @@ auto await(cu::yield_type& yield, shared_task<T> task) -> T
 {
 	while(!task->is_ready())
 	{
-		yield();
+		yield( cu::control_type{} );
 	}
 	return task->get();
 }
@@ -599,7 +599,7 @@ auto await(cu::yield_type& yield, Function&& f, Args&& ... args) -> functor_type
 	);
 	while(!task->is_ready())
 	{
-		yield();
+		yield( cu::control_type{} );
 	}
 	return task->get();
 }
