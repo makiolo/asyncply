@@ -54,7 +54,7 @@
 #include <boost/lockfree/queue.hpp>
 
 #ifndef _ctplThreadPoolLength_
-#define _ctplThreadPoolLength_  1024
+#define _ctplThreadPoolLength_  2048
 #endif
 
 // thread pool to run user's functors with signature
@@ -67,7 +67,6 @@ namespace ctpl {
 class thread_pool {
 
 public:
-
 	thread_pool() : q(_ctplThreadPoolLength_) { this->init(); }
 	thread_pool(int nThreads, int queueSize = _ctplThreadPoolLength_) : q(queueSize) { this->init(); this->resize(nThreads); }
 
@@ -427,8 +426,7 @@ public:
  * Constructor.
  */
 ThreadPool(void)
-    // : ThreadPool{std::max(std::thread::hardware_concurrency(), 2u) - 1u}
-    : ThreadPool{1}
+	: ThreadPool{std::max(std::thread::hardware_concurrency(), 2u) - 1u}
 {
 	/*
 	* Always create at least one thread.  If hardware_concurrency() returns 0,
