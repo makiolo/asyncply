@@ -29,14 +29,13 @@
     "url": "https://github.com/makiolo/asyncply/issues"
   },
   "homepage": "https://github.com/makiolo/asyncply#readme",
+  "devDependencies": {
+    "npm-mas-mas": "git+https://github.com/makiolo/npm-mas-mas.git"
+  },
   "dependencies": {
-    "cmaki": "git+https://github.com/makiolo/cmaki.git",
-    "cmaki_generator": "git+https://github.com/makiolo/cmaki_generator.git",
-    "cmaki_identifier": "git+https://github.com/makiolo/cmaki_identifier.git",
-    "cmaki_scripts": "git+https://github.com/makiolo/cmaki_scripts.git",
-    "fast-event-system": "https://github.com/makiolo/fast-event-system.git",
-    "teelogging": "git+https://github.com/makiolo/teelogging.git",
+    "coroutine": "git+https://github.com/makiolo/coroutine.git",
+    "fast-event-system": "git+https://github.com/makiolo/fast-event-system.git",
     "metacommon": "git+https://github.com/makiolo/metacommon.git",
-    "coroutine": "git+https://github.com/makiolo/coroutine.git"
+    "teelogging": "git+https://github.com/makiolo/teelogging.git"
   }
 }
