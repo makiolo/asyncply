@@ -6,14 +6,11 @@
     "test": "tests"
   },
   "scripts": {
-	"ci": "curl -s https://raw.githubusercontent.com/makiolo/npm-mas-mas/master/cmaki_scripts/ci.sh | bash",
-	"docker": "curl -s https://raw.githubusercontent.com/makiolo/npm-mas-mas/master/cmaki_scripts/docker.sh | bash",
     "clean": "cmaki clean",
     "setup": "cmaki setup",
     "compile": "cmaki compile",
     "install": "cmaki setup && cmaki compile",
-    "test": "cmaki test",
-    "upload": "cmaki upload"
+    "test": "cmaki test"
   },
   "repository": {
     "type": "git",
@@ -34,8 +31,6 @@
   },
   "dependencies": {
     "coroutine": "git+https://github.com/makiolo/coroutine.git",
-    "fast-event-system": "git+https://github.com/makiolo/fast-event-system.git",
-    "metacommon": "git+https://github.com/makiolo/metacommon.git",
-    "teelogging": "git+https://github.com/makiolo/teelogging.git"
+    "metacommon": "git+https://github.com/makiolo/metacommon.git"
   }
 }

@@ -15,7 +15,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <queue>
-#include <teelogging/teelogging.h>
+// #include <teelogging/teelogging.h>
 #include "metacommon/common.h"
 #include "run_fwd.h"
 #include "task.h"
@@ -305,7 +305,7 @@ bool waitPop(T& out)
      */
     if(!m_valid)
     {
-	return false;
+		return false;
     }
     out = std::move(m_queue.front());
     m_queue.pop();
