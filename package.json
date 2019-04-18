@@ -1,6 +1,6 @@
 {
   "name": "asyncply",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Async-Await implementation in C++11/14 for humans",
   "directories": {
     "test": "tests"

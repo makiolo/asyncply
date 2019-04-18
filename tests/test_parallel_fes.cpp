@@ -5,9 +5,9 @@
 #include <atomic>
 #include <assert.h>
 #include <gtest/gtest.h>
-// #include <fast-event-system/sync.h>
-// #include <fast-event-system/async_fast.h>
-// #include <fast-event-system/async_delay.h>
+#include <fast-event-system/sync.h>
+#include <fast-event-system/async_fast.h>
+#include <fast-event-system/async_delay.h>
 #include "../parallel.h"
 #include "../task.h"
 #include "../algorithm.h"
@@ -47,7 +47,7 @@ private:
 	std::string _data;
 };
 
-#if 0
+#if 1
 
 class ParallelFesTest : testing::Test { };
 
