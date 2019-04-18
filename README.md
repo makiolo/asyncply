@@ -9,9 +9,11 @@ Async-Await implementation in C++11/14 for humans
 # :construction: I am under construction
 Don't use it
 
-# compile, setup and tests
+# quick-start
 ```bash
-$ git clone --recursive https://github.com/makiolo/asyncply.git
-$ ./cmaki/run.sh
+$ git clone https://github.com/makiolo/asyncply.git
+$ cd asyncply
+$ export COMPILER=gcc COMPILER_VERSION=5.4 COMPILER_LIBCXX=libstdc++11
+$ npm install
+$ npm test
 ```
-
