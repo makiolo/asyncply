@@ -10,6 +10,5 @@ cmaki_google_test(consumer_producer tests/test_consumer_producer.cpp DEPENDS asy
 cmaki_google_test(parallel2 tests/test_parallel2.cpp DEPENDS asyncply PTHREADS)
 cmaki_google_test(parallel_sequence tests/test_parallel_sequence.cpp DEPENDS asyncply PTHREADS)
 cmaki_google_test(sequence tests/test_sequence.cpp DEPENDS asyncply PTHREADS)
-# cmaki_find_package(fast-event-system)
-# cmaki_google_test(parallel_fes tests/test_parallel_fes.cpp DEPENDS asyncply PTHREADS)
+cmaki_google_test(parallel_fes tests/test_parallel_fes.cpp DEPENDS asyncply PTHREADS)
 

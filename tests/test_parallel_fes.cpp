@@ -5,9 +5,9 @@
 #include <atomic>
 #include <assert.h>
 #include <gtest/gtest.h>
-#include <fast-event-system/sync.h>
-#include <fast-event-system/async_fast.h>
-#include <fast-event-system/async_delay.h>
+// #include <fast-event-system/sync.h>
+// #include <fast-event-system/async_fast.h>
+// #include <fast-event-system/async_delay.h>
 #include "../parallel.h"
 #include "../task.h"
 #include "../algorithm.h"
@@ -47,9 +47,9 @@ private:
 	std::string _data;
 };
 
-class ParallelFesTest : testing::Test { };
-
 #if 0
+
+class ParallelFesTest : testing::Test { };
 
 TEST(ParallelFesTest, Test1)
 {
@@ -106,8 +106,6 @@ TEST(ParallelFesTest, Test1)
 	ASSERT_EQ(total, 44550);
 }
 
-#endif
-
 TEST(ParallelFesTest, TestSync)
 {
 	fes::sync<foo> channel;
@@ -141,4 +139,6 @@ TEST(ParallelFesTest, TestAsyncDelay)
 	// recv foo
 	channel.get();
 }
+
+#endif
 

@@ -77,21 +77,19 @@ TEST(SequenceTest, test_sequence_async)
 	ASSERT_FALSE(flow_out.code);
 }
 
-TEST(SequenceTest, Test_await)
-{
-	auto fib = []() {
-		return cu::pull_type<cu::control_type>(
-			[&](cu::push_type<cu::control_type>& yield)
-			{
-				int n = asyncply::await(yield, [](){
-					return 233 + 1;
-				});
-				int n2 = asyncply::await(yield, asyncply::async([](){
-					return 233 + 1;
-				}));
-			}
-		);
-	};
-	fib();
-}
+// TEST(SequenceTest, Test_await)
+// {
+// 	[]() {
+// 		return cu::pull_type<cu::control_type>([](auto& yield)
+// 			{
+// 				int n = asyncply::await(yield, [](){
+// 					return 233 + 1;
+// 				});
+// 				int n2 = asyncply::await(yield, asyncply::async([](){
+// 					return 233 + 1;
+// 				}));
+// 			}
+// 		);
+// 	}();
+// }
 
