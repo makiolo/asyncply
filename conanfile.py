@@ -13,7 +13,7 @@ class NpmMasMas(ConanFile):
     generators = "cmake"
 
     def requirements(self):
-        self.requires('fast-event-system/1.0.15@npm-mas-mas/testing')
+        self.requires('fast-event-system/1.0.18@npm-mas-mas/testing')
 
     def source(self):
         self.run("git clone {}".format(self.url))
