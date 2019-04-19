@@ -2,9 +2,9 @@
 #include <vector>
 #include <cmath>
 #include <gtest/gtest.h>
-#include "../parallel.h"
-#include "../sequence.h"
-#include "../task.h"
+#include "parallel.h"
+#include "sequence.h"
+#include "task.h"
 
 class ParallelSequenceTest : testing::Test { ; };
 

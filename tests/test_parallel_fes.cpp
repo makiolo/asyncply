@@ -8,9 +8,9 @@
 #include <fast-event-system/sync.h>
 #include <fast-event-system/async_fast.h>
 #include <fast-event-system/async_delay.h>
-#include "../parallel.h"
-#include "../task.h"
-#include "../algorithm.h"
+#include "parallel.h"
+#include "task.h"
+#include "algorithm.h"
 
 class foo
 {

@@ -8,9 +8,9 @@
 #include <atomic>
 #include <algorithm>
 #include <gtest/gtest.h>
-#include "../algorithm.h"
-#include "../sequence.h"
-#include "../parallel.h"
+#include "algorithm.h"
+#include "sequence.h"
+#include "parallel.h"
 
 class BenchTest : testing::Test { };
 

@@ -2,8 +2,8 @@
 #include <vector>
 #include <atomic>
 #include <gtest/gtest.h>
-#include "../parallel.h"
-#include "../task.h"
+#include "parallel.h"
+#include "task.h"
 
 class ConsumerProducerTest : testing::Test { };
 

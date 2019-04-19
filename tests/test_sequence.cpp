@@ -4,9 +4,9 @@
 #include <thread>
 #include <vector>
 #include <gtest/gtest.h>
-#include "../sequence.h"
-#include "../parallel.h"
-#include "../run.h"
+#include "sequence.h"
+#include "parallel.h"
+#include "run.h"
 
 class SequenceTest : testing::Test { };
 

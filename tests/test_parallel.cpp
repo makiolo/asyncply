@@ -3,8 +3,8 @@
 #include <cmath>
 #include <assert.h>
 #include <gtest/gtest.h>
-#include "../parallel.h"
-#include "../task.h"
+#include "parallel.h"
+#include "task.h"
 
 class ParallelTest : testing::Test { ; };
 
