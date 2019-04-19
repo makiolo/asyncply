@@ -47,7 +47,7 @@ private:
 	std::string _data;
 };
 
-#if 1
+#if 0
 
 class ParallelFesTest : testing::Test { };
 
