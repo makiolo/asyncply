@@ -22,7 +22,7 @@ class NpmMasMas(ConanFile):
         self.run("cd {} && npm install && npm test".format(self.name))
 
     def package(self):
-        self.copy("{}/*.h".format(self.name), dst="include", excludes=["{}/node_modules".format(self.name), "{}/readerwriterqueue".format(self.name)])
+        self.copy("{}/include/*.h".format(self.name), dst=os.path.join('include', self.name), keep_path=False)
         self.copy("{}/bin/{}/*.lib".format(self.name, self.settings.build_type), dst="lib", keep_path=False)
         self.copy("{}/bin/{}/*.dll".format(self.name, self.settings.build_type), dst="bin", keep_path=False)
         self.copy("{}/bin/{}/*_unittest".format(self.name, self.settings.build_type), dst="unittest", keep_path=False)
@@ -32,4 +32,5 @@ class NpmMasMas(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = [lib for lib in tools.collect_libs(self)]
+        self.cpp_info.includedirs.append('include')
 
