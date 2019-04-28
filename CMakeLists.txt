@@ -2,7 +2,14 @@ project(asyncply CXX)
 cmake_minimum_required(VERSION 3.5)
 include("$ENV{CMAKI_PWD}/node_modules/npm-mas-mas/cmaki/cmaki.cmake")
 cmaki_setup()
+cmaki_git_clone(
+	PROJECT_NAME    readerwriterqueue
+	GIT_URL         https://github.com/cameron314/readerwriterqueue
+	GIT_BRANCH      master
+	DIRECTORY		${CMAKE_SOURCE_DIR}
+)
 cmaki_find_package_boost()
+include_directories(.)
 include_directories(include)
 cmaki_library(asyncply src/run.cpp PTHREADS)
 cmaki_google_test(bench tests/test_bench.cpp DEPENDS asyncply PTHREADS)

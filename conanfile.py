@@ -14,6 +14,7 @@ class NpmMasMas(ConanFile):
 
     def requirements(self):
         self.requires('fast-event-system/1.0.18@npm-mas-mas/testing')
+        self.requires('teelogging/1.0.1@npm-mas-mas/testing')
 
     def source(self):
         self.run("git clone {}".format(self.url))

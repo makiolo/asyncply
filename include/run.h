@@ -15,8 +15,8 @@
 #include <condition_variable>
 #include <mutex>
 #include <queue>
-// #include <teelogging/teelogging.h>
-#include "metacommon/common.h"
+#include <teelogging/teelogging.h>
+#include <metacommon/common.h>
 #include "run_fwd.h"
 #include "task.h"
 
@@ -561,6 +561,7 @@ auto _async(Function&& f, Args&& ... args) -> future_functor<Function, Args...>
 template <typename Function, typename ... Args>
 auto async(Function&& f, Args&& ... args) -> shared_task_functor<Function, Args...>
 {
+	LOGD("new async task!");
 	return std::make_shared< task_functor<Function, Args...> >(std::forward<Function>(f), std::forward<Args>(args)...);
 }
 
@@ -570,6 +571,7 @@ auto await(cu::yield_type& yield, shared_task<T> task) -> T
 {
 	while(!task->is_ready())
 	{
+		LOGD("Waiting task ...");
 		yield( cu::control_type{} );
 	}
 	return task->get();
@@ -587,6 +589,7 @@ auto await(cu::yield_type& yield, Function&& f, Args&& ... args) -> functor_type
 	);
 	while(!task->is_ready())
 	{
+		LOGD("Waiting task ...");
 		yield( cu::control_type{} );
 	}
 	return task->get();
