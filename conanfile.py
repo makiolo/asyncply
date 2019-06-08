@@ -11,6 +11,7 @@ class NpmMasMas(ConanFile):
     options = {"shared": [True, False]}
     default_options = {"shared": True}
     generators = "cmake"
+    short_paths = True
 
     def requirements(self):
         self.requires('fast-event-system/1.0.18@npm-mas-mas/testing')
