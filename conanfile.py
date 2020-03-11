@@ -14,14 +14,14 @@ class NpmMasMas(ConanFile):
     short_paths = True
 
     def requirements(self):
-        self.requires('fast-event-system/1.0.22@npm-mas-mas/testing')
+        self.requires('fast-event-system/1.0.23@npm-mas-mas/testing')
         self.requires('teelogging/1.0.1@npm-mas-mas/testing')
 
     def source(self):
         self.run("git clone {}".format(self.url))
 
     def build(self):
-        self.run("cd {} && npm install && npm test".format(self.name))
+        self.run("cd {} && CMAKI_INSTALL={} npm install && npm test".format(self.name, self.package_folder))
 
     def package(self):
         self.copy("{}/include/*.h".format(self.name), dst=os.path.join('include', self.name), keep_path=False)
