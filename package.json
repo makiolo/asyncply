@@ -6,12 +6,12 @@
     "test": "tests"
   },
   "scripts": {
-    "clean": "cmaki clean",
-    "setup": "cmaki setup",
-    "compile": "cmaki compile",
-    "install": "cmaki setup && cmaki compile",
-    "test": "cmaki test",
-    "create_package": "cmaki create_package"
+      "clean": "cmaki clean",
+      "setup": "cmaki setup",
+      "compile": "cmaki compile",
+      "install": "cmaki setup && cmaki compile",
+      "test": "cmaki test",
+      "pack": "cmaki create_package"
   },
   "repository": {
     "type": "git",
